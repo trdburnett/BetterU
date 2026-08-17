@@ -23,7 +23,7 @@ def add_task(description, priority, reward):
     tasklist.append(task)
 
 def display_tasks():
-    tasklist_by_priority = sorted(tasklist, key=attrgetter('priority'))
+    tasklist_by_priority = sorted(tasklist, key=attrgetter('priority','time'))
     for task in tasklist_by_priority:
         print(f"Task: {task.description}       Reward: {task.reward} Credits")
     #sorts by time if reverse is true shows oldest last
