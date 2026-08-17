@@ -5,9 +5,9 @@ time = datetime.datetime
 tasklist = []
 
 class Priority(Enum):
-    HIGH = "High"
-    MEDIUM = "Medium"
-    LOW = "Low"
+    HIGH = 1
+    MEDIUM = 2
+    LOW = 3
 
 class Task:
     def __init__(self,description: str, priority: Priority, reward: int, time: datetime):
@@ -22,12 +22,12 @@ def add_task(description, priority, reward):
     tasklist.append(task)
 
 def display_tasks():
-    for task in tasklist:
-        if task.priority == "Low":
-            print(task.priority)
+    tasklist_by_priority = sorted(tasklist, key=lambda task: task.priority)
+    for task in tasklist_by_priority:
+        print(f"Task: {task.description} _____ Reward: {task.reward} Credits")
+
 
 #hard coded inputs
-add_task("Do 3 sets of bicep curls for 5 reps", "Low", 1)
+add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
 display_tasks()
-for task in tasklist:
-    print(f"Task: {task.description} ----- Reward: {task.reward} Credits")
+
