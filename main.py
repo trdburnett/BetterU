@@ -23,8 +23,7 @@ def add_task(description, priority, reward):
 
 def display_tasks():
     for task in tasklist:
-        if task.priority == "low":
-            print("1")
+        print(task.priority)
 
 #hard coded inputs
 add_task("Do 3 sets of bicep curls for 5 reps", "Low", 1)
