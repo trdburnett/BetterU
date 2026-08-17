@@ -28,6 +28,6 @@ def display_tasks():
 
 #hard coded inputs
 add_task("Do 3 sets of bicep curls for 5 reps", "Low", 1)
-
+display_tasks()
 for task in tasklist:
     print(f"Task: {task.description} ----- Reward: {task.reward} Credits")
