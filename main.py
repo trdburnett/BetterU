@@ -23,7 +23,7 @@ def add_task(description, priority, reward):
 
 def display_tasks():
     for task in tasklist:
-        if task.priority == Priority.LOW:
+        if task.priority == "low":
             print("1")
 
 #hard coded inputs
