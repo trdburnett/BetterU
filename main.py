@@ -25,7 +25,7 @@ def display_tasks():
     tasklist_by_priority = sorted(tasklist, key=lambda task: task.priority)
     for task in tasklist_by_priority:
         print(f"Task: {task.description} _____ Reward: {task.reward} Credits")
-    tasklist_by_time = sorted(tasklist, key=lambda task: task.time)
+    tasklist_by_time = sorted(tasklist, key=lambda task: task.time, reverse=True)
     for task in tasklist_by_time:
         print(f"Task: {task.description} ===== Reward: {task.reward} Credits")
 
