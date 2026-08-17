@@ -22,5 +22,4 @@ def add_task(description, priority, reward):
 
 add_task("Do 3 sets of bicep curls for 5 reps", "Low", 1)
 for task in tasklist:
-    print(f"Task: {task.description} Reward: {task.reward} Credits")
-    
+    print(f"Task: {task.description} ----- Reward: {task.reward} Credits")
