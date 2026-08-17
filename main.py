@@ -1,5 +1,6 @@
 import datetime
 from enum import Enum
+from operator import attrgetter
 
 time = datetime.datetime
 tasklist = []
@@ -22,9 +23,10 @@ def add_task(description, priority, reward):
     tasklist.append(task)
 
 def display_tasks():
-    tasklist_by_priority = sorted(tasklist, key=lambda task: task.priority)
+    tasklist_by_priority = sorted(tasklist, key=attrgetter('priority'))
     for task in tasklist_by_priority:
-        print(f"Task: {task.description} _____ Reward: {task.reward} Credits")
+        print(f"Task: {task.description}       Reward: {task.reward} Credits")
+    #sorts by time if reverse is true shows oldest last
     tasklist_by_time = sorted(tasklist, key=lambda task: task.time, reverse=True)
     for task in tasklist_by_time:
         print(f"Task: {task.description} ===== Reward: {task.reward} Credits")
@@ -34,7 +36,7 @@ def display_tasks():
 add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
 add_task("Do 3 lessons on boot.dev", 1, 3)
 add_task("Go for a 10K walk", 2, 2)
-task = Task("Touch grass",1,1,time(2025,1,1))
+task = Task("Touch grass",3,1,time(2025,1,1))
 tasklist.append(task)
 display_tasks()
 
