@@ -29,5 +29,7 @@ def display_tasks():
 
 #hard coded inputs
 add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
+add_task("Do 3 lessons on boot.dev", 1, 3)
+add_task("Go for a 10K walk", 2, 2)
 display_tasks()
 
