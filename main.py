@@ -22,14 +22,22 @@ def add_task(description, priority, reward):
     task = Task(description,priority,reward,time.now())
     tasklist.append(task)
 
+#sorts the tasklist by priority and then time
+#the oldest tasks with the highest priority will display at the top
 def display_tasks():
-    tasklist_by_priority = sorted(tasklist, key=attrgetter('priority','time'))
-    for task in tasklist_by_priority:
-        print(f"Task: {task.description}       Reward: {task.reward} Credits")
-    #sorts by time if reverse is true shows oldest last
-    tasklist_by_time = sorted(tasklist, key=lambda task: task.time, reverse=True)
-    for task in tasklist_by_time:
-        print(f"Task: {task.description} ===== Reward: {task.reward} Credits")
+    sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
+    for task in sorted_tasklist:
+        print(f"Task: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits")
+
+#returns a string of spaces based on the length of the description it is given
+#helper method for display tasks
+def display_padding(description):
+    padding = ""
+    padding_size = 50 - len(description)
+    while padding_size > 0:
+        padding = padding + " "
+        padding_size -= 1
+    return padding
 
 
 #hard coded inputs
