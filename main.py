@@ -1,6 +1,9 @@
-import datetime
+import datetime, argparse
 from enum import Enum
 from operator import attrgetter
+
+parser = argparse.ArgumentParser()
+parser.parse_args()
 
 time = datetime.datetime
 tasklist = []
@@ -41,10 +44,10 @@ def display_padding(description):
 
 
 #hard coded inputs
-add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
-add_task("Do 3 lessons on boot.dev", 1, 3)
-add_task("Go for a 10K walk", 2, 2)
-task = Task("Touch grass",3,1,time(2025,1,1))
-tasklist.append(task)
-display_tasks()
+#add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
+#add_task("Do 3 lessons on boot.dev", 1, 3)
+#add_task("Go for a 10K walk", 2, 2)
+#task = Task("Touch grass",3,1,time(2025,1,1))
+#tasklist.append(task)
+#display_tasks()
 
