@@ -3,9 +3,10 @@ from enum import Enum
 from operator import attrgetter
 
 parser = argparse.ArgumentParser()
-parser.add_argument("echo")
+parser.add_argument("--echo", help="echo the string you use here")
 args = parser.parse_args()
 print(args.echo)
+
 
 time = datetime.datetime
 tasklist = []
