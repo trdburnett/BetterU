@@ -51,7 +51,7 @@ args = parser.parse_args()
 if args.display:
     display_tasks
 
-if args.task_description and args.task_priority and args.task_reward:
+if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
     add_task(args.task_description,args.task_priority,args.task_reward)
     display_tasks()
 
