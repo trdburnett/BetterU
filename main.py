@@ -35,12 +35,13 @@ def getmax_task_id():
 #if it does it loads the task objects from the file into the tasklist
 #then uses getmax_task_id() helper to set the task_id
 def load():
+    global task_id
     if os.path.exists(tasklist_file_path):
         with open(tasklist_file_path, 'rb') as inp:
             #uses the first dump of the length of the list to know what to load from the file
             for _ in range(pickle.load(inp)):
                 tasklist.append(pickle.load(inp))
-        task_id = task_id + getmax_task_id()
+        task_id += getmax_task_id()
 load()
 
 #saves the tasklist to the tasklist file
