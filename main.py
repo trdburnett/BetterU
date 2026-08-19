@@ -122,13 +122,19 @@ def add_task(description, priority, reward):
 #removes a task object from the task list and awards credits
 def complete_task(task_id):
     global credits
+    found = False
     for i in range(len(tasklist)):
         if tasklist[i].id == task_id:
             index_to_remove = i
-            credits += tasklist[i].reward
-    del tasklist[index_to_remove]
-    save_tasklist()
-    save_credits()
+            found = True
+            credits_to_add = tasklist[i].reward
+    if found:
+        credits += credits_to_add
+        del tasklist[index_to_remove]
+        save_tasklist()
+        save_credits()
+    else:
+        print("Task not found, check task ID.")
 
 #add a reward object to the reward list
 def add_reward(description, cost):
@@ -139,13 +145,21 @@ def add_reward(description, cost):
 #removes a reward object from the reward list and removes the cost from available credits
 def claim_reward(reward_id):
     global credits
+    found = False
     for i in range(len(rewardlist)):
         if rewardlist[i].id == reward_id:
             index_to_remove = i
-            credits -= rewardlist[i].cost
-    del rewardlist[index_to_remove]
-    save_rewardlist()
-    save_credits()
+            found = True
+            credits_to_deduct = rewardlist[i].cost
+    if found and credits >= credits_to_deduct:
+        del rewardlist[index_to_remove]
+        save_rewardlist()
+        save_credits()
+    elif not found:
+        print("Reward not found, check reward ID.")
+    else:
+        print("You don't have enough credits for that reward yet.")
+
 
 #shows available credits
 def display_credits():
