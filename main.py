@@ -4,6 +4,7 @@ from operator import attrgetter
 
 time = datetime.datetime
 tasklist = []
+task_id = 1
 tasklist_file_path = 'data/tasklist.dat'
 
 class Priority(Enum):
@@ -12,11 +13,23 @@ class Priority(Enum):
     LOW = 3
 
 class Task:
-    def __init__(self,description: str, priority: Priority, reward: int, time: datetime):
+    def __init__(self,description: str, priority: Priority, reward: int, time: datetime, id: int):
         self.description = description
         self.priority = priority
         self.reward = reward
         self.time = time
+        self.id = id
+
+#helper function for load
+#cycles through the tasks in the task list to find the one with the highest number
+#used to add to task_id which is initialised at 1
+#this ensures all tasks have a unique ID 
+def getmax_task_id():
+    max_id = 0
+    for task in tasklist:
+        if task.id > max_id:
+            max_id = task.id
+    return max_id
 
 #checks to see if data/tasklist.dat exisits
 #if it does it loads the task objects from the file into the tasklist
@@ -27,6 +40,7 @@ def load():
             #uses the first dump of the length of the list to know what to load from the file
             for _ in range(pickle.load(inp)):
                 tasklist.append(pickle.load(inp))
+            task_id += getmax_task_id()
     else:
         os.makedirs('data', exist_ok=True)
         f = open(tasklist_file_path, 'x')
@@ -46,7 +60,7 @@ def save():
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
-    task = Task(description,priority,reward,time.now())
+    task = Task(description,priority,reward,time.now(),task_id)
     tasklist.append(task)
     save()
 
@@ -55,7 +69,7 @@ def add_task(description, priority, reward):
 def display_tasks():
     sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
     for task in sorted_tasklist:
-        print(f"Task: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits")
+        print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits")
 
 #returns a string of spaces based on the length of the description it is given
 #helper method for display tasks
