@@ -2,19 +2,24 @@ import datetime, argparse
 from enum import Enum
 from operator import attrgetter
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--echo", help="echo the string you use here")
-args = parser.parse_args()
-print(args.echo)
-
-
-time = datetime.datetime
-tasklist = []
-
 class Priority(Enum):
     HIGH = 1
     MEDIUM = 2
     LOW = 3
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--echo", help="echo the string you use here")
+subparsers = parser.add_subparsers()
+parser_add_task = subparsers.add_parser('add_task', help='Takes 3 positional arguments (Description,Priority,Reward)')
+parser_add_task.add_argument('description', type=str, help='Description of task')
+parser_add_task.add_argument('priority', type=Priority, help='Priority of task')
+parser_add_task.add_argument('reward', type=int, help='Reward of task')
+args = parser.parse_args()
+print(args.echo)
+
+time = datetime.datetime
+tasklist = []
+
 
 class Task:
     def __init__(self,description: str, priority: Priority, reward: int, time: datetime):
