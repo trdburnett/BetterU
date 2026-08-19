@@ -144,8 +144,8 @@ def claim_reward(reward_id):
             index_to_remove = i
             credits -= rewardlist[i].cost
     del rewardlist[index_to_remove]
-    save_rewardlist
-    save_credits
+    save_rewardlist()
+    save_credits()
 
 #shows available credits
 def display_credits():
