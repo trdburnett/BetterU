@@ -22,7 +22,9 @@ def load():
     if os.path.exists(tasklist_file_path):
         print("file exists")
     else:
-        os.makedirs(tasklist_file_path, exist_ok=True)
+        os.makedirs('data', exist_ok=True)
+        f = open(tasklist_file_path, 'x')
+        f.close()
         print("file created")
 
 #adds a task object to the task list
