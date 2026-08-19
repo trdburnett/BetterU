@@ -48,7 +48,7 @@ parser_add_task.add_argument('priority', type=int, choices=[1,2,3], help='Priori
 parser_add_task.add_argument('reward', type=int, help='Reward of task')
 args = parser.parse_args()
 print(args)
-print(args.description)
+add_task(args.description,args.priority,args.reward)
 display_tasks()
 
 
