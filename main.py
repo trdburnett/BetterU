@@ -23,6 +23,9 @@ def load():
     
     if os.path.exists(tasklist_file_path):
         print("file exists")
+        with open(tasklist_file_path, 'rb') as inp:
+            task = pickle.load(inp)
+            print(task)
     else:
         os.makedirs('data', exist_ok=True)
         f = open(tasklist_file_path, 'x')
@@ -33,9 +36,9 @@ load()
 #currently just saves the tasklist to the what should already be exisiting tasklist file
 def save():
     if os.path.exists(tasklist_file_path):
-        with open(tasklist_file_path, 'wb') as output:
+        with open(tasklist_file_path, 'wb') as outp:
             for task in tasklist:
-                pickle.dump(task, output, pickle.HIGHEST_PROTOCOL)
+                pickle.dump(task, outp, pickle.HIGHEST_PROTOCOL)
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
