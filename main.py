@@ -17,6 +17,16 @@ class Task:
         self.reward = reward
         self.time = time
 
+def load():
+    tasklist_file_path = 'data/tasklist.txt'
+    if os.path.exists(tasklist_file_path):
+        print("file exists")
+    else:
+        os.makedirs(tasklist_file_path, exist_ok=True)
+        f = open(tasklist_file_path, 'x')
+        f.close()
+        print("file created")
+
 #adds a task object to the task list
 def add_task(description, priority, reward):
     task = Task(description,priority,reward,time.now())
@@ -61,6 +71,8 @@ if args.display:
 
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
     add_task(args.task_description,args.task_priority,args.task_reward)
+
+load()
     
 
 
