@@ -5,7 +5,9 @@ from operator import attrgetter
 time = datetime.datetime
 tasklist = []
 task_id = 1
+credits = 0
 tasklist_file_path = 'data/tasklist.dat'
+credits_file_path = 'data/credits.txt'
 
 class Priority(Enum):
     HIGH = 1
@@ -42,12 +44,15 @@ def load():
             for _ in range(pickle.load(inp)):
                 tasklist.append(pickle.load(inp))
         task_id += getmax_task_id()
+    if os.path.exists(credits_file_path):
+        with open(credits_file_path, 'r') as f:
+            credits += f.read()
 load()
 
 #saves the tasklist to the tasklist file
 #if the file does not exisit it creates it and any missing directories first
 #is only called after adding a task and completing a task
-def save():
+def save_tasklist():
     if not os.path.exists(tasklist_file_path):
         os.makedirs('data', exist_ok=True)
         f = open(tasklist_file_path, 'x')
@@ -56,21 +61,36 @@ def save():
         #first dump is the length of the list
         pickle.dump(len(tasklist), outp, pickle.HIGHEST_PROTOCOL)
         for task in tasklist:
-            pickle.dump(task, outp)            
+            pickle.dump(task, outp)
+
+#saves total available credits
+def save_credits():
+    if not os.path.exists(credits_file_path):
+        os.makedirs('data', exist_ok=True)
+        f = open(credits_file_path, 'x')
+        f.close()
+    with open(credits_file_path, 'w') as f:
+        f.write(credits)           
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
     task = Task(description,priority,reward,time.now(),task_id)
     tasklist.append(task)
-    save()
+    save_tasklist()
 
-#removes a task object from the task list
+#removes a task object from the task list and awards credits
 def complete_task(task_id):
     for i in range(len(tasklist)):
         if tasklist[i].id == task_id:
             index_to_remove = i
+            credits += tasklist[i].reward
     del tasklist[index_to_remove]
-    save()
+    save_tasklist()
+    save_credits()
+
+#shows available credits
+def display_credits():
+    print(f"Available Credits: {credits}")
 
 #sorts the tasklist by priority and then time
 #the oldest tasks with the highest priority will display at the top
@@ -91,7 +111,8 @@ def display_padding(description):
 
 #parsing command line arguments for different functions see help descriptions
 parser = argparse.ArgumentParser()
-parser.add_argument("--display", action='store_true', help="displays the task list")
+parser.add_argument('--display', action='store_true', help="displays the task list")
+parser.add_argument('--credits', action='store_true', help='displays available credits')
 subparsers = parser.add_subparsers()
 parser_add_task = subparsers.add_parser('add_task', help='add a task to the task list')
 parser_add_task.add_argument('task_description', type=str, help='Description of task')
@@ -104,6 +125,10 @@ args = parser.parse_args()
 #branch for calling display_tasks()
 if args.display:
     display_tasks()
+
+#branch for calling display_credits()
+if args.credits:
+    display_credits()
 
 #branch for calling add_task
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
