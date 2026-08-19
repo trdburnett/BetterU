@@ -1,10 +1,10 @@
-import datetime, argparse, os
+import datetime, argparse, os, pickle
 from enum import Enum
 from operator import attrgetter
 
 time = datetime.datetime
 tasklist = []
-tasklist_file_path = 'data/tasklist.txt'
+tasklist_file_path = 'data/tasklist.pkl'
 
 class Priority(Enum):
     HIGH = 1
@@ -33,8 +33,9 @@ load()
 #currently just saves the tasklist to the what should already be exisiting tasklist file
 def save():
     if os.path.exists(tasklist_file_path):
-        with open(tasklist_file_path, 'w') as f:
-            f.write(tasklist)
+        with open(tasklist_file_path, 'wb') as output:
+            for task in tasklist:
+                pickle.dump(task, output, pickle.HIGHEST_PROTOCOL)
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
