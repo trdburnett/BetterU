@@ -56,7 +56,7 @@ parser_add_task.add_argument('task_reward', type=int, help='Reward of task')
 args = parser.parse_args()
 
 if args.display:
-    display_tasks
+    display_tasks()
 
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
     add_task(args.task_description,args.task_priority,args.task_reward)
