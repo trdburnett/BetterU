@@ -18,9 +18,10 @@ class Task:
         self.reward = reward
         self.time = time
 
-#currently checks to see if data/tasklist.txt exisits and if it doesn't it creates it
+#checks to see if data/tasklist.dat exisits
+#if it does it loads the task objects from the file into the tasklist
+#if it does not it creates the file
 def load():
-    
     if os.path.exists(tasklist_file_path):
         print("file exists")
         with open(tasklist_file_path, 'rb') as inp:
@@ -33,7 +34,9 @@ def load():
         print("file created")
 load()
 
-#currently just saves the tasklist to the what should already be exisiting tasklist file
+#saves the tasklist to the tasklist file
+#load ensures the file already exists
+#is only called after adding a task
 def save():
     if os.path.exists(tasklist_file_path):
         with open(tasklist_file_path, 'wb') as outp:
@@ -64,13 +67,6 @@ def display_padding(description):
         padding_size -= 1
     return padding
 
-#hard coded inputs
-#add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
-#add_task("Do 3 lessons on boot.dev", 1, 3)
-#add_task("Go for a 10K walk", 2, 2)
-#task = Task("Touch grass",3,1,time(2025,1,1))
-#tasklist.append(task)
-
 #parsing command line arguments for different functions see help descriptions
 parser = argparse.ArgumentParser()
 parser.add_argument("--display", action='store_true', help="displays the task list")
@@ -81,9 +77,11 @@ parser_add_task.add_argument('task_priority', type=int, choices=[1,2,3], help='P
 parser_add_task.add_argument('task_reward', type=int, choices=[1,2,3,4,5], help='Reward of task')
 args = parser.parse_args()
 
+#branch for calling display_tasks()
 if args.display:
     display_tasks()
 
+#branch for calling add_task
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
     add_task(args.task_description,args.task_priority,args.task_reward)
 
