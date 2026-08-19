@@ -23,7 +23,6 @@ class Task:
 #if it does not it creates the file
 def load():
     if os.path.exists(tasklist_file_path):
-        print("file exists")
         with open(tasklist_file_path, 'rb') as inp:
             #uses the first dump of the length of the list to know what to load from the file
             for _ in range(pickle.load(inp)):
