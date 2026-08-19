@@ -52,7 +52,7 @@ parser.add_argument("--display", action='store_true', help="displays the task li
 subparsers = parser.add_subparsers()
 parser_add_task = subparsers.add_parser('add_task', help='add a task to the task list')
 parser_add_task.add_argument('task_description', type=str, help='Description of task')
-parser_add_task.add_argument('task_priority', type=Priority, choices=[1,2,3], help='Priority of task')
+parser_add_task.add_argument('task_priority', type=int, choices=[1,2,3], help='Priority of task')
 parser_add_task.add_argument('task_reward', type=int, choices=[1,2,3,4,5], help='Reward of task')
 args = parser.parse_args()
 
