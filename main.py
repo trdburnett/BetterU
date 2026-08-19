@@ -40,7 +40,7 @@ def display_padding(description):
     return padding
 
 parser = argparse.ArgumentParser()
-#parser.add_argument("--echo", help="echo the string you use here")
+parser.add_argument("--display", action='store_true', help="displays tasks")
 subparsers = parser.add_subparsers()
 parser_add_task = subparsers.add_parser('add_task', help='Takes 3 positional arguments (Description,Priority,Reward)')
 parser_add_task.add_argument('task_description', type=str, help='Description of task')
@@ -48,16 +48,19 @@ parser_add_task.add_argument('task_priority', type=int, choices=[1,2,3], help='P
 parser_add_task.add_argument('task_reward', type=int, help='Reward of task')
 args = parser.parse_args()
 
+if args.display:
+    display_tasks
+
 if args.task_description and args.task_priority and args.task_reward:
     add_task(args.task_description,args.task_priority,args.task_reward)
-display_tasks()
+    display_tasks()
 
 
 #hard coded inputs
-#add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
-#add_task("Do 3 lessons on boot.dev", 1, 3)
-#add_task("Go for a 10K walk", 2, 2)
-#task = Task("Touch grass",3,1,time(2025,1,1))
-#tasklist.append(task)
+add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
+add_task("Do 3 lessons on boot.dev", 1, 3)
+add_task("Go for a 10K walk", 2, 2)
+task = Task("Touch grass",3,1,time(2025,1,1))
+tasklist.append(task)
 #display_tasks()
 
