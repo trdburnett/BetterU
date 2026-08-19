@@ -40,7 +40,7 @@ def load():
             #uses the first dump of the length of the list to know what to load from the file
             for _ in range(pickle.load(inp)):
                 tasklist.append(pickle.load(inp))
-        task_id += getmax_task_id()
+    task_id += getmax_task_id()
 load()
 
 #saves the tasklist to the tasklist file
