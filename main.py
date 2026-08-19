@@ -38,6 +38,7 @@ def getmax_task_id():
 #then uses getmax_task_id() helper to set the task_id
 def load():
     global task_id
+    global credits
     if os.path.exists(tasklist_file_path):
         with open(tasklist_file_path, 'rb') as inp:
             #uses the first dump of the length of the list to know what to load from the file
