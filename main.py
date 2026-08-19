@@ -46,7 +46,7 @@ load()
 
 #saves the tasklist to the tasklist file
 #if the file does not exisit it creates it and any missing directories first
-#is only called after adding a task
+#is only called after adding a task and completing a task
 def save():
     if not os.path.exists(tasklist_file_path):
         os.makedirs('data', exist_ok=True)
@@ -62,6 +62,14 @@ def save():
 def add_task(description, priority, reward):
     task = Task(description,priority,reward,time.now(),task_id)
     tasklist.append(task)
+    save()
+
+#removes a task object from the task list
+def complete_task(task_id):
+    for i in range(len(tasklist)):
+        if tasklist[i].task_id == task_id:
+            index_to_remove = i
+    del tasklist[index_to_remove]
     save()
 
 #sorts the tasklist by priority and then time
@@ -89,6 +97,8 @@ parser_add_task = subparsers.add_parser('add_task', help='add a task to the task
 parser_add_task.add_argument('task_description', type=str, help='Description of task')
 parser_add_task.add_argument('task_priority', type=int, choices=[1,2,3], help='Priority of task')
 parser_add_task.add_argument('task_reward', type=int, choices=[1,2,3,4,5], help='Reward of task')
+parser_complete_task = subparsers.add_parser('complete_task', help='removes a task from the task list by task ID and applies reward credit(s)')
+parser_complete_task.add_argument('task_id', type=int, help='Task ID number')
 args = parser.parse_args()
 
 #branch for calling display_tasks()
@@ -99,6 +109,9 @@ if args.display:
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
     add_task(args.task_description,args.task_priority,args.task_reward)
 
+#branch for calling complete_task
+if 'task_id' in args:
+    complete_task(args.task_id)
 
     
 
