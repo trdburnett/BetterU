@@ -33,7 +33,7 @@ def getmax_task_id():
 
 #checks to see if data/tasklist.dat exisits
 #if it does it loads the task objects from the file into the tasklist
-#if it does not it creates the file
+#then uses getmax_task_id() helper to set the task_id
 def load():
     if os.path.exists(tasklist_file_path):
         with open(tasklist_file_path, 'rb') as inp:
@@ -41,22 +41,21 @@ def load():
             for _ in range(pickle.load(inp)):
                 tasklist.append(pickle.load(inp))
             task_id += getmax_task_id()
-    else:
-        os.makedirs('data', exist_ok=True)
-        f = open(tasklist_file_path, 'x')
-        f.close()
 load()
 
 #saves the tasklist to the tasklist file
-#load ensures the file already exists
+#if the file does not exisit it creates it and any missing directories first
 #is only called after adding a task
 def save():
-    if os.path.exists(tasklist_file_path):
-        with open(tasklist_file_path, 'wb') as outp:
-            #first dump is the length of the list
-            pickle.dump(len(tasklist), outp, pickle.HIGHEST_PROTOCOL)
-            for task in tasklist:
-                pickle.dump(task, outp)
+    if not os.path.exists(tasklist_file_path):
+        os.makedirs('data', exist_ok=True)
+        f = open(tasklist_file_path, 'x')
+        f.close()
+    with open(tasklist_file_path, 'wb') as outp:
+        #first dump is the length of the list
+        pickle.dump(len(tasklist), outp, pickle.HIGHEST_PROTOCOL)
+        for task in tasklist:
+            pickle.dump(task, outp)            
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
