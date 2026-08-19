@@ -4,9 +4,12 @@ from operator import attrgetter
 
 time = datetime.datetime
 tasklist = []
+rewardlist = []
 task_id = 1
+reward_id = 1
 credits = 0
 tasklist_file_path = 'data/tasklist.dat'
+rewardlist_file_path = 'data/rewardlist.dat'
 credits_file_path = 'data/credits.txt'
 
 class Priority(Enum):
@@ -22,6 +25,12 @@ class Task:
         self.time = time
         self.id = id
 
+class Reward:
+    def __init__(self,description: str, cost: int, id: int):
+        self.description = description
+        self.cost = cost
+        self.id = id
+
 #helper function for load
 #cycles through the tasks in the task list to find the one with the highest number
 #used to add to task_id which is initialised at 1
@@ -33,13 +42,25 @@ def getmax_task_id():
             max_id = task.id
     return max_id
 
+#helper function for load
+#similar to getmax_task_id but for rewards instead
+def getmax_reward_id():
+    max_id = 0
+    for reward in rewardlist:
+        if reward.id > max_id:
+            max_id = reward.id
+    return max_id
+
 #checks to see if data/tasklist.dat exisits
 #if it does it loads the task objects from the file into the tasklist
 #then uses getmax_task_id() helper to set the task_id
+#checks to see if data/tasklist.dat exists
+#follows similar flow as tasklist loading
 #checks to see if data/credits.txt exisits
 #if it does it loads the value and sets the credit variable
 def load():
     global task_id
+    global reward_id
     global credits
     if os.path.exists(tasklist_file_path):
         with open(tasklist_file_path, 'rb') as inp:
@@ -47,6 +68,11 @@ def load():
             for _ in range(pickle.load(inp)):
                 tasklist.append(pickle.load(inp))
         task_id += getmax_task_id()
+    if os.path.exists(rewardlist_file_path):
+        with open(rewardlist_file_path, 'rb') as inp:
+            for _ in range(pickle.load(inp)):
+                rewardlist.append(pickle.load(inp))
+        reward_id += getmax_reward_id()
     if os.path.exists(credits_file_path):
         with open(credits_file_path, 'r') as f:
             credits += int(f.read())
@@ -65,6 +91,18 @@ def save_tasklist():
         pickle.dump(len(tasklist), outp, pickle.HIGHEST_PROTOCOL)
         for task in tasklist:
             pickle.dump(task, outp)
+
+#saves the rewardlist to the rewardlist file
+#works similar to save_tasklist
+def save_rewardlist():
+    if not os.path.exists(rewardlist_file_path):
+        os.makedirs('data', exist_ok=True)
+        f = open(rewardlist_file_path, 'x')
+        f.close()
+    with open(rewardlist_file_path, 'wb') as outp:
+        pickle.dump(len(rewardlist), outp, pickle.HIGHEST_PROTOCOL)
+        for reward in rewardlist:
+            pickle.dump(reward, outp)
 
 #saves total available credits
 def save_credits():
@@ -92,6 +130,12 @@ def complete_task(task_id):
     save_tasklist()
     save_credits()
 
+#add a reward object to the reward list
+def add_reward(description, cost):
+    reward = Reward(description,cost,reward_id)
+    rewardlist.append(reward)
+    save_rewardlist()
+
 #shows available credits
 def display_credits():
     print(f"Available Credits: {credits}")
@@ -103,8 +147,13 @@ def display_tasks():
     for task in sorted_tasklist:
         print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits")
 
+#displays the rewards list
+def display_rewards():
+    for reward in rewardlist:
+        print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
+
 #returns a string of spaces based on the length of the description it is given
-#helper method for display tasks
+#helper method for display tasks and display rewards
 def display_padding(description):
     padding = ""
     padding_size = 50 - len(description)
@@ -115,7 +164,8 @@ def display_padding(description):
 
 #parsing command line arguments for different functions see help descriptions
 parser = argparse.ArgumentParser()
-parser.add_argument('--display', action='store_true', help="displays the task list")
+parser.add_argument('--tasks', action='store_true', help='displays the task list')
+parser.add_argument('--rewards', action='store_true', help='displays the reward list')
 parser.add_argument('--credits', action='store_true', help='displays available credits')
 subparsers = parser.add_subparsers()
 parser_add_task = subparsers.add_parser('add_task', help='add a task to the task list')
@@ -124,11 +174,18 @@ parser_add_task.add_argument('task_priority', type=int, choices=[1,2,3], help='P
 parser_add_task.add_argument('task_reward', type=int, choices=[1,2,3,4,5], help='Reward of task')
 parser_complete_task = subparsers.add_parser('complete_task', help='removes a task from the task list by task ID and applies reward credit(s)')
 parser_complete_task.add_argument('task_id', type=int, help='Task ID number')
+parser_add_reward = subparsers.add_parser('add_reward', help='add a reward to the reward list')
+parser_add_reward.add_argument('reward_description', type=str, help='Description of reward')
+parser_add_reward.add_argument('reward_cost', type=int, help='Cost of redeeming reward')
 args = parser.parse_args()
 
 #branch for calling display_tasks()
-if args.display:
+if args.tasks:
     display_tasks()
+
+#branch for calling display_rewards()
+if args.rewards:
+    display_rewards()
 
 #branch for calling display_credits()
 if args.credits:
@@ -142,6 +199,9 @@ if 'task_description' in args and 'task_priority' in args and 'task_reward' in a
 if 'task_id' in args:
     complete_task(args.task_id)
 
+#branch for calling reward_task
+if 'reward_description' in args and 'reward_cost' in args:
+    add_reward(args.reward_description,args.reward_cost)
     
 
 
