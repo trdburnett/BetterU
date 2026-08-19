@@ -152,6 +152,7 @@ def claim_reward(reward_id):
             found = True
             credits_to_deduct = rewardlist[i].cost
     if found and credits >= credits_to_deduct:
+        credits -= credits_to_deduct
         del rewardlist[index_to_remove]
         save_rewardlist()
         save_credits()
