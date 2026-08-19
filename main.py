@@ -46,13 +46,14 @@ add_task("Go for a 10K walk", 2, 2)
 task = Task("Touch grass",3,1,time(2025,1,1))
 tasklist.append(task)
 
+#parsing command line arguments for different functions see help descriptions
 parser = argparse.ArgumentParser()
-parser.add_argument("--display", action='store_true', help="displays tasks")
+parser.add_argument("--display", action='store_true', help="displays the task list")
 subparsers = parser.add_subparsers()
-parser_add_task = subparsers.add_parser('add_task', help='Takes 3 positional arguments (Description,Priority,Reward)')
+parser_add_task = subparsers.add_parser('add_task', help='add a task to the task list')
 parser_add_task.add_argument('task_description', type=str, help='Description of task')
 parser_add_task.add_argument('task_priority', type=int, choices=[1,2,3], help='Priority of task')
-parser_add_task.add_argument('task_reward', type=int, help='Reward of task')
+parser_add_task.add_argument('task_reward', type=int, choices=[1,2,3,4,5], help='Reward of task')
 args = parser.parse_args()
 
 if args.display:
@@ -60,6 +61,6 @@ if args.display:
 
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
     add_task(args.task_description,args.task_priority,args.task_reward)
-    display_tasks()
+    
 
 
