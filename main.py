@@ -4,6 +4,7 @@ from operator import attrgetter
 
 time = datetime.datetime
 tasklist = []
+tasklist_file_path = 'data/tasklist.txt'
 
 class Priority(Enum):
     HIGH = 1
@@ -17,8 +18,9 @@ class Task:
         self.reward = reward
         self.time = time
 
+#currently checks to see if data/tasklist.txt exisits and if it doesn't it creates it
 def load():
-    tasklist_file_path = 'data/tasklist.txt'
+    
     if os.path.exists(tasklist_file_path):
         print("file exists")
     else:
@@ -26,11 +28,19 @@ def load():
         f = open(tasklist_file_path, 'x')
         f.close()
         print("file created")
+load()
+
+#currently just saves the tasklist to the what should already be exisiting tasklist file
+def save():
+    if os.path.exists(tasklist_file_path):
+        with open(tasklist_file_path, 'w') as f:
+            f.write(tasklist)
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
     task = Task(description,priority,reward,time.now())
     tasklist.append(task)
+    save()
 
 #sorts the tasklist by priority and then time
 #the oldest tasks with the highest priority will display at the top
@@ -72,7 +82,7 @@ if args.display:
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
     add_task(args.task_description,args.task_priority,args.task_reward)
 
-load()
+
     
 
 
