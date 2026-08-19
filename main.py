@@ -4,7 +4,7 @@ from operator import attrgetter
 
 time = datetime.datetime
 tasklist = []
-tasklist_file_path = 'data/tasklist.pkl'
+tasklist_file_path = 'data/tasklist.dat'
 
 class Priority(Enum):
     HIGH = 1
@@ -24,8 +24,8 @@ def load():
     if os.path.exists(tasklist_file_path):
         print("file exists")
         with open(tasklist_file_path, 'rb') as inp:
-            task = pickle.load(inp)
-            print(task)
+            loaded_tasklist = pickle.load(inp)
+            print(loaded_tasklist)
     else:
         os.makedirs('data', exist_ok=True)
         f = open(tasklist_file_path, 'x')
@@ -37,8 +37,7 @@ load()
 def save():
     if os.path.exists(tasklist_file_path):
         with open(tasklist_file_path, 'wb') as outp:
-            for task in tasklist:
-                pickle.dump(task, outp, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(tasklist, outp, pickle.HIGHEST_PROTOCOL)
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
