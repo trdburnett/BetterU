@@ -39,6 +39,13 @@ def display_padding(description):
         padding_size -= 1
     return padding
 
+#hard coded inputs
+add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
+add_task("Do 3 lessons on boot.dev", 1, 3)
+add_task("Go for a 10K walk", 2, 2)
+task = Task("Touch grass",3,1,time(2025,1,1))
+tasklist.append(task)
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--display", action='store_true', help="displays tasks")
 subparsers = parser.add_subparsers()
@@ -55,12 +62,4 @@ if 'task_description' in args and 'task_priority' in args and 'task_reward' in a
     add_task(args.task_description,args.task_priority,args.task_reward)
     display_tasks()
 
-
-#hard coded inputs
-add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
-add_task("Do 3 lessons on boot.dev", 1, 3)
-add_task("Go for a 10K walk", 2, 2)
-task = Task("Touch grass",3,1,time(2025,1,1))
-tasklist.append(task)
-#display_tasks()
 
