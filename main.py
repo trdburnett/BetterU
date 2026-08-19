@@ -142,11 +142,7 @@ def claim_reward(reward_id):
     for i in range(len(rewardlist)):
         if rewardlist[i].id == reward_id:
             index_to_remove = i
-            if credits >= rewardlist[i].cost:
-                credits -= rewardlist[i].cost
-            else:
-                print("You don't have enough credits to claim this reward, yet!")
-                break
+            credits -= rewardlist[i].cost
     del rewardlist[index_to_remove]
     save_rewardlist
     save_credits
