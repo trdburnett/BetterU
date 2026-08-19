@@ -46,7 +46,7 @@ def load():
         task_id += getmax_task_id()
     if os.path.exists(credits_file_path):
         with open(credits_file_path, 'r') as f:
-            credits += f.read()
+            credits += int(f.read())
 load()
 
 #saves the tasklist to the tasklist file
@@ -70,7 +70,7 @@ def save_credits():
         f = open(credits_file_path, 'x')
         f.close()
     with open(credits_file_path, 'w') as f:
-        f.write(credits)           
+        f.write(str(credits))           
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
