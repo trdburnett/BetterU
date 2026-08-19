@@ -60,11 +60,11 @@ def display_padding(description):
     return padding
 
 #hard coded inputs
-add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
-add_task("Do 3 lessons on boot.dev", 1, 3)
-add_task("Go for a 10K walk", 2, 2)
-task = Task("Touch grass",3,1,time(2025,1,1))
-tasklist.append(task)
+#add_task("Do 3 sets of bicep curls for 5 reps", 3, 1)
+#add_task("Do 3 lessons on boot.dev", 1, 3)
+#add_task("Go for a 10K walk", 2, 2)
+#task = Task("Touch grass",3,1,time(2025,1,1))
+#tasklist.append(task)
 
 #parsing command line arguments for different functions see help descriptions
 parser = argparse.ArgumentParser()
