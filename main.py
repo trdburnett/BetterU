@@ -46,7 +46,7 @@ parser_add_task = subparsers.add_parser('add_task', help='Takes 3 positional arg
 parser_add_task.add_argument('description', type=str, help='Description of task')
 parser_add_task.add_argument('priority', type=int, choices=[1,2,3], help='Priority of task')
 parser_add_task.add_argument('reward', type=int, help='Reward of task')
-args = parser_add_task.parse_args()
+args = parser.parse_args()
 add_task(args.description,args.priority,args.reward)
 display_tasks()
 
