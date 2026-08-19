@@ -43,11 +43,13 @@ parser = argparse.ArgumentParser()
 #parser.add_argument("--echo", help="echo the string you use here")
 subparsers = parser.add_subparsers()
 parser_add_task = subparsers.add_parser('add_task', help='Takes 3 positional arguments (Description,Priority,Reward)')
-parser_add_task.add_argument('description', type=str, help='Description of task')
-parser_add_task.add_argument('priority', type=int, choices=[1,2,3], help='Priority of task')
-parser_add_task.add_argument('reward', type=int, help='Reward of task')
+parser_add_task.add_argument('task_description', type=str, help='Description of task')
+parser_add_task.add_argument('task_priority', type=int, choices=[1,2,3], help='Priority of task')
+parser_add_task.add_argument('task_reward', type=int, help='Reward of task')
 args = parser.parse_args()
-add_task(args.description,args.priority,args.reward)
+
+if args.task_description and args.task_priority and args.task_reward:
+    add_task(args.task_description,args.task_priority,args.task_reward)
 display_tasks()
 
 
