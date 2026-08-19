@@ -80,6 +80,7 @@ def add_task(description, priority, reward):
 
 #removes a task object from the task list and awards credits
 def complete_task(task_id):
+    global credits
     for i in range(len(tasklist)):
         if tasklist[i].id == task_id:
             index_to_remove = i
