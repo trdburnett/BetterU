@@ -136,6 +136,21 @@ def add_reward(description, cost):
     rewardlist.append(reward)
     save_rewardlist()
 
+#removes a reward object from the reward list and removes the cost from available credits
+def claim_reward(reward_id):
+    global credits
+    for i in range(len(rewardlist)):
+        if rewardlist[i].id == reward_id:
+            index_to_remove = i
+            if credits >= rewardlist[i].cost:
+                credits -= rewardlist[i].cost
+            else:
+                print("You don't have enough credits to claim this reward, yet!")
+                break
+    del rewardlist[index_to_remove]
+    save_rewardlist
+    save_credits
+
 #shows available credits
 def display_credits():
     print(f"Available Credits: {credits}")
@@ -177,6 +192,8 @@ parser_complete_task.add_argument('task_id', type=int, help='Task ID number')
 parser_add_reward = subparsers.add_parser('add_reward', help='add a reward to the reward list')
 parser_add_reward.add_argument('reward_description', type=str, help='Description of reward')
 parser_add_reward.add_argument('reward_cost', type=int, help='Cost of redeeming reward')
+parser_claim_reward = subparsers.add_parser('claim_reward', help='removes a reward from the rewards list by reward ID and deducts the cost from available credits')
+parser_claim_reward.add_argument('reward_id', type=int, help='Reward ID number')
 args = parser.parse_args()
 
 #branch for calling display_tasks()
@@ -202,6 +219,10 @@ if 'task_id' in args:
 #branch for calling reward_task
 if 'reward_description' in args and 'reward_cost' in args:
     add_reward(args.reward_description,args.reward_cost)
+
+#branch for calling claim_reward
+if 'reward_id' in args:
+    claim_reward(args.reward_id)
     
 
 
