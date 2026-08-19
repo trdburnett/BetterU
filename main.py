@@ -36,6 +36,8 @@ def getmax_task_id():
 #checks to see if data/tasklist.dat exisits
 #if it does it loads the task objects from the file into the tasklist
 #then uses getmax_task_id() helper to set the task_id
+#checks to see if data/credits.txt exisits
+#if it does it loads the value and sets the credit variable
 def load():
     global task_id
     global credits
