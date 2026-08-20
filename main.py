@@ -87,17 +87,17 @@ def load():
         with open(save_file_path, 'r') as f:
             for line in f:
                 if "Credits" in line:
-                    credits += int(line.lstrip("Credits: "))
+                    credits += int((line.lstrip("Credits: ")).rstrip(" \n"))
                 if "High Priority Tasks Completed" in line:
-                    high_priority_tasks_completed += int(line.lstrip("High Priority Tasks Completed: "))
+                    high_priority_tasks_completed += int((line.lstrip("High Priority Tasks Completed: ")).rstrip(" \n"))
                 if "Medium Priority Tasks Completed" in line:
-                    medium_priority_tasks_completed += int(line.lstrip("Medium Priority Tasks Completed: "))
+                    medium_priority_tasks_completed += int((line.lstrip("Medium Priority Tasks Completed: ")).rstrip(" \n"))
                 if "Low Priority Tasks Completed" in line:
-                    low_priority_tasks_completed += int(line.lstrip("Low Priority Tasks Completed: "))
+                    low_priority_tasks_completed += int((line.lstrip("Low Priority Tasks Completed: ")).rstrip(" \n"))
                 if "Tasks Completed" in line:
-                    tasks_completed += int(line.lstrip("Tasks Completed: "))
+                    tasks_completed += int((line.lstrip("Tasks Completed: ")).rstrip(" \n"))
                 if "Rewards Claimed" in line:
-                    rewards_claimed += int(line.lstrip("Rewards Claimed: "))
+                    rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
 load()
 
 #saves the tasklist to the tasklist file
