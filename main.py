@@ -15,7 +15,7 @@ low_priority_tasks_completed = 0
 rewards_claimed = 0
 tasklist_file_path = 'data/tasklist.dat'
 rewardlist_file_path = 'data/rewardlist.dat'
-credits_file_path = 'data/credits.txt'
+save_file_path = 'data/save.txt'
 
 class Priority(Enum):
     HIGH = 1
@@ -78,8 +78,8 @@ def load():
             for _ in range(pickle.load(inp)):
                 rewardlist.append(pickle.load(inp))
         reward_id += getmax_reward_id()
-    if os.path.exists(credits_file_path):
-        with open(credits_file_path, 'r') as f:
+    if os.path.exists(save_file_path):
+        with open(save_file_path, 'r') as f:
             for line in f:
                 if "Credits" in line:
                     credits += int(line.lstrip("Credits: "))
@@ -111,13 +111,13 @@ def save_rewardlist():
         for reward in rewardlist:
             pickle.dump(reward, outp)
 
-#saves total available credits
-def save_credits():
-    if not os.path.exists(credits_file_path):
+#saves total available credits (currently)
+def save():
+    if not os.path.exists(save_file_path):
         os.makedirs('data', exist_ok=True)
-        f = open(credits_file_path, 'x')
+        f = open(save_file_path, 'x')
         f.close()
-    with open(credits_file_path, 'w') as f:
+    with open(save_file_path, 'w') as f:
         f.write(f"Credits: {credits}")           
 
 #adds a task object to the task list
@@ -150,7 +150,7 @@ def complete_task(task_id):
         credits += credits_to_add
         del tasklist[index_to_remove]
         save_tasklist()
-        save_credits()
+        save()
         print(f"Tasks Completed: {tasks_completed}")
         print(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
         print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
@@ -179,7 +179,7 @@ def claim_reward(reward_id):
         rewards_claimed += 1
         del rewardlist[index_to_remove]
         save_rewardlist()
-        save_credits()
+        save()
         print(f"Rewards Claimed: {rewards_claimed}")
     elif not found:
         print("Reward not found, check reward ID.")
