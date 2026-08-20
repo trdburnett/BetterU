@@ -133,12 +133,12 @@ def save():
         f = open(save_file_path, 'x')
         f.close()
     with open(save_file_path, 'w') as f:
-        f.write(f"Credits: {credits}")
-        f.write(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
-        f.write(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
-        f.write(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
-        f.write(f"Tasks Completed: {tasks_completed}")
-        f.write(f"Rewards Claimed: {rewards_claimed}")           
+        f.write(f"Credits: {credits} \n")
+        f.write(f"High Priority Tasks Completed: {high_priority_tasks_completed} \n")
+        f.write(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed} \n")
+        f.write(f"Low Priority Tasks Completed: {low_priority_tasks_completed} \n")
+        f.write(f"Tasks Completed: {tasks_completed} \n")
+        f.write(f"Rewards Claimed: {rewards_claimed} \n")           
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
