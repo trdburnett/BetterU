@@ -61,12 +61,17 @@ def getmax_reward_id():
 #then uses getmax_task_id() helper to set the task_id
 #checks to see if data/tasklist.dat exists
 #follows similar flow as tasklist loading
-#checks to see if data/credits.txt exisits
-#if it does it loads the value and sets the credit variable
+#checks to see if data/save.txt exisits
+#if it does it loads the values and sets variables used in the program
 def load():
     global task_id
     global reward_id
     global credits
+    global tasks_completed
+    global high_priority_tasks_completed
+    global medium_priority_tasks_completed
+    global low_priority_tasks_completed
+    global rewards_claimed
     if os.path.exists(tasklist_file_path):
         with open(tasklist_file_path, 'rb') as inp:
             #uses the first dump of the length of the list to know what to load from the file
@@ -83,6 +88,16 @@ def load():
             for line in f:
                 if "Credits" in line:
                     credits += int(line.lstrip("Credits: "))
+                if "High Priority Tasks Completed" in line:
+                    high_priority_tasks_completed += int(line.lstrip("High Priority Tasks Completed: "))
+                if "Medium Priority Tasks Completed" in line:
+                    medium_priority_tasks_completed += int(line.lstrip("Medium Priority Tasks Completed: "))
+                if "Low Priority Tasks Completed" in line:
+                    low_priority_tasks_completed += int(line.lstrip("Low Priority Tasks Completed: "))
+                if "Tasks Completed" in line:
+                    tasks_completed += int(line.lstrip("Tasks Completed: "))
+                if "Rewards Claimed" in line:
+                    rewards_claimed += int(line.lstrip("Rewards Claimed: "))
 load()
 
 #saves the tasklist to the tasklist file
@@ -111,14 +126,19 @@ def save_rewardlist():
         for reward in rewardlist:
             pickle.dump(reward, outp)
 
-#saves total available credits (currently)
+#saves all simple variables used by the program
 def save():
     if not os.path.exists(save_file_path):
         os.makedirs('data', exist_ok=True)
         f = open(save_file_path, 'x')
         f.close()
     with open(save_file_path, 'w') as f:
-        f.write(f"Credits: {credits}")           
+        f.write(f"Credits: {credits}")
+        f.write(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
+        f.write(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
+        f.write(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
+        f.write(f"Tasks Completed: {tasks_completed}")
+        f.write(f"Rewards Claimed: {rewards_claimed}")           
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
