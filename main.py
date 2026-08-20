@@ -80,7 +80,9 @@ def load():
         reward_id += getmax_reward_id()
     if os.path.exists(credits_file_path):
         with open(credits_file_path, 'r') as f:
-            credits += int(f.read())
+            for line in f:
+                if "Credits" in line:
+                    credits += int(line.lstrip("Credits: "))
 load()
 
 #saves the tasklist to the tasklist file
@@ -116,7 +118,7 @@ def save_credits():
         f = open(credits_file_path, 'x')
         f.close()
     with open(credits_file_path, 'w') as f:
-        f.write(str(credits))           
+        f.write(f"Credits: {credits}")           
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
