@@ -8,6 +8,11 @@ rewardlist = []
 task_id = 1
 reward_id = 1
 credits = 0
+tasks_completed = 0
+high_priority_tasks_completed = 0
+medium_priority_tasks_completed = 0
+low_priority_tasks_completed = 0
+rewards_claimed = 0
 tasklist_file_path = 'data/tasklist.dat'
 rewardlist_file_path = 'data/rewardlist.dat'
 credits_file_path = 'data/credits.txt'
@@ -122,6 +127,10 @@ def add_task(description, priority, reward):
 #removes a task object from the task list and awards credits
 def complete_task(task_id):
     global credits
+    global tasks_completed
+    global high_priority_tasks_completed
+    global medium_priority_tasks_completed
+    global low_priority_tasks_completed
     found = False
     for i in range(len(tasklist)):
         if tasklist[i].id == task_id:
@@ -129,10 +138,21 @@ def complete_task(task_id):
             found = True
             credits_to_add = tasklist[i].reward
     if found:
+        if tasklist[index_to_remove].priority == 1:
+            high_priority_tasks_completed += 1
+        if tasklist[index_to_remove].priority == 2:
+            medium_priority_tasks_completed += 1
+        if tasklist[index_to_remove].priority == 3:
+            low_priority_tasks_completed += 1
+        tasks_completed += 1
         credits += credits_to_add
         del tasklist[index_to_remove]
         save_tasklist()
         save_credits()
+        print(f"Tasks Completed: {tasks_completed}")
+        print(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
+        print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
+        print(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
     else:
         print("Task not found, check task ID.")
 
@@ -145,6 +165,7 @@ def add_reward(description, cost):
 #removes a reward object from the reward list and removes the cost from available credits
 def claim_reward(reward_id):
     global credits
+    global rewards_claimed
     found = False
     for i in range(len(rewardlist)):
         if rewardlist[i].id == reward_id:
@@ -153,9 +174,11 @@ def claim_reward(reward_id):
             credits_to_deduct = rewardlist[i].cost
     if found and credits >= credits_to_deduct:
         credits -= credits_to_deduct
+        rewards_claimed += 1
         del rewardlist[index_to_remove]
         save_rewardlist()
         save_credits()
+        print(f"Rewards Claimed: {rewards_claimed}")
     elif not found:
         print("Reward not found, check reward ID.")
     else:
