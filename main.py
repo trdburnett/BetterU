@@ -5,6 +5,7 @@ from operator import attrgetter
 time = datetime.datetime
 tasklist = []
 rewardlist = []
+achievementlist = []
 task_id = 1
 reward_id = 1
 credits = 0
@@ -15,6 +16,7 @@ low_priority_tasks_completed = 0
 rewards_claimed = 0
 tasklist_file_path = 'data/tasklist.dat'
 rewardlist_file_path = 'data/rewardlist.dat'
+achievementlist_file_path = 'data/achievementlist.dat'
 save_file_path = 'data/save.txt'
 
 class Priority(Enum):
@@ -35,6 +37,14 @@ class Reward:
         self.description = description
         self.cost = cost
         self.id = id
+
+class Achievement:
+    def __init__(self,description: str, completed: bool, reward: int, required_stat: str, required_value: int):
+        self.description = description
+        self.completed = completed
+        self.reward = reward
+        self.required_stat = required_stat
+        self.required_value = required_value
 
 #helper function for load
 #cycles through the tasks in the task list to find the one with the highest number
@@ -83,6 +93,10 @@ def load():
             for _ in range(pickle.load(inp)):
                 rewardlist.append(pickle.load(inp))
         reward_id += getmax_reward_id()
+    if os.path.exists(achievementlist_file_path):
+            with open(achievementlist_file_path, 'rb') as inp:
+                for _ in range(pickle.load(inp)):
+                    achievementlist.append(pickle.load(inp))
     if os.path.exists(save_file_path):
         with open(save_file_path, 'r') as f:
             for line in f:
@@ -138,7 +152,52 @@ def save():
         f.write(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed} \n")
         f.write(f"Low Priority Tasks Completed: {low_priority_tasks_completed} \n")
         f.write(f"Tasks Completed: {tasks_completed} \n")
-        f.write(f"Rewards Claimed: {rewards_claimed} \n")           
+        f.write(f"Rewards Claimed: {rewards_claimed} \n")
+
+#saves the achievementlist to the achievementlist file
+def save_achievementlist():
+    if not os.path.exists(achievementlist_file_path):
+        os.makedirs('data', exist_ok=True)
+        f = open(achievementlist_file_path, 'x')
+        f.close()
+    with open(achievementlist_file_path, 'wb') as outp:
+        pickle.dump(len(achievementlist), outp, pickle.HIGHEST_PROTOCOL)
+        for achievement in achievementlist:
+            pickle.dump(achievement, outp)
+
+#populates the achievement_list
+def populate_achievement_list():
+    achievementlist.append(Achievement("Completed 10 Tasks",False,5,"tasks_completed",10))
+
+#helper method for check_achievements
+#takes a required statistic to check and the required value
+#returns true if the requirements have been met, false otherwise
+def check_achievement(required_stat: str, required_value: int):
+    global tasks_completed
+    global high_priority_tasks_completed
+    global medium_priority_tasks_completed
+    global low_priority_tasks_completed
+    global rewards_claimed
+    if required_stat == "tasks_completed":
+        if tasks_completed >= required_value:
+            return True
+    return False
+
+
+#performs a check for the achievement list if it is empty it calls the populate and save achievement functions respectively
+#otherwise applies credits and alerts user if an achievement has been completed
+def check_achievements():
+    global credits
+    if achievementlist == []:
+        populate_achievement_list()
+        save_achievementlist()
+    else:
+        for achievement in achievementlist:
+            if not achievement.completed:
+                completed = check_achievement(achievement.required_stat,achievement.required_value)
+                if completed:
+                    achievement.completed = True
+                    credits += achievement.reward
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
@@ -256,13 +315,21 @@ def display_rewards():
         for reward in rewardlist:
             print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
 
-#display statistics
+#displays statistics
 def display_stats():
     print(f"Tasks Completed: {tasks_completed}")
     print(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
     print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
     print(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
     print(f"Rewards Claimed: {rewards_claimed}")
+
+#displays the achievement list
+def display_achievements():
+    if achievementlist == []:
+        print("Oh Dear, sorry the achievements have failed to load. Please try again.")
+    else:
+        for achievement in achievementlist:
+            print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
 
 #returns a string of spaces based on the length of the description it is given
 #helper method for display tasks and display rewards
@@ -280,6 +347,7 @@ parser.add_argument('--tasks', action='store_true', help='displays the task list
 parser.add_argument('--rewards', action='store_true', help='displays the reward list')
 parser.add_argument('--credits', action='store_true', help='displays available credits')
 parser.add_argument('--stats', action='store_true', help='displays statistics such as tasks completed and rewards claimed')
+parser.add_argument('--achievements', action='store_true', help='displays achievements')
 subparsers = parser.add_subparsers()
 parser_add_task = subparsers.add_parser('add_task', help='add a task to the task list')
 parser_add_task.add_argument('task_description', type=str, help='Description of task')
@@ -313,6 +381,10 @@ if args.credits:
 #branch for calling display_stats()
 if args.stats:
     display_stats()
+
+#branch for calling display_achievements()
+if args.achievements:
+    display_achievements()
 
 #branch for calling add_task
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
