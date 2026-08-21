@@ -250,8 +250,8 @@ def complete_task(task_id):
         del tasklist[index_to_remove]
         save_tasklist()
         save()
-        check_achievements()
         print("Task Completed.")
+        check_achievements()
     else:
         print("Task not found, check task ID.")
 
@@ -292,8 +292,8 @@ def claim_reward(reward_id):
         del rewardlist[index_to_remove]
         save_rewardlist()
         save()
-        check_achievements()
         print("Reward Claimed.")
+        check_achievements()
     elif not found:
         print("Reward not found, check reward ID.")
     else:
