@@ -196,9 +196,9 @@ def check_achievements():
             if not achievement.completed:
                 completed = check_achievement(achievement.required_stat,achievement.required_value)
                 if completed:
-                    achievement.completed = True
                     credits += achievement.reward
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
+                    achievement.completed = True
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
