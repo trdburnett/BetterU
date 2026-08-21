@@ -171,10 +171,6 @@ def complete_task(task_id):
         del tasklist[index_to_remove]
         save_tasklist()
         save()
-        print(f"Tasks Completed: {tasks_completed}")
-        print(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
-        print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
-        print(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
     else:
         print("Task not found, check task ID.")
 
@@ -200,7 +196,6 @@ def claim_reward(reward_id):
         del rewardlist[index_to_remove]
         save_rewardlist()
         save()
-        print(f"Rewards Claimed: {rewards_claimed}")
     elif not found:
         print("Reward not found, check reward ID.")
     else:
@@ -223,6 +218,14 @@ def display_rewards():
     for reward in rewardlist:
         print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
 
+#display statistics
+def display_stats():
+    print(f"Tasks Completed: {tasks_completed}")
+    print(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
+    print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
+    print(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
+    print(f"Rewards Claimed: {rewards_claimed}")
+
 #returns a string of spaces based on the length of the description it is given
 #helper method for display tasks and display rewards
 def display_padding(description):
@@ -238,6 +241,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--tasks', action='store_true', help='displays the task list')
 parser.add_argument('--rewards', action='store_true', help='displays the reward list')
 parser.add_argument('--credits', action='store_true', help='displays available credits')
+parser.add_argument('--stats', action='store_true', help='displays statistics such as tasks completed and rewards claimed')
 subparsers = parser.add_subparsers()
 parser_add_task = subparsers.add_parser('add_task', help='add a task to the task list')
 parser_add_task.add_argument('task_description', type=str, help='Description of task')
@@ -263,6 +267,10 @@ if args.rewards:
 #branch for calling display_credits()
 if args.credits:
     display_credits()
+
+#branch for calling display_stats()
+if args.stats:
+    display_stats()
 
 #branch for calling add_task
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
