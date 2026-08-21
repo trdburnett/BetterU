@@ -198,6 +198,7 @@ def check_achievements():
                 if completed:
                     achievement.completed = True
                     credits += achievement.reward
+check_achievements()
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
