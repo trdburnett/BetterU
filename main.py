@@ -91,6 +91,7 @@ def load():
                     credits += int(left_stripped_line.rstrip(" \n"))
                 if "High Priority Tasks Completed" in line:
                     left_stripped_line = line.lstrip("High Priority Tasks Completed: ")
+                    print(left_stripped_line)
                     high_priority_tasks_completed += int(left_stripped_line.rstrip(" \n"))
                 if "Medium Priority Tasks Completed" in line:
                     left_stripped_line = line.lstrip("Medium Priority Tasks Completed: ")
