@@ -46,6 +46,21 @@ class Achievement:
         self.required_stat = required_stat
         self.required_value = required_value
 
+#saves the achievementlist to the achievementlist file
+def save_achievementlist():
+    if not os.path.exists(achievementlist_file_path):
+        os.makedirs('data', exist_ok=True)
+        f = open(achievementlist_file_path, 'x')
+        f.close()
+    with open(achievementlist_file_path, 'wb') as outp:
+        pickle.dump(len(achievementlist), outp, pickle.HIGHEST_PROTOCOL)
+        for achievement in achievementlist:
+            pickle.dump(achievement, outp)
+
+#populates the achievement_list
+def populate_achievement_list():
+    achievementlist.append(Achievement("Completed 10 Tasks",False,5,"tasks_completed",10))
+
 #helper function for load
 #cycles through the tasks in the task list to find the one with the highest number
 #used to add to task_id which is initialised at 1
@@ -112,6 +127,9 @@ def load():
                     tasks_completed += int((line.lstrip("Tasks Completed: ")).rstrip(" \n"))
                 if "Rewards Claimed" in line:
                     rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
+    if achievementlist == []:
+        populate_achievement_list()
+        save_achievementlist()
 load()
 
 #saves the tasklist to the tasklist file
@@ -154,21 +172,6 @@ def save():
         f.write(f"Tasks Completed: {tasks_completed} \n")
         f.write(f"Rewards Claimed: {rewards_claimed} \n")
 
-#saves the achievementlist to the achievementlist file
-def save_achievementlist():
-    if not os.path.exists(achievementlist_file_path):
-        os.makedirs('data', exist_ok=True)
-        f = open(achievementlist_file_path, 'x')
-        f.close()
-    with open(achievementlist_file_path, 'wb') as outp:
-        pickle.dump(len(achievementlist), outp, pickle.HIGHEST_PROTOCOL)
-        for achievement in achievementlist:
-            pickle.dump(achievement, outp)
-
-#populates the achievement_list
-def populate_achievement_list():
-    achievementlist.append(Achievement("Completed 10 Tasks",False,5,"tasks_completed",10))
-
 #helper method for check_achievements
 #takes a required statistic to check and the required value
 #returns true if the requirements have been met, false otherwise
@@ -187,20 +190,15 @@ def check_achievement(required_stat: str, required_value: int):
 #performs a check for the achievement list if it is empty it calls the populate and save achievement functions respectively
 #otherwise applies credits and alerts user if an achievement has been completed
 def check_achievements():
-    print(achievementlist)
     global credits
-    if achievementlist == []:
-        populate_achievement_list()
-        save_achievementlist()
-    else:
-        for achievement in achievementlist:
-            if not achievement.completed:
-                completed = check_achievement(achievement.required_stat,achievement.required_value)
-                if completed:
-                    achievement.completed = True
-                    credits += achievement.reward
-                    save()
-                    print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
+    for achievement in achievementlist:
+        if not achievement.completed:
+            completed = check_achievement(achievement.required_stat,achievement.required_value)
+            if completed:
+                achievement.completed = True
+                credits += achievement.reward
+                save()
+                print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
                     
 
 #adds a task object to the task list
@@ -331,7 +329,6 @@ def display_stats():
 
 #displays the achievement list
 def display_achievements():
-    check_achievements()
     if achievementlist == []:
         print("Oh Dear, sorry the achievements have failed to load. Please try again.")
     else:
