@@ -197,6 +197,20 @@ def add_reward(description, cost):
     save_rewardlist()
     print("Reward Added.")
 
+#removes a reward object from the reward list only
+def remove_reward(reward_id):
+    found = False
+    for i in range(len(rewardlist)):
+        if rewardlist[i].id == reward_id:
+            index_to_remove = i
+            found = True
+    if found:
+        del rewardlist[index_to_remove]
+        save_rewardlist()
+        print("Reward Removed.")
+    else:
+        print("Reward not found, check reward ID.")
+
 #removes a reward object from the reward list and removes the cost from available credits
 def claim_reward(reward_id):
     global credits
@@ -278,8 +292,10 @@ parser_complete_task.add_argument('complete_task_id', type=int, help='Task ID nu
 parser_add_reward = subparsers.add_parser('add_reward', help='add a reward to the reward list')
 parser_add_reward.add_argument('reward_description', type=str, help='Description of reward')
 parser_add_reward.add_argument('reward_cost', type=int, help='Cost of redeeming reward')
+parser_remove_reward = subparsers.add_parser('remove_reward', help='removes a reward from the reward list by reward ID only')
+parser_remove_reward.add_argument('remove_reward_id', type=int, help='Reward ID number')
 parser_claim_reward = subparsers.add_parser('claim_reward', help='removes a reward from the rewards list by reward ID and deducts the cost from available credits')
-parser_claim_reward.add_argument('reward_id', type=int, help='Reward ID number')
+parser_claim_reward.add_argument('claim_reward_id', type=int, help='Reward ID number')
 args = parser.parse_args()
 
 #branch for calling display_tasks()
@@ -310,13 +326,17 @@ if 'remove_task_id' in args:
 if 'complete_task_id' in args:
     complete_task(args.complete_task_id)
 
-#branch for calling reward_task
+#branch for calling add_reward
 if 'reward_description' in args and 'reward_cost' in args:
     add_reward(args.reward_description,args.reward_cost)
 
+#branch for calling remove reward
+if 'remove_reward_id' in args:
+    remove_reward(args.remove_reward_id)
+
 #branch for calling claim_reward
-if 'reward_id' in args:
-    claim_reward(args.reward_id)
+if 'claim_reward_id' in args:
+    claim_reward(args.claim_reward_id)
     
 
 
