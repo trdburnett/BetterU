@@ -199,7 +199,6 @@ def check_achievements():
                     achievement.completed = True
                     credits += achievement.reward
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
-check_achievements()
 
 #adds a task object to the task list
 def add_task(description, priority, reward):
@@ -247,6 +246,7 @@ def complete_task(task_id):
         del tasklist[index_to_remove]
         save_tasklist()
         save()
+        check_achievements()
         print("Task Completed.")
     else:
         print("Task not found, check task ID.")
@@ -288,6 +288,7 @@ def claim_reward(reward_id):
         del rewardlist[index_to_remove]
         save_rewardlist()
         save()
+        check_achievements()
         print("Reward Claimed.")
     elif not found:
         print("Reward not found, check reward ID.")
@@ -327,6 +328,7 @@ def display_stats():
 
 #displays the achievement list
 def display_achievements():
+    check_achievements()
     if achievementlist == []:
         print("Oh Dear, sorry the achievements have failed to load. Please try again.")
     else:
