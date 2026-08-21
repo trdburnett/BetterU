@@ -187,6 +187,7 @@ def check_achievement(required_stat: str, required_value: int):
 #performs a check for the achievement list if it is empty it calls the populate and save achievement functions respectively
 #otherwise applies credits and alerts user if an achievement has been completed
 def check_achievements():
+    print(achievementlist)
     global credits
     if achievementlist == []:
         populate_achievement_list()
