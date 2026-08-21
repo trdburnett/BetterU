@@ -147,6 +147,20 @@ def add_task(description, priority, reward):
     save_tasklist()
     print("Task Added.")
 
+#removes a task object from the task list only
+def remove_task(task_id):
+    found = False
+    for i in range(len(tasklist)):
+        if tasklist[i].id == task_id:
+            index_to_remove = i
+            found = True
+    if found:
+        del tasklist[index_to_remove]
+        save_tasklist()
+        print("Task Removed.")
+    else:
+        print("Task not found, check task ID.")
+
 #removes a task object from the task list and awards credits
 def complete_task(task_id):
     global credits
@@ -257,8 +271,10 @@ parser_add_task = subparsers.add_parser('add_task', help='add a task to the task
 parser_add_task.add_argument('task_description', type=str, help='Description of task')
 parser_add_task.add_argument('task_priority', type=int, choices=[1,2,3], help='Priority of task')
 parser_add_task.add_argument('task_reward', type=int, choices=[1,2,3,4,5], help='Reward of task')
+parser_remove_task = subparsers.add_parser('remove_task', help='removes a task from the task list by task ID only')
+parser_remove_task.add_argument('remove_task_id', type=int, help='Task ID number')
 parser_complete_task = subparsers.add_parser('complete_task', help='removes a task from the task list by task ID and applies reward credit(s)')
-parser_complete_task.add_argument('task_id', type=int, help='Task ID number')
+parser_complete_task.add_argument('complete_task_id', type=int, help='Task ID number')
 parser_add_reward = subparsers.add_parser('add_reward', help='add a reward to the reward list')
 parser_add_reward.add_argument('reward_description', type=str, help='Description of reward')
 parser_add_reward.add_argument('reward_cost', type=int, help='Cost of redeeming reward')
@@ -286,9 +302,13 @@ if args.stats:
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
     add_task(args.task_description,args.task_priority,args.task_reward)
 
+#branch for calling remove_task
+if 'remove_task_id' in args:
+    remove_task(args.remove_task_id)
+
 #branch for calling complete_task
-if 'task_id' in args:
-    complete_task(args.task_id)
+if 'complete_task_id' in args:
+    complete_task(args.complete_task_id)
 
 #branch for calling reward_task
 if 'reward_description' in args and 'reward_cost' in args:
