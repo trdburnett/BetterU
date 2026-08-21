@@ -145,6 +145,7 @@ def add_task(description, priority, reward):
     task = Task(description,priority,reward,time.now(),task_id)
     tasklist.append(task)
     save_tasklist()
+    print("Task Added.")
 
 #removes a task object from the task list and awards credits
 def complete_task(task_id):
@@ -171,6 +172,7 @@ def complete_task(task_id):
         del tasklist[index_to_remove]
         save_tasklist()
         save()
+        print("Task Completed.")
     else:
         print("Task not found, check task ID.")
 
@@ -179,6 +181,7 @@ def add_reward(description, cost):
     reward = Reward(description,cost,reward_id)
     rewardlist.append(reward)
     save_rewardlist()
+    print("Reward Added.")
 
 #removes a reward object from the reward list and removes the cost from available credits
 def claim_reward(reward_id):
@@ -196,6 +199,7 @@ def claim_reward(reward_id):
         del rewardlist[index_to_remove]
         save_rewardlist()
         save()
+        print("Reward Claimed.")
     elif not found:
         print("Reward not found, check reward ID.")
     else:
@@ -209,14 +213,20 @@ def display_credits():
 #sorts the tasklist by priority and then time
 #the oldest tasks with the highest priority will display at the top
 def display_tasks():
-    sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
-    for task in sorted_tasklist:
-        print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits")
+    if tasklist == []:
+        print("No tasks to display, please add some tasks.")
+    else:
+        sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
+        for task in sorted_tasklist:
+            print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits")
 
 #displays the rewards list
 def display_rewards():
-    for reward in rewardlist:
-        print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
+    if rewardlist == []:
+        print("No rewards to display. please add some rewards.")
+    else:
+        for reward in rewardlist:
+            print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
 
 #display statistics
 def display_stats():
