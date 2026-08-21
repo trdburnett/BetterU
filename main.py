@@ -87,26 +87,17 @@ def load():
         with open(save_file_path, 'r') as f:
             for line in f:
                 if "Credits" in line:
-                    left_stripped_line = line.lstrip("Credits: ")
-                    credits += int(left_stripped_line.rstrip(" \n"))
+                    credits += int((line.lstrip("Credits: ")).rstrip(" \n"))
                 if "High Priority Tasks Completed" in line:
-                    left_stripped_line = line.lstrip("High Priority Tasks Completed: ")
-                    print(left_stripped_line)
-                    right_stripped_line = left_stripped_line.rstrip(" \n")
-                    print(right_stripped_line)
-                    high_priority_tasks_completed += int(left_stripped_line.rstrip(" \n"))
+                    high_priority_tasks_completed += int((line.lstrip("High Priority Tasks Completed: ")).rstrip(" \n"))
                 if "Medium Priority Tasks Completed" in line:
-                    left_stripped_line = line.lstrip("Medium Priority Tasks Completed: ")
-                    medium_priority_tasks_completed += int(left_stripped_line.rstrip(" \n"))
+                    medium_priority_tasks_completed += int((line.lstrip("Medium Priority Tasks Completed: ")).rstrip(" \n"))
                 if "Low Priority Tasks Completed" in line:
-                    left_stripped_line = line.lstrip("Low Priority Tasks Completed: ")
-                    low_priority_tasks_completed += int(left_stripped_line.rstrip(" \n"))
-                if "Tasks Completed" in line:
-                    left_stripped_line = line.lstrip("Tasks Completed: ")
-                    tasks_completed += int(left_stripped_line.rstrip(" \n"))
+                    low_priority_tasks_completed += int((line.lstrip("Low Priority Tasks Completed: ")).rstrip(" \n"))
+                if "Tasks Completed" in line and "High" not in line and "Medium" not in line and "Low" not in line:
+                    tasks_completed += int((line.lstrip("Tasks Completed: ")).rstrip(" \n"))
                 if "Rewards Claimed" in line:
-                    left_stripped_line = line.lstrip("Rewards Claimed: ")
-                    rewards_claimed += int(left_stripped_line.rstrip(" \n"))
+                    rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
 load()
 
 #saves the tasklist to the tasklist file
