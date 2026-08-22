@@ -114,31 +114,22 @@ def load():
                     rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
 load()
 
-#saves the tasklist to the tasklist file
-#if the file does not exisit it creates it and any missing directories first
-#is only called after adding a task and completing a task
-def save_tasklist():
-    if not os.path.exists(tasklist_file_path):
+#saves a list to the given lists filepath
+def save_list(file_path: str):
+    if file_path == tasklist_file_path:
+        savelist = tasklist
+    if file_path == rewardlist_file_path:
+        savelist = rewardlist
+    if file_path == achievementlist_file_path:
+        savelist = achievementlist
+    if not os.path.exists(file_path):
         os.makedirs('data', exist_ok=True)
-        f = open(tasklist_file_path, 'x')
+        f = open(file_path, 'x')
         f.close()
-    with open(tasklist_file_path, 'wb') as outp:
-        #first dump is the length of the list
-        pickle.dump(len(tasklist), outp, pickle.HIGHEST_PROTOCOL)
-        for task in tasklist:
-            pickle.dump(task, outp)
-
-#saves the rewardlist to the rewardlist file
-#works similar to save_tasklist
-def save_rewardlist():
-    if not os.path.exists(rewardlist_file_path):
-        os.makedirs('data', exist_ok=True)
-        f = open(rewardlist_file_path, 'x')
-        f.close()
-    with open(rewardlist_file_path, 'wb') as outp:
-        pickle.dump(len(rewardlist), outp, pickle.HIGHEST_PROTOCOL)
-        for reward in rewardlist:
-            pickle.dump(reward, outp)
+    with open(file_path, 'wb') as outp:
+        pickle.dump(len(savelist), outp, pickle.HIGHEST_PROTOCOL)
+        for item in savelist:
+            pickle.dump(item, outp)
 
 #saves all simple variables used by the program
 def save():
@@ -153,17 +144,6 @@ def save():
         f.write(f"Low Priority Tasks Completed: {low_priority_tasks_completed} \n")
         f.write(f"Tasks Completed: {tasks_completed} \n")
         f.write(f"Rewards Claimed: {rewards_claimed} \n")
-
-#saves the achievementlist to the achievementlist file
-def save_achievementlist():
-    if not os.path.exists(achievementlist_file_path):
-        os.makedirs('data', exist_ok=True)
-        f = open(achievementlist_file_path, 'x')
-        f.close()
-    with open(achievementlist_file_path, 'wb') as outp:
-        pickle.dump(len(achievementlist), outp, pickle.HIGHEST_PROTOCOL)
-        for achievement in achievementlist:
-            pickle.dump(achievement, outp)
 
 #populates the achievement_list
 def populate_achievement_list():
@@ -190,7 +170,7 @@ def check_achievements():
     global credits
     if achievementlist == []:
         populate_achievement_list()
-        save_achievementlist()
+        save_list(achievementlist_file_path)
     else:
         for achievement in achievementlist:
             if not achievement.completed:
@@ -200,18 +180,18 @@ def check_achievements():
                     credits += achievement.reward
                     save()
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
-                    save_achievementlist()
+                    save_list(achievementlist_file_path)
                     
 
 #adds a task object to the task list
-def add_task(description, priority, reward):
+def add_task(description: str, priority: Priority, reward: int):
     task = Task(description,priority,reward,time.now(),task_id)
     tasklist.append(task)
-    save_tasklist()
+    save_list(tasklist_file_path)
     print("Task Added.")
 
 #removes a task object from the task list only
-def remove_task(task_id):
+def remove_task(task_id: int):
     found = False
     for i in range(len(tasklist)):
         if tasklist[i].id == task_id:
@@ -219,13 +199,13 @@ def remove_task(task_id):
             found = True
     if found:
         del tasklist[index_to_remove]
-        save_tasklist()
+        save_list(tasklist_file_path)
         print("Task Removed.")
     else:
         print("Task not found, check task ID.")
 
 #removes a task object from the task list and awards credits
-def complete_task(task_id):
+def complete_task(task_id: int):
     global credits
     global tasks_completed
     global high_priority_tasks_completed
@@ -247,7 +227,7 @@ def complete_task(task_id):
         tasks_completed += 1
         credits += credits_to_add
         del tasklist[index_to_remove]
-        save_tasklist()
+        save_list(tasklist_file_path)
         save()
         print("Task Completed.")
         check_achievements()
@@ -255,14 +235,14 @@ def complete_task(task_id):
         print("Task not found, check task ID.")
 
 #add a reward object to the reward list
-def add_reward(description, cost):
+def add_reward(description: str, cost: int):
     reward = Reward(description,cost,reward_id)
     rewardlist.append(reward)
-    save_rewardlist()
+    save_list(rewardlist_file_path)
     print("Reward Added.")
 
 #removes a reward object from the reward list only
-def remove_reward(reward_id):
+def remove_reward(reward_id: int):
     found = False
     for i in range(len(rewardlist)):
         if rewardlist[i].id == reward_id:
@@ -270,13 +250,13 @@ def remove_reward(reward_id):
             found = True
     if found:
         del rewardlist[index_to_remove]
-        save_rewardlist()
+        save_list(rewardlist_file_path)
         print("Reward Removed.")
     else:
         print("Reward not found, check reward ID.")
 
 #removes a reward object from the reward list and removes the cost from available credits
-def claim_reward(reward_id):
+def claim_reward(reward_id: int):
     global credits
     global rewards_claimed
     found = False
@@ -289,7 +269,7 @@ def claim_reward(reward_id):
         credits -= credits_to_deduct
         rewards_claimed += 1
         del rewardlist[index_to_remove]
-        save_rewardlist()
+        save_list(rewardlist_file_path)
         save()
         print("Reward Claimed.")
         check_achievements()
@@ -340,7 +320,7 @@ def display_achievements():
 
 #returns a string of spaces based on the length of the description it is given
 #helper method for display tasks and display rewards
-def display_padding(description):
+def display_padding(description: str)->str:
     padding = ""
     padding_size = 50 - len(description)
     while padding_size > 0:
@@ -417,5 +397,40 @@ if 'remove_reward_id' in args:
 if 'claim_reward_id' in args:
     claim_reward(args.claim_reward_id)
     
+#refactored functions
+#saves the tasklist to the tasklist file
+#if the file does not exisit it creates it and any missing directories first
+#is only called after adding a task and completing a task
+#def save_tasklist():
+#    if not os.path.exists(tasklist_file_path):
+#        os.makedirs('data', exist_ok=True)
+#        f = open(tasklist_file_path, 'x')
+#        f.close()
+#    with open(tasklist_file_path, 'wb') as outp:
+#        #first dump is the length of the list
+#        pickle.dump(len(tasklist), outp, pickle.HIGHEST_PROTOCOL)
+#        for task in tasklist:
+#            pickle.dump(task, outp)
 
+#saves the rewardlist to the rewardlist file
+#works similar to save_tasklist
+#def save_rewardlist():
+#    if not os.path.exists(rewardlist_file_path):
+#        os.makedirs('data', exist_ok=True)
+#        f = open(rewardlist_file_path, 'x')
+#        f.close()
+#    with open(rewardlist_file_path, 'wb') as outp:
+#        pickle.dump(len(rewardlist), outp, pickle.HIGHEST_PROTOCOL)
+#        for reward in rewardlist:
+#            pickle.dump(reward, outp)
 
+#saves the achievementlist to the achievementlist file
+#def save_achievementlist():
+#    if not os.path.exists(achievementlist_file_path):
+#        os.makedirs('data', exist_ok=True)
+#        f = open(achievementlist_file_path, 'x')
+#        f.close()
+#   with open(achievementlist_file_path, 'wb') as outp:
+#        pickle.dump(len(achievementlist), outp, pickle.HIGHEST_PROTOCOL)
+#        for achievement in achievementlist:
+#            pickle.dump(achievement, outp)
