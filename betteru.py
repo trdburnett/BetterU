@@ -209,7 +209,20 @@ def check_achievements():
                     save()
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
                     save_list(achievementlist_file_path)
-                    
+
+#returns either the time remaining to complete a task or expired string
+#helper for display_tasks and complete_tasks                    
+def time_remaining(task_priority: int, task_time: datetime):
+    if task_priority == 1:
+        task_deadline = task_time + datetime.timedelta(days=1)
+    if task_priority == 2:
+        task_deadline = task_time + datetime.timedelta(days=7)
+    if task_priority == 3:
+        task_deadline = task_time + datetime.timedelta(days=28)
+    if task_deadline - time.now() < datetime.timedelta(seconds=0):
+        return "Expired!"
+    else:
+        return task_deadline - time.now()
 
 #adds a task object to the task list
 def add_task(description: str, priority: int, reward: int):
@@ -317,7 +330,6 @@ def claim_reward(reward_id: int, repeat=False):
         if repeat:
             add_reward(dc[0],dc[1])
 
-
 #shows available credits
 def display_credits():
     print(f"Available Credits: {credits}")
@@ -331,7 +343,7 @@ def display_tasks():
         print(display_banner("Tasks"))
         sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
         for task in sorted_tasklist:
-            print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits")
+            print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits | Time Remaining: {time_remaining(task.priority,task.time)}")
 
 #displays the rewards list
 def display_rewards():
@@ -581,3 +593,90 @@ if 'claim_reward_id' in args:
 #    else:
 #        print("You don't have enough credits for that reward yet.")
 #THE ABOVE 2 METHODS WERE MODIFIED TO WORK TOGETHER
+
+#calculates if a year is a leap year
+#helper for days_in_month
+#def leap_year(year: int)-> bool:
+#    if year%100 == 0:
+#        if year%400 != 0:
+#            return False
+#        elif year%4 == 0:
+#            return True
+#        else:
+#            return False
+#    elif year%4 == 0:
+#        return True
+#    else:
+#        return False
+
+#calculates days in given month
+#helper for tommorrow function
+#uses leap_year helper function
+#def days_in_month(month: int, year: int)-> int:
+#    if month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 10 or month == 12:
+#        return 31
+#    if month == 2:
+#        if leap_year(year):
+#            return 29
+#        else:
+#            return 28
+#    if month == 4 or month == 6 or month == 9 or month == 11:
+#        return 30
+
+#takes 2 sets representing a day by (day,month,year)
+#returns true if the second day is tomorrow in relation to the first day
+# helper for minutes remaining 
+#def tommorrow(day1: set, day2: set)-> bool:
+#    if day1[0] + 1 == day2[0]:
+#        if day1[1] == day2[1] and day1[2] == day2[2]:
+#            return True
+#    elif day1[1] == 12 and day1[0] == days_in_month(day1[1],day1[2]):
+#        if day2[0] == 1 and day2[1] == 1 and day1[2] + 1 == day2[2]:
+#            return True
+#    elif day1[2] == day2[2] and day1[0] == days_in_month(day1[1],day1[2]):
+#        if day2[0] == 1 and day1[1] == day2[1]:
+#            return True
+#    else:
+#        return False 
+
+#calculates the time remaining in minutes to complete a task based on the task's priority
+#def minutes_remaining(task_priority: int, task_time: datetime)-> int:
+#    task_minute = int(task_time.strftime("%M"))
+#    task_hour = int(task_time.strftime("%H"))
+#    task_day = int(task_time.strftime("%d"))
+#    task_month = int(task_time.strftime("%m"))
+#    task_year = int(task_time.strftime("%Y"))
+#    now_time = time.now()
+#    now_minute = int(now_time.strftime("%M"))
+#    now_hour = int(now_time.strftime("%H"))
+#    now_day = int(now_time.strftime("%d"))
+#    now_month = int(now_time.strftime("%m"))
+#    now_year = int(now_time.strftime("%Y"))
+    #high priority tasks have a time limit of one day
+    #remaining time is calculated by checking if the tasks day matches the current day
+    #or the current day is tomorrow in comparison to the tasks day
+    #return the total minutes in a day minus the difference
+#    if task_priority == 1:
+#        if tommorrow((task_day,task_month,task_year),(now_day,now_month,now_year)):
+#            round_hour = 60 - task_minute
+#            task_hour += 1
+#            task_minute = 0
+#            round_day = 24 - task_hour
+#            task_day += 1
+#            task_hour = 0
+#            difference = (round_day + now_hour) * 60 + round_hour + now_minute
+#            return 1440 - difference
+#        elif task_day == now_day and task_month == now_month and task_year == now_year:
+#            round_hour = 60 - task_minute
+#            task_hour += 1
+#            task_minute = 0
+#            remaining_hours = now_hour - task_hour
+#            difference = remaining_hours * 60 + round_hour + now_minute
+#            return 1440 - difference
+#        else:
+#            return 0
+#    if task_priority == 2:
+#        print("Not Implemented")
+#    if task_priority == 3:
+#        return 525600
+#GOING TO GO ABOUT IT A DIFFERENT WAY I"M NEEDLESSLY REINVENTING THE WHEEL
