@@ -374,7 +374,7 @@ def display_padding(description: str)->str:
 #returns a string to be used as a banner at the top of displays
 #helper method for display functions
 def display_banner(string_to_banner: str)->str:
-    left_banner_padding = "=========================["
+    left_banner_padding = "==============================["
     right_banner_padding = "]========================="
     uniform_padding = ""
     uniform_padding_size = 20 - len(string_to_banner)
