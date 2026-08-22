@@ -193,46 +193,50 @@ def add_task(description: str, priority: Priority, reward: int):
 #removes a task object from the task list only
 def remove_task(task_id: int, remove=True):
     found = False
+    description = None
     priority = None
-    credits_to_add = None
+    reward = None
     for i in range(len(tasklist)):
         if tasklist[i].id == task_id:
             index_to_remove = i
             found = True
+            description = tasklist[i].description
             priority = tasklist[i].priority
-            credits_to_add = tasklist[i].reward
+            reward = tasklist[i].reward
     if found:
         del tasklist[index_to_remove]
         save_list(tasklist_file_path)
         if remove:
             print("Task Removed.")
         else:
-            return (priority,credits_to_add)
+            return (description,priority,reward)
     else:
         print("Task not found, check task ID.")
         if not remove:
-            return (priority,credits_to_add)
+            return (description,priority,reward)
 
 #removes a task object from the task list and awards credits
-def complete_task(task_id: int):
+def complete_task(task_id: int, repeat=False):
     global credits
     global tasks_completed
     global high_priority_tasks_completed
     global medium_priority_tasks_completed
     global low_priority_tasks_completed
-    priority_credits = remove_task(task_id, remove=False)
-    if not priority_credits[0] == None and not priority_credits[1] == None:
-        if priority_credits[0] == 1:
+    dpr = remove_task(task_id, remove=False)
+    if not dpr[0] == None and not dpr[1] == None and not dpr[2] == None:
+        if dpr[1] == 1:
             high_priority_tasks_completed += 1
-        if priority_credits[0] == 2:
+        if dpr[1] == 2:
             medium_priority_tasks_completed += 1
-        if priority_credits[0] == 3:
+        if dpr[1] == 3:
             low_priority_tasks_completed += 1
         tasks_completed += 1
-        credits += priority_credits[1]
+        credits += dpr[2]
         save()
-        print(f"Task Completed, you have been awarded {priority_credits[1]} credit(s)")
+        print(f"Task Completed, you have been awarded {dpr[2]} credit(s)")
         check_achievements()
+        if repeat:
+            add_task(dpr[0],dpr[1],dpr[2])
 
 #add a reward object to the reward list
 def add_reward(description: str, cost: int):
@@ -385,7 +389,8 @@ if 'remove_task_id' in args:
 #branch for calling complete_task
 if 'complete_task_id' in args:
     if args.repeat:
-        print(f"Repeat option selected: {args.repeat}, task id is {args.complete_task_id}")
+        print("Repeat option selected")
+        complete_task(args.complete_task_id, args.repeat)
     else:
         complete_task(args.complete_task_id)
 
