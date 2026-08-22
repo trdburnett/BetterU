@@ -344,6 +344,7 @@ parser_remove_task = subparsers.add_parser('remove_task', help='removes a task f
 parser_remove_task.add_argument('remove_task_id', type=int, help='Task ID number')
 parser_complete_task = subparsers.add_parser('complete_task', help='removes a task from the task list by task ID and applies reward credit(s)')
 parser_complete_task.add_argument('complete_task_id', type=int, help='Task ID number')
+parser_complete_task.add_argument('--repeat', action='store_true', help='Option to repeat the task, this option adds the task again after completion')
 parser_add_reward = subparsers.add_parser('add_reward', help='add a reward to the reward list')
 parser_add_reward.add_argument('reward_description', type=str, help='Description of reward')
 parser_add_reward.add_argument('reward_cost', type=int, help='Cost of redeeming reward')
@@ -383,7 +384,10 @@ if 'remove_task_id' in args:
 
 #branch for calling complete_task
 if 'complete_task_id' in args:
-    complete_task(args.complete_task_id)
+    if args.repeat:
+        print("Repeat option selected")
+    else:
+        complete_task(args.complete_task_id)
 
 #branch for calling add_reward
 if 'reward_description' in args and 'reward_cost' in args:
