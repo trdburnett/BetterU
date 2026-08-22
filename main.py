@@ -385,7 +385,7 @@ if 'remove_task_id' in args:
 #branch for calling complete_task
 if 'complete_task_id' in args:
     if args.repeat:
-        print(f"Repeat option selected, task id is {args.complete_task_id}")
+        print(f"Repeat option selected: {args.repeat}, task id is {args.complete_task_id}")
     else:
         complete_task(args.complete_task_id)
 
