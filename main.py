@@ -224,11 +224,11 @@ def complete_task(task_id: int, repeat=False):
     global low_priority_tasks_completed
     dpr = remove_task(task_id, remove=False)
     if not dpr[0] == None and not dpr[1] == None and not dpr[2] == None:
-        if dpr[1] == 1:
+        if dpr[1] == Priority.HIGH:
             high_priority_tasks_completed += 1
-        if dpr[1] == 2:
+        if dpr[1] == Priority.MEDIUM:
             medium_priority_tasks_completed += 1
-        if dpr[1] == 3:
+        if dpr[1] == Priority.LOW:
             low_priority_tasks_completed += 1
         tasks_completed += 1
         credits += dpr[2]
