@@ -274,41 +274,48 @@ def add_reward(description: str, cost: int):
     print("Reward Added.")
 
 #removes a reward object from the reward list only
-def remove_reward(reward_id: int):
+def remove_reward(reward_id: int, remove=True):
     found = False
+    description = None
+    cost = None
     for i in range(len(rewardlist)):
         if rewardlist[i].id == reward_id:
             index_to_remove = i
             found = True
+            description = rewardlist[i].description
+            cost = rewardlist[i].cost
     if found:
-        del rewardlist[index_to_remove]
-        save_list(rewardlist_file_path)
-        print("Reward Removed.")
+        if remove:
+            del rewardlist[index_to_remove]
+            save_list(rewardlist_file_path)
+            print("Reward Removed.")
+        else:
+            if cost <= credits:
+                del rewardlist[index_to_remove]
+                save_list(rewardlist_file_path)
+                return (description,cost)
+            else:
+                print("You don't have enough credits for that reward yet.")
+                description = None
+                cost = None
+                return (description,cost)
     else:
         print("Reward not found, check reward ID.")
+        return (description,cost)
 
 #removes a reward object from the reward list and removes the cost from available credits
-def claim_reward(reward_id: int):
+def claim_reward(reward_id: int, repeat=False):
     global credits
     global rewards_claimed
-    found = False
-    for i in range(len(rewardlist)):
-        if rewardlist[i].id == reward_id:
-            index_to_remove = i
-            found = True
-            credits_to_deduct = rewardlist[i].cost
-    if found and credits >= credits_to_deduct:
-        credits -= credits_to_deduct
+    dc = remove_reward(reward_id, False)
+    if not dc[0] == None and not dc[1] == None:
+        credits -= dc[1]
         rewards_claimed += 1
-        del rewardlist[index_to_remove]
-        save_list(rewardlist_file_path)
         save()
-        print("Reward Claimed.")
+        print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
         check_achievements()
-    elif not found:
-        print("Reward not found, check reward ID.")
-    else:
-        print("You don't have enough credits for that reward yet.")
+        if repeat:
+            add_reward(dc[0],dc[1])
 
 
 #shows available credits
@@ -384,6 +391,7 @@ parser_remove_reward = subparsers.add_parser('remove_reward', help='removes a re
 parser_remove_reward.add_argument('remove_reward_id', type=int, help='Reward ID number')
 parser_claim_reward = subparsers.add_parser('claim_reward', help='removes a reward from the rewards list by reward ID and deducts the cost from available credits')
 parser_claim_reward.add_argument('claim_reward_id', type=int, help='Reward ID number')
+parser_claim_reward.add_argument('--repeat', action='store_true', help='Option to repeat the reward, this option adds the reward again after completion')
 args = parser.parse_args()
 
 #branch for calling display_tasks()
@@ -431,7 +439,10 @@ if 'remove_reward_id' in args:
 
 #branch for calling claim_reward
 if 'claim_reward_id' in args:
-    claim_reward(args.claim_reward_id)
+    if args.repeat:
+        claim_reward(args.claim_reward_id, args.repeat)
+    else:
+        claim_reward(args.claim_reward_id)
     
 #refactored functions
 #saves the tasklist to the tasklist file
@@ -514,3 +525,42 @@ if 'claim_reward_id' in args:
 #        check_achievements()
 #    else:
 #        print("Task not found, check task ID.")
+#THE ABOVE 2 METHODS WERE MODIFIED TO WORK TOGETHER
+
+#removes a reward object from the reward list only
+#def remove_reward(reward_id: int):
+#    found = False
+#    for i in range(len(rewardlist)):
+#        if rewardlist[i].id == reward_id:
+#            index_to_remove = i
+#            found = True
+#    if found:
+#        del rewardlist[index_to_remove]
+#        save_list(rewardlist_file_path)
+#        print("Reward Removed.")
+#    else:
+#        print("Reward not found, check reward ID.")
+
+#removes a reward object from the reward list and removes the cost from available credits
+#def claim_reward(reward_id: int):
+#    global credits
+#    global rewards_claimed
+#    found = False
+#    for i in range(len(rewardlist)):
+#        if rewardlist[i].id == reward_id:
+#            index_to_remove = i
+#            found = True
+#            credits_to_deduct = rewardlist[i].cost
+#    if found and credits >= credits_to_deduct:
+#        credits -= credits_to_deduct
+#        rewards_claimed += 1
+#        del rewardlist[index_to_remove]
+#        save_list(rewardlist_file_path)
+#        save()
+#        print("Reward Claimed.")
+#        check_achievements()
+#    elif not found:
+#        print("Reward not found, check reward ID.")
+#    else:
+#        print("You don't have enough credits for that reward yet.")
+#THE ABOVE 2 METHODS WERE MODIFIED TO WORK TOGETHER
