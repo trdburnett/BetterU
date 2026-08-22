@@ -374,8 +374,9 @@ def display_padding(description: str)->str:
 #returns a string to be used as a banner at the top of displays
 #helper method for display functions
 def display_banner(string_to_banner: str)->str:
-    banner_padding = "===================="
-    banner = banner_padding + string_to_banner + banner_padding
+    left_banner_padding = "=========================["
+    right_banner_padding = "]========================="
+    banner = left_banner_padding + string_to_banner + right_banner_padding
     return banner
 
 #parsing command line arguments for different functions see help descriptions
