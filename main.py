@@ -376,7 +376,12 @@ def display_padding(description: str)->str:
 def display_banner(string_to_banner: str)->str:
     left_banner_padding = "=========================["
     right_banner_padding = "]========================="
-    banner = left_banner_padding + string_to_banner + right_banner_padding
+    uniform_padding = ""
+    uniform_padding_size = 20 - len(string_to_banner)
+    while uniform_padding_size > 0:
+        uniform_padding = uniform_padding + "="
+        uniform_padding_size -= 1
+    banner = left_banner_padding + string_to_banner + right_banner_padding + uniform_padding
     return banner
 
 #parsing command line arguments for different functions see help descriptions
