@@ -328,6 +328,7 @@ def display_tasks():
     if tasklist == []:
         print("No tasks to display, please add some tasks.")
     else:
+        print(display_banner("Tasks"))
         sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
         for task in sorted_tasklist:
             print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits")
@@ -337,11 +338,13 @@ def display_rewards():
     if rewardlist == []:
         print("No rewards to display. please add some rewards.")
     else:
+        print(display_banner("Rewards"))
         for reward in rewardlist:
             print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
 
 #displays statistics
 def display_stats():
+    print(display_banner("Statistics"))
     print(f"Tasks Completed: {tasks_completed}")
     print(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
     print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
@@ -354,11 +357,12 @@ def display_achievements():
     if achievementlist == []:
         print("Oh Dear, sorry the achievements have failed to load. Please try again.")
     else:
+        print(display_banner("Achievements"))
         for achievement in achievementlist:
             print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
 
 #returns a string of spaces based on the length of the description it is given
-#helper method for display tasks and display rewards
+#helper method for display functions
 def display_padding(description: str)->str:
     padding = ""
     padding_size = 50 - len(description)
@@ -366,6 +370,13 @@ def display_padding(description: str)->str:
         padding = padding + " "
         padding_size -= 1
     return padding
+
+#returns a string to be used as a banner at the top of displays
+#helper method for display functions
+def display_banner(string_to_banner: str)->str:
+    banner_padding = "=========="
+    banner = banner_padding + string_to_banner + banner_padding
+    return banner
 
 #parsing command line arguments for different functions see help descriptions
 parser = argparse.ArgumentParser()
