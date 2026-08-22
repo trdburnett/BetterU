@@ -191,18 +191,27 @@ def add_task(description: str, priority: Priority, reward: int):
     print("Task Added.")
 
 #removes a task object from the task list only
-def remove_task(task_id: int):
+def remove_task(task_id: int, remove=True):
     found = False
+    priority = None
+    credits_to_add = None
     for i in range(len(tasklist)):
         if tasklist[i].id == task_id:
             index_to_remove = i
             found = True
+            priority = tasklist[i].priority
+            credits_to_add = tasklist[i].reward
     if found:
         del tasklist[index_to_remove]
         save_list(tasklist_file_path)
-        print("Task Removed.")
+        if remove:
+            print("Task Removed.")
+        else:
+            return (priority,credits_to_add)
     else:
         print("Task not found, check task ID.")
+        if not remove:
+            return (priority,credits_to_add)
 
 #removes a task object from the task list and awards credits
 def complete_task(task_id: int):
@@ -211,28 +220,19 @@ def complete_task(task_id: int):
     global high_priority_tasks_completed
     global medium_priority_tasks_completed
     global low_priority_tasks_completed
-    found = False
-    for i in range(len(tasklist)):
-        if tasklist[i].id == task_id:
-            index_to_remove = i
-            found = True
-            credits_to_add = tasklist[i].reward
-    if found:
-        if tasklist[index_to_remove].priority == 1:
+    priority_credits = remove_task(task_id, remove=False)
+    if not priority_credits[0] == None and not priority_credits[1] == None:
+        if priority_credits[0] == 1:
             high_priority_tasks_completed += 1
-        if tasklist[index_to_remove].priority == 2:
+        if priority_credits[0] == 2:
             medium_priority_tasks_completed += 1
-        if tasklist[index_to_remove].priority == 3:
+        if priority_credits[0] == 3:
             low_priority_tasks_completed += 1
         tasks_completed += 1
-        credits += credits_to_add
-        del tasklist[index_to_remove]
-        save_list(tasklist_file_path)
+        credits += priority_credits[1]
         save()
-        print("Task Completed.")
+        print(f"Task Completed, you have been awarded {priority_credits[1]} credit(s)")
         check_achievements()
-    else:
-        print("Task not found, check task ID.")
 
 #add a reward object to the reward list
 def add_reward(description: str, cost: int):
@@ -434,3 +434,47 @@ if 'claim_reward_id' in args:
 #        pickle.dump(len(achievementlist), outp, pickle.HIGHEST_PROTOCOL)
 #        for achievement in achievementlist:
 #            pickle.dump(achievement, outp)
+#THE ABOVE 3 METHODS HAVE BEEN COMBINED INTO 1
+
+#removes a task object from the task list only
+#def remove_task(task_id: int):
+#    found = False
+#    for i in range(len(tasklist)):
+#        if tasklist[i].id == task_id:
+#            index_to_remove = i
+#            found = True
+#    if found:
+#        del tasklist[index_to_remove]
+#        save_list(tasklist_file_path)
+#        print("Task Removed.")
+#    else:
+#        print("Task not found, check task ID.")
+#removes a task object from the task list and awards credits
+#def complete_task(task_id: int):
+#    global credits
+#    global tasks_completed
+#    global high_priority_tasks_completed
+#    global medium_priority_tasks_completed
+#    global low_priority_tasks_completed
+#    found = False
+#    for i in range(len(tasklist)):
+#        if tasklist[i].id == task_id:
+#            index_to_remove = i
+#            found = True
+#            credits_to_add = tasklist[i].reward
+#    if found:
+#        if tasklist[index_to_remove].priority == 1:
+#            high_priority_tasks_completed += 1
+#        if tasklist[index_to_remove].priority == 2:
+#            medium_priority_tasks_completed += 1
+#        if tasklist[index_to_remove].priority == 3:
+#            low_priority_tasks_completed += 1
+#        tasks_completed += 1
+#        credits += credits_to_add
+#        del tasklist[index_to_remove]
+#        save_list(tasklist_file_path)
+#        save()
+#        print("Task Completed.")
+#        check_achievements()
+#    else:
+#        print("Task not found, check task ID.")
