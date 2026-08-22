@@ -1,5 +1,4 @@
 import datetime, argparse, os, pickle
-from enum import Enum
 from operator import attrgetter
 
 time = datetime.datetime
@@ -19,13 +18,8 @@ rewardlist_file_path = 'data/rewardlist.dat'
 achievementlist_file_path = 'data/achievementlist.dat'
 save_file_path = 'data/save.txt'
 
-class Priority(Enum):
-    HIGH = 1
-    MEDIUM = 2
-    LOW = 3
-
 class Task:
-    def __init__(self,description: str, priority: Priority, reward: int, time: datetime, id: int):
+    def __init__(self,description: str, priority: int, reward: int, time: datetime, id: int):
         self.description = description
         self.priority = priority
         self.reward = reward
@@ -184,7 +178,7 @@ def check_achievements():
                     
 
 #adds a task object to the task list
-def add_task(description: str, priority: Priority, reward: int):
+def add_task(description: str, priority: int, reward: int):
     task = Task(description,priority,reward,time.now(),task_id)
     tasklist.append(task)
     save_list(tasklist_file_path)
@@ -224,11 +218,11 @@ def complete_task(task_id: int, repeat=False):
     global low_priority_tasks_completed
     dpr = remove_task(task_id, remove=False)
     if not dpr[0] == None and not dpr[1] == None and not dpr[2] == None:
-        if dpr[1] == Priority.HIGH:
+        if dpr[1] == 1:
             high_priority_tasks_completed += 1
-        if dpr[1] == Priority.MEDIUM:
+        if dpr[1] == 2:
             medium_priority_tasks_completed += 1
-        if dpr[1] == Priority.LOW:
+        if dpr[1] == 3:
             low_priority_tasks_completed += 1
         tasks_completed += 1
         credits += dpr[2]
