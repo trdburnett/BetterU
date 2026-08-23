@@ -237,6 +237,7 @@ def remove_task(task_id: int, remove=True):
     description = None
     priority = None
     reward = None
+    task_time = None
     for i in range(len(tasklist)):
         if tasklist[i].id == task_id:
             index_to_remove = i
@@ -244,17 +245,18 @@ def remove_task(task_id: int, remove=True):
             description = tasklist[i].description
             priority = tasklist[i].priority
             reward = tasklist[i].reward
+            task_time = tasklist[i].time
     if found:
         del tasklist[index_to_remove]
         save_list(tasklist_file_path)
         if remove:
             print("Task Removed.")
         else:
-            return (description,priority,reward)
+            return (description,priority,reward,task_time)
     else:
         print("Task not found, check task ID.")
         if not remove:
-            return (description,priority,reward)
+            return (description,priority,reward,task_time)
 
 #removes a task object from the task list and awards credits
 def complete_task(task_id: int, repeat=False):
@@ -263,21 +265,25 @@ def complete_task(task_id: int, repeat=False):
     global high_priority_tasks_completed
     global medium_priority_tasks_completed
     global low_priority_tasks_completed
-    dpr = remove_task(task_id, remove=False)
-    if not dpr[0] == None and not dpr[1] == None and not dpr[2] == None:
-        if dpr[1] == 1:
+    dprt = remove_task(task_id, remove=False)
+    if not dprt[0] == None and not dprt[1] == None and not dprt[2] == None and not dprt[3] == None:
+        if dprt[1] == 1:
             high_priority_tasks_completed += 1
-        if dpr[1] == 2:
+        if dprt[1] == 2:
             medium_priority_tasks_completed += 1
-        if dpr[1] == 3:
+        if dprt[1] == 3:
             low_priority_tasks_completed += 1
         tasks_completed += 1
-        credits += dpr[2]
+        t = time_remaining(dprt[1],dprt[3])
+        if t == "Expired!":
+            print(f"Task Completed, however no credits have been awarded due to the task not being completed in time.")
+        else:
+            credits += dprt[2]
+            print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
         save()
-        print(f"Task Completed, you have been awarded {dpr[2]} credit(s)")
         check_achievements()
         if repeat:
-            add_task(dpr[0],dpr[1],dpr[2])
+            add_task(dprt[0],dprt[1],dprt[2])
 
 #add a reward object to the reward list
 def add_reward(description: str, cost: int):
