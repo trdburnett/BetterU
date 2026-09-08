@@ -113,7 +113,7 @@ def load():
                 #as last_accessed is a datetime object the below converts the extracted string to a datetime object and saves it the last_accessed variable
                 if "Last Accessed" in line:
                     date_str = ((line.lstrip("Last Accessed: ")).rstrip(" \n"))
-                    date_format = '%Y-%m-%d %H:%M:%S'
+                    date_format = '%Y-%m-%d %H:%M:%S.%f'
                     last_accessed = datetime.datetime.strptime(date_str, date_format)
                 if "Streak" in line:
                     streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
