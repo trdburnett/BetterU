@@ -13,6 +13,8 @@ high_priority_tasks_completed = 0
 medium_priority_tasks_completed = 0
 low_priority_tasks_completed = 0
 rewards_claimed = 0
+last_accessed = None
+streak = 0
 tasklist_file_path = 'data/tasklist.dat'
 rewardlist_file_path = 'data/rewardlist.dat'
 achievementlist_file_path = 'data/achievementlist.dat'
@@ -76,6 +78,8 @@ def load():
     global medium_priority_tasks_completed
     global low_priority_tasks_completed
     global rewards_claimed
+    global last_accessed
+    global streak
     if os.path.exists(tasklist_file_path):
         with open(tasklist_file_path, 'rb') as inp:
             #uses the first dump of the length of the list to know what to load from the file
@@ -106,6 +110,10 @@ def load():
                     tasks_completed += int((line.lstrip("Tasks Completed: ")).rstrip(" \n"))
                 if "Rewards Claimed" in line:
                     rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
+                if "Last Accessed" in line:
+                    last_accessed = datetime((line.lstrip("Last Accessed: ")).rstrip(" \n"))
+                if "Streak" in line:
+                    streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
 load()
 
 #saves a list to the given lists filepath
@@ -138,6 +146,86 @@ def save():
         f.write(f"Low Priority Tasks Completed: {low_priority_tasks_completed} \n")
         f.write(f"Tasks Completed: {tasks_completed} \n")
         f.write(f"Rewards Claimed: {rewards_claimed} \n")
+        f.write(f"Last Accessed: {last_accessed} \n")
+        f.write(f"Streak: {streak} \n")
+
+#helper for daily reward
+#checks if last_accessed day was yesterday to be used in the event that it had been less than 24 hours
+def yesterday_check(last_accessed_day: str, access_day: str) -> bool:
+    yesterday = False
+    if last_accessed_day == "Monday":
+        if access_day == "Sunday":
+            yesterday = True
+    if last_accessed_day == "Tuesday":
+        if access_day == "Monday":
+            yesterday = True
+    if last_accessed_day == "Wednesday":
+        if access_day == "Tuesday":
+            yesterday = True
+    if last_accessed_day == "Thursday":
+        if access_day == "Wednesday":
+            yesterday = True
+    if last_accessed_day == "Friday":
+        if access_day == "Thursday":
+            yesterday = True
+    if last_accessed_day == "Saturday":
+        if access_day == "Friday":
+            yesterday = True
+    if last_accessed_day == "Sunday":
+        if access_day == "Saturday":
+            yesterday = True
+    return yesterday
+
+#helper for daily reward
+#resets streak when not upheld
+def streak_reset():
+    global streak
+    streak = 0
+
+#called by complete task
+#checks the last time a task was completed and if it is a new day displays a welcome message and applies a credit
+def daily_reward(access_time: datetime):
+    global last_accessed
+    global credits
+    global streak
+    access_day = access_time.strftime("%A")
+    if last_accessed == None:
+        last_accessed = access_time
+        credits += 1
+        print("Looks like this your first time. You have been awarded a credit to help motivate you on your task completion journey!")
+        save()
+        return
+    elif last_accessed <= access_time - datetime.timedelta(days=1):
+        credits += 1
+        streak_reset()
+        last_accessed = access_time
+        print("Looks like its been more than a day. You have been awarded a credit to get you motivated!")
+        save()
+        return
+    elif yesterday_check(last_accessed.strftime("%A"),access_day):
+        credits += 1
+        streak += 1
+        last_accessed = access_time
+        print(f"You are getting things done! Have a productive {access_day}. You have increased your streak to {streak} days and been awarded your daily credit!")
+        if streak % 7 == 0:
+            streak_weeks = streak / 7
+            if streak_weeks % 4 == 0:
+                streak_months = streak_weeks / 4
+                if streak_months % 13 == 0:
+                    credits += 100
+                    streak_reset()
+                    print(f"Amazing you have been getting tasks done for whole year! Your streak has now been reset and you have been awarded 100 credits")
+                else:
+                    credits += 28
+                    print(f"Congratulations on reaching a streak of {streak_months} month(s)! You have awarded 28 credits")
+            else:    
+                credits += 7
+                print(f"Congratulations on reaching a streak of {streak_weeks} week(s)! You have been awarded 7 credits")
+        save()
+        return
+    elif last_accessed > access_time:
+        print(f"Well that is naughty, how has modifiying the last accessed time to the future helped you get things done?")
+        return
 
 #populates the achievement_list
 def populate_achievement_list():
@@ -191,7 +279,7 @@ def check_achievement(required_stat: str, required_value: int):
             return True
     return False
 
-
+#called by complete task
 #performs a check for the achievement list if it is empty it calls the populate and save achievement functions respectively
 #otherwise applies credits and alerts user if an achievement has been completed
 def check_achievements():
@@ -281,6 +369,7 @@ def complete_task(task_id: int, repeat=False):
             credits += dprt[2]
             print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
         save()
+        daily_reward(time.now())
         check_achievements()
         if repeat:
             add_task(dprt[0],dprt[1],dprt[2])
