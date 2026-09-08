@@ -110,8 +110,11 @@ def load():
                     tasks_completed += int((line.lstrip("Tasks Completed: ")).rstrip(" \n"))
                 if "Rewards Claimed" in line:
                     rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
+                #as last_accessed is a datetime object the below converts the extracted string to a datetime object and saves it the last_accessed variable
                 if "Last Accessed" in line:
-                    last_accessed = datetime((line.lstrip("Last Accessed: ")).rstrip(" \n"))
+                    date_str = ((line.lstrip("Last Accessed: ")).rstrip(" \n"))
+                    date_format = '%Y-%m-%d %H:%M:%S'
+                    last_accessed = datetime.strptime(date_str, date_format)
                 if "Streak" in line:
                     streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
 load()
