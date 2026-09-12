@@ -44,7 +44,6 @@ class Achievement:
         self.required_stat = required_stat
         self.required_value = required_value
 
-#helper function for load
 #cycles through the tasks in the task list to find the one with the highest number
 #used to add to task_id which is initialised at 1
 #this ensures all tasks have a unique ID 
@@ -55,7 +54,6 @@ def getmax_task_id():
             max_id = task.id
     return max_id
 
-#helper function for load
 #similar to getmax_task_id but for rewards instead
 def getmax_reward_id():
     max_id = 0
@@ -82,11 +80,6 @@ def load():
     global rewards_claimed
     global last_accessed
     global streak
-    if os.path.exists(rewardlist_file_path):
-        with open(rewardlist_file_path, 'rb') as inp:
-            for _ in range(pickle.load(inp)):
-                rewardlist.append(pickle.load(inp))
-        reward_id += getmax_reward_id()
     if os.path.exists(save_file_path):
         with open(save_file_path, 'r') as f:
             for line in f:
@@ -112,6 +105,8 @@ def load():
 load()
 tasklist = load_list(tasklist_file_path)
 task_id += getmax_task_id()
+rewardlist = load_list(rewardlist_file_path)
+reward_id += getmax_reward_id()
 achievementlist = load_list(achievementlist_file_path)
 
 #packages the simple variables into a list ready for saving
