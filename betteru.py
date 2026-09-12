@@ -1,6 +1,6 @@
 import datetime, argparse, os, pickle
 from operator import attrgetter
-from save import save_list
+from save import save_list, save
 
 time = datetime.datetime
 tasklist = []
@@ -120,21 +120,18 @@ def load():
                     streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
 load()
 
-#saves all simple variables used by the program
-def save():
-    if not os.path.exists(save_file_path):
-        os.makedirs('data', exist_ok=True)
-        f = open(save_file_path, 'x')
-        f.close()
-    with open(save_file_path, 'w') as f:
-        f.write(f"Credits: {credits} \n")
-        f.write(f"High Priority Tasks Completed: {high_priority_tasks_completed} \n")
-        f.write(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed} \n")
-        f.write(f"Low Priority Tasks Completed: {low_priority_tasks_completed} \n")
-        f.write(f"Tasks Completed: {tasks_completed} \n")
-        f.write(f"Rewards Claimed: {rewards_claimed} \n")
-        f.write(f"Last Accessed: {last_accessed} \n")
-        f.write(f"Streak: {streak} \n")
+#packages the simple variables into a list ready for saving
+def variables_as_list():
+    variablelist = []
+    variablelist.append(f"Credits: {credits} \n")
+    variablelist.append(f"High Priority Tasks Completed: {high_priority_tasks_completed} \n")
+    variablelist.append(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed} \n")
+    variablelist.append(f"Low Priority Tasks Completed: {low_priority_tasks_completed} \n")
+    variablelist.append(f"Tasks Completed: {tasks_completed} \n")
+    variablelist.append(f"Rewards Claimed: {rewards_claimed} \n")
+    variablelist.append(f"Last Accessed: {last_accessed} \n")
+    variablelist.append(f"Streak: {streak} \n")
+    return variablelist
 
 #helper for daily reward
 #checks if last_accessed day was yesterday to be used in the event that it had been less than 24 hours
@@ -180,14 +177,14 @@ def daily_reward(access_time: datetime):
         last_accessed = access_time
         credits += 1
         print("Looks like this your first time. You have been awarded a credit to help motivate you on your task completion journey!")
-        save()
+        save(save_file_path, variables_as_list())
         return
     elif last_accessed <= access_time - datetime.timedelta(days=1):
         credits += 1
         streak_reset()
         last_accessed = access_time
         print("Looks like its been more than a day. You have been awarded a credit to get you motivated!")
-        save()
+        save(save_file_path, variables_as_list())
         return
     elif yesterday_check(last_accessed.strftime("%A"),access_day):
         credits += 1
@@ -208,7 +205,7 @@ def daily_reward(access_time: datetime):
             else:    
                 credits += 7
                 print(f"Congratulations on reaching a streak of {streak_weeks} week(s)! You have been awarded 7 credits")
-        save()
+        save(save_file_path, variables_as_list())
         return
     elif last_accessed > access_time:
         print(f"Well that is naughty, how has modifiying the last accessed time to the future helped you get things done?")
@@ -281,7 +278,7 @@ def check_achievements():
                 if completed:
                     achievement.completed = True
                     credits += achievement.reward
-                    save()
+                    save(save_file_path, variables_as_list())
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
                     save_list(achievementlist_file_path, achievementlist)
 
@@ -355,7 +352,7 @@ def complete_task(task_id: int, repeat=False):
         else:
             credits += dprt[2]
             print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
-        save()
+        save(save_file_path, variables_as_list())
         daily_reward(time.now())
         check_achievements()
         if repeat:
@@ -406,7 +403,7 @@ def claim_reward(reward_id: int, repeat=False):
     if not dc[0] == None and not dc[1] == None:
         credits -= dc[1]
         rewards_claimed += 1
-        save()
+        save(save_file_path, variables_as_list())
         print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
         check_achievements()
         if repeat:
