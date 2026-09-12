@@ -1,7 +1,7 @@
 import datetime, argparse, os, pickle
 from operator import attrgetter
 from save import save_list, save
-from achievements import check_achievements, get_achievement_list
+from achievements import Achievement, check_achievements, get_achievement_list
 
 time = datetime.datetime
 tasklist = []
