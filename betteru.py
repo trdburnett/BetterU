@@ -1,5 +1,6 @@
 import datetime, argparse, os, pickle
 from operator import attrgetter
+from save import save_list
 
 time = datetime.datetime
 tasklist = []
@@ -118,23 +119,6 @@ def load():
                 if "Streak" in line:
                     streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
 load()
-
-#saves a list to the given lists filepath
-def save_list(file_path: str):
-    if file_path == tasklist_file_path:
-        savelist = tasklist
-    if file_path == rewardlist_file_path:
-        savelist = rewardlist
-    if file_path == achievementlist_file_path:
-        savelist = achievementlist
-    if not os.path.exists(file_path):
-        os.makedirs('data', exist_ok=True)
-        f = open(file_path, 'x')
-        f.close()
-    with open(file_path, 'wb') as outp:
-        pickle.dump(len(savelist), outp, pickle.HIGHEST_PROTOCOL)
-        for item in savelist:
-            pickle.dump(item, outp)
 
 #saves all simple variables used by the program
 def save():
@@ -289,7 +273,7 @@ def check_achievements():
     global credits
     if achievementlist == []:
         populate_achievement_list()
-        save_list(achievementlist_file_path)
+        save_list(achievementlist_file_path, achievementlist)
     else:
         for achievement in achievementlist:
             if not achievement.completed:
@@ -299,7 +283,7 @@ def check_achievements():
                     credits += achievement.reward
                     save()
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
-                    save_list(achievementlist_file_path)
+                    save_list(achievementlist_file_path, achievementlist)
 
 #returns either the time remaining to complete a task or expired string
 #helper for display_tasks and complete_tasks                    
@@ -319,7 +303,7 @@ def time_remaining(task_priority: int, task_time: datetime):
 def add_task(description: str, priority: int, reward: int):
     task = Task(description,priority,reward,time.now(),task_id)
     tasklist.append(task)
-    save_list(tasklist_file_path)
+    save_list(tasklist_file_path, tasklist)
     print("Task Added.")
 
 #removes a task object from the task list only
@@ -339,7 +323,7 @@ def remove_task(task_id: int, remove=True):
             task_time = tasklist[i].time
     if found:
         del tasklist[index_to_remove]
-        save_list(tasklist_file_path)
+        save_list(tasklist_file_path, tasklist)
         if remove:
             print("Task Removed.")
         else:
@@ -381,7 +365,7 @@ def complete_task(task_id: int, repeat=False):
 def add_reward(description: str, cost: int):
     reward = Reward(description,cost,reward_id)
     rewardlist.append(reward)
-    save_list(rewardlist_file_path)
+    save_list(rewardlist_file_path, rewardlist)
     print("Reward Added.")
 
 #removes a reward object from the reward list only
@@ -398,12 +382,12 @@ def remove_reward(reward_id: int, remove=True):
     if found:
         if remove:
             del rewardlist[index_to_remove]
-            save_list(rewardlist_file_path)
+            save_list(rewardlist_file_path, rewardlist)
             print("Reward Removed.")
         else:
             if cost <= credits:
                 del rewardlist[index_to_remove]
-                save_list(rewardlist_file_path)
+                save_list(rewardlist_file_path, rewardlist)
                 return (description,cost)
             else:
                 print("You don't have enough credits for that reward yet.")
