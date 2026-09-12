@@ -1,4 +1,4 @@
-from betteru import variables_as_list, display_banner, display_padding
+from betteru import variables_as_list
 from save import save_list, save
 from load import load_list
 
