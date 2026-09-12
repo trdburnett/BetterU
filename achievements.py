@@ -1,5 +1,4 @@
-from betteru import variables_as_list
-from save import save_list, save
+from save import save_list
 from load import load_list
 
 achievementlist_file_path = 'data/achievementlist.dat'
@@ -75,7 +74,6 @@ def check_achievements(save_file_path: str, tasks_completed: int, high_priority_
                 if completed:
                     achievement.completed = True
                     credits_to_add += achievement.reward
-                    save(save_file_path, variables_as_list())
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
                     save_list(achievementlist_file_path, achievementlist)
     return credits_to_add

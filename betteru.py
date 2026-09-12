@@ -270,9 +270,9 @@ def complete_task(task_id: int, repeat=False):
         else:
             credits += dprt[2]
             print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
-        save(save_file_path, variables_as_list())
         daily_reward(time.now())
         credits += check_achievements(save_file_path, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed)
+        save(save_file_path, variables_as_list())
         if repeat:
             add_task(dprt[0],dprt[1],dprt[2])
 
@@ -321,9 +321,9 @@ def claim_reward(reward_id: int, repeat=False):
     if not dc[0] == None and not dc[1] == None:
         credits -= dc[1]
         rewards_claimed += 1
-        save(save_file_path, variables_as_list())
         print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
         credits += check_achievements()
+        save(save_file_path, variables_as_list())
         if repeat:
             add_reward(dc[0],dc[1])
 
