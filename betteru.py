@@ -82,12 +82,6 @@ def load():
     global rewards_claimed
     global last_accessed
     global streak
-    if os.path.exists(tasklist_file_path):
-        with open(tasklist_file_path, 'rb') as inp:
-            #uses the first dump of the length of the list to know what to load from the file
-            for _ in range(pickle.load(inp)):
-                tasklist.append(pickle.load(inp))
-        task_id += getmax_task_id()
     if os.path.exists(rewardlist_file_path):
         with open(rewardlist_file_path, 'rb') as inp:
             for _ in range(pickle.load(inp)):
@@ -116,6 +110,8 @@ def load():
                 if "Streak" in line:
                     streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
 load()
+tasklist = load_list(tasklist_file_path)
+task_id += getmax_task_id()
 achievementlist = load_list(achievementlist_file_path)
 
 #packages the simple variables into a list ready for saving
