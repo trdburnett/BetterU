@@ -1,11 +1,11 @@
 import datetime, argparse, os, pickle
 from operator import attrgetter
 from save import save_list, save
-from achievements import check_achievements, get_achievement_list
 
 time = datetime.datetime
 tasklist = []
 rewardlist = []
+achievementlist = []
 task_id = 1
 reward_id = 1
 credits = 0
@@ -18,6 +18,7 @@ last_accessed = None
 streak = 0
 tasklist_file_path = 'data/tasklist.dat'
 rewardlist_file_path = 'data/rewardlist.dat'
+achievementlist_file_path = 'data/achievementlist.dat'
 save_file_path = 'data/save.txt'
 
 class Task:
@@ -33,6 +34,14 @@ class Reward:
         self.description = description
         self.cost = cost
         self.id = id
+
+class Achievement:
+    def __init__(self,description: str, completed: bool, reward: int, required_stat: str, required_value: int):
+        self.description = description
+        self.completed = completed
+        self.reward = reward
+        self.required_stat = required_stat
+        self.required_value = required_value
 
 #helper function for load
 #cycles through the tasks in the task list to find the one with the highest number
@@ -83,6 +92,10 @@ def load():
             for _ in range(pickle.load(inp)):
                 rewardlist.append(pickle.load(inp))
         reward_id += getmax_reward_id()
+    if os.path.exists(achievementlist_file_path):
+            with open(achievementlist_file_path, 'rb') as inp:
+                for _ in range(pickle.load(inp)):
+                    achievementlist.append(pickle.load(inp))
     if os.path.exists(save_file_path):
         with open(save_file_path, 'r') as f:
             for line in f:
@@ -198,10 +211,79 @@ def daily_reward(access_time: datetime):
         print(f"Well that is naughty, how has modifiying the last accessed time to the future helped you get things done?")
         return
 
+#populates the achievement_list
+def populate_achievement_list():
+    achievementlist.append(Achievement("Completed 10 Tasks",False,2,"tasks_completed",10))
+    achievementlist.append(Achievement("Completed 50 Tasks",False,10,"tasks_completed",50))
+    achievementlist.append(Achievement("Completed 100 Tasks",False,20,"tasks_completed",100))
+    achievementlist.append(Achievement("Completed 500 Tasks",False,100,"tasks_completed",500))
+    achievementlist.append(Achievement("Completed 1000 Tasks",False,200,"tasks_completed",1000))
+    achievementlist.append(Achievement("Completed 5000 Tasks",False,1000,"tasks_completed",5000))
+    achievementlist.append(Achievement("Completed 10000 Tasks",False,2000,"tasks_completed",10000))
+    achievementlist.append(Achievement("Completed 20 High Priority Tasks",False,2,"high_priority_tasks_completed",20))
+    achievementlist.append(Achievement("Completed 100 High Priority Tasks",False,10,"high_priority_tasks_completed",100))
+    achievementlist.append(Achievement("Completed 200 High Priority Tasks",False,20,"high_priority_tasks_completed",200))
+    achievementlist.append(Achievement("Completed 1000 High Priority Tasks",False,100,"high_priority_tasks_completed",1000))
+    achievementlist.append(Achievement("Completed 40 Medium Priority Tasks",False,2,"medium_priority_tasks_completed",40))
+    achievementlist.append(Achievement("Completed 200 Medium Priority Tasks",False,10,"medium_priority_tasks_completed",200))
+    achievementlist.append(Achievement("Completed 400 Medium Priority Tasks",False,20,"medium_priority_tasks_completed",400))
+    achievementlist.append(Achievement("Completed 2000 Medium Priority Tasks",False,100,"medium_priority_tasks_completed",2000))
+    achievementlist.append(Achievement("Completed 80 Low Priority Tasks",False,2,"low_priority_tasks_completed",80))
+    achievementlist.append(Achievement("Completed 400 Low Priority Tasks",False,10,"low_priority_tasks_completed",400))
+    achievementlist.append(Achievement("Completed 800 Low Priority Tasks",False,20,"low_priority_tasks_completed",800))
+    achievementlist.append(Achievement("Completed 4000 Low Priority Tasks",False,100,"low_priority_tasks_completed",4000))
+    achievementlist.append(Achievement("Claimed 5 Rewards",False,2,"rewards_claimed",5))
+    achievementlist.append(Achievement("Claimed 25 Rewards",False,10,"rewards_claimed",25))
+    achievementlist.append(Achievement("Claimed 50 Rewards",False,20,"rewards_claimed",50))
+    achievementlist.append(Achievement("Claimed 250 Rewards",False,100,"rewards_claimed",250))
 
+#helper method for check_achievements
+#takes a required statistic to check and the required value
+#returns true if the requirements have been met, false otherwise
+def check_achievement(required_stat: str, required_value: int):
+    global tasks_completed
+    global high_priority_tasks_completed
+    global medium_priority_tasks_completed
+    global low_priority_tasks_completed
+    global rewards_claimed
+    if required_stat == "tasks_completed":
+        if tasks_completed >= required_value:
+            return True
+    if required_stat == "high_priority_tasks_completed":
+        if high_priority_tasks_completed >= required_value:
+            return True
+    if required_stat == "medium_priority_tasks_completed":
+        if medium_priority_tasks_completed >= required_value:
+            return True
+    if required_stat == "low_priority_tasks_completed":
+        if low_priority_tasks_completed >= required_value:
+            return True
+    if required_stat == "rewards_claimed":
+        if rewards_claimed >= required_value:
+            return True
+    return False
+
+#called by complete task
+#performs a check for the achievement list if it is empty it calls the populate and save achievement functions respectively
+#otherwise applies credits and alerts user if an achievement has been completed
+def check_achievements():
+    global credits
+    if achievementlist == []:
+        populate_achievement_list()
+        save_list(achievementlist_file_path, achievementlist)
+    else:
+        for achievement in achievementlist:
+            if not achievement.completed:
+                completed = check_achievement(achievement.required_stat,achievement.required_value)
+                if completed:
+                    achievement.completed = True
+                    credits += achievement.reward
+                    save(save_file_path, variables_as_list())
+                    print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
+                    save_list(achievementlist_file_path, achievementlist)
 
 #returns either the time remaining to complete a task or expired string
-#helper for display_tasks and complete_task                    
+#helper for display_tasks and complete_tasks                    
 def time_remaining(task_priority: int, task_time: datetime):
     if task_priority == 1:
         task_deadline = task_time + datetime.timedelta(days=2)
@@ -270,9 +352,9 @@ def complete_task(task_id: int, repeat=False):
         else:
             credits += dprt[2]
             print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
-        daily_reward(time.now())
-        credits += check_achievements(save_file_path, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed)
         save(save_file_path, variables_as_list())
+        daily_reward(time.now())
+        check_achievements()
         if repeat:
             add_task(dprt[0],dprt[1],dprt[2])
 
@@ -321,9 +403,9 @@ def claim_reward(reward_id: int, repeat=False):
     if not dc[0] == None and not dc[1] == None:
         credits -= dc[1]
         rewards_claimed += 1
-        print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
-        credits += check_achievements()
         save(save_file_path, variables_as_list())
+        print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
+        check_achievements()
         if repeat:
             add_reward(dc[0],dc[1])
 
@@ -351,16 +433,6 @@ def display_rewards():
         for reward in rewardlist:
             print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
 
-#displays the achievement list
-def display_achievements():
-    check_achievements()
-    if get_achievement_list() == []:
-        print("Oh Dear, sorry the achievements have failed to load. Please try again.")
-    else:
-        print(display_banner("Achievements"))
-        for achievement in get_achievement_list():
-            print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
-
 #displays statistics
 def display_stats():
     print(display_banner("Statistics"))
@@ -369,6 +441,16 @@ def display_stats():
     print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
     print(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
     print(f"Rewards Claimed: {rewards_claimed}")
+
+#displays the achievement list
+def display_achievements():
+    check_achievements()
+    if achievementlist == []:
+        print("Oh Dear, sorry the achievements have failed to load. Please try again.")
+    else:
+        print(display_banner("Achievements"))
+        for achievement in achievementlist:
+            print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
 
 #returns a string of spaces based on the length of the description it is given
 #helper method for display functions
