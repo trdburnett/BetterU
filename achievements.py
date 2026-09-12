@@ -80,12 +80,5 @@ def check_achievements(save_file_path: str, tasks_completed: int, high_priority_
                     save_list(achievementlist_file_path, achievementlist)
     return credits_to_add
 
-#displays the achievement list
-def display_achievements():
-    check_achievements()
-    if achievementlist == []:
-        print("Oh Dear, sorry the achievements have failed to load. Please try again.")
-    else:
-        print(display_banner("Achievements"))
-        for achievement in achievementlist:
-            print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
+def get_achievement_list()->list:
+    return achievementlist
