@@ -1,7 +1,7 @@
 import datetime, argparse, os, pickle
 from operator import attrgetter
 from save import save_list, save
-from achievements import Achievement, check_achievements, get_achievement_list
+from achievements import check_achievements, get_achievement_list
 
 time = datetime.datetime
 tasklist = []
@@ -354,11 +354,11 @@ def display_rewards():
 #displays the achievement list
 def display_achievements():
     check_achievements()
-    if get_achievement_list == []:
+    if get_achievement_list() == []:
         print("Oh Dear, sorry the achievements have failed to load. Please try again.")
     else:
         print(display_banner("Achievements"))
-        for achievement in get_achievement_list:
+        for achievement in get_achievement_list():
             print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
 
 #displays statistics
