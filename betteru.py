@@ -1,6 +1,7 @@
 import datetime, argparse, os, pickle
 from operator import attrgetter
 from save import save_list, save
+from load import load_list
 
 time = datetime.datetime
 tasklist = []
@@ -92,10 +93,6 @@ def load():
             for _ in range(pickle.load(inp)):
                 rewardlist.append(pickle.load(inp))
         reward_id += getmax_reward_id()
-    if os.path.exists(achievementlist_file_path):
-            with open(achievementlist_file_path, 'rb') as inp:
-                for _ in range(pickle.load(inp)):
-                    achievementlist.append(pickle.load(inp))
     if os.path.exists(save_file_path):
         with open(save_file_path, 'r') as f:
             for line in f:
@@ -119,6 +116,7 @@ def load():
                 if "Streak" in line:
                     streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
 load()
+achievementlist = load_list(achievementlist_file_path)
 
 #packages the simple variables into a list ready for saving
 def variables_as_list():
