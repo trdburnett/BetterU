@@ -1,4 +1,4 @@
-import datetime, argparse, os, pickle
+import datetime, argparse, os
 from operator import attrgetter
 from save import save_list, save
 from load import load_list
@@ -393,13 +393,14 @@ def display_tasks():
         for task in sorted_tasklist:
             print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits | Time Remaining: {time_remaining(task.priority,task.time)}")
 
-#displays the rewards list
+#displays the rewards list in cost order
 def display_rewards():
     if rewardlist == []:
         print("No rewards to display. please add some rewards.")
     else:
         print(display_banner("Rewards"))
-        for reward in rewardlist:
+        sorted_rewardlist = sorted(rewardlist, key=attrgetter('cost'))
+        for reward in sorted_rewardlist:
             print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
 
 #displays statistics
