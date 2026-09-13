@@ -391,7 +391,7 @@ def display_tasks():
         print(display_banner("Tasks"))
         sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
         for task in sorted_tasklist:
-            print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits | Time Remaining: {time_remaining(task.priority,task.time)}")
+            print(f"Task[{task.id}]: {task.description}{display_padding(task.description,"task")}| Reward: {task.reward} Credits | Time Remaining: {time_remaining(task.priority,task.time)}")
 
 #displays the rewards list in cost order
 def display_rewards():
@@ -401,7 +401,7 @@ def display_rewards():
         print(display_banner("Rewards"))
         sorted_rewardlist = sorted(rewardlist, key=attrgetter('cost'))
         for reward in sorted_rewardlist:
-            print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
+            print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description,"reward")}| Cost: {reward.cost} Credits")
 
 #displays statistics
 def display_stats():
@@ -424,9 +424,13 @@ def display_achievements():
 
 #returns a string of spaces based on the length of the description it is given
 #helper method for display functions
-def display_padding(description: str)->str:
+def display_padding(description: str, id_padding:str="")->str:
     padding = ""
     padding_size = 50 - len(description)
+    if id_padding == "task":
+        padding_size = padding_size - len(str(task_id))
+    if id_padding == "reward":
+        padding_size = padding_size - len(str(reward_id))
     while padding_size > 0:
         padding = padding + " "
         padding_size -= 1
