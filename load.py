@@ -1,6 +1,6 @@
 import os, pickle
 
-#returns list found at given filepath
+#returns list of objects found at given filepath
 def load_list(list_file_path:str)-> list:
     list_to_return = []
     if os.path.exists(list_file_path):

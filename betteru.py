@@ -44,69 +44,49 @@ class Achievement:
         self.required_stat = required_stat
         self.required_value = required_value
 
-#cycles through the tasks in the task list to find the one with the highest number
-#used to add to task_id which is initialised at 1
-#this ensures all tasks have a unique ID 
-def getmax_task_id():
+#cycles through the tasks/rewards list based on mode and returns highest found ID
+#used to add to task_id/reward_id which is initialised at 1
+#ensures all tasks and rewards have a unique ID 
+def getmax_id(mode:str)->int:
     max_id = 0
-    for task in tasklist:
-        if task.id > max_id:
-            max_id = task.id
+    if mode == "task":
+        for task in tasklist:
+            if task.id > max_id:
+                max_id = task.id
+    if mode == "reward":
+        for reward in rewardlist:
+            if reward.id > max_id:
+                max_id = reward.id
     return max_id
 
-#similar to getmax_task_id but for rewards instead
-def getmax_reward_id():
-    max_id = 0
-    for reward in rewardlist:
-        if reward.id > max_id:
-            max_id = reward.id
-    return max_id
-
-#checks to see if data/tasklist.dat exisits
-#if it does it loads the task objects from the file into the tasklist
-#then uses getmax_task_id() helper to set the task_id
-#checks to see if data/tasklist.dat exists
-#follows similar flow as tasklist loading
 #checks to see if data/save.txt exisits
 #if it does it loads the values and sets variables used in the program
-def load():
-    global task_id
-    global reward_id
-    global credits
-    global tasks_completed
-    global high_priority_tasks_completed
-    global medium_priority_tasks_completed
-    global low_priority_tasks_completed
-    global rewards_claimed
-    global last_accessed
-    global streak
-    if os.path.exists(save_file_path):
-        with open(save_file_path, 'r') as f:
-            for line in f:
-                if "Credits" in line:
-                    credits += int((line.lstrip("Credits: ")).rstrip(" \n"))
-                if "High Priority Tasks Completed" in line:
-                    high_priority_tasks_completed += int((line.lstrip("High Priority Tasks Completed: ")).rstrip(" \n"))
-                if "Medium Priority Tasks Completed" in line:
-                    medium_priority_tasks_completed += int((line.lstrip("Medium Priority Tasks Completed: ")).rstrip(" \n"))
-                if "Low Priority Tasks Completed" in line:
-                    low_priority_tasks_completed += int((line.lstrip("Low Priority Tasks Completed: ")).rstrip(" \n"))
-                if "Tasks Completed" in line and "High" not in line and "Medium" not in line and "Low" not in line:
-                    tasks_completed += int((line.lstrip("Tasks Completed: ")).rstrip(" \n"))
-                if "Rewards Claimed" in line:
-                    rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
-                #as last_accessed is a datetime object the below converts the extracted string to a datetime object and saves it the last_accessed variable
-                if "Last Accessed" in line:
-                    date_str = ((line.lstrip("Last Accessed: ")).rstrip(" \n"))
-                    date_format = '%Y-%m-%d %H:%M:%S.%f'
-                    last_accessed = datetime.datetime.strptime(date_str, date_format)
-                if "Streak" in line:
-                    streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
-load()
+if os.path.exists(save_file_path):
+    with open(save_file_path, 'r') as f:
+        for line in f:
+            if "Credits" in line:
+                credits += int((line.lstrip("Credits: ")).rstrip(" \n"))
+            if "High Priority Tasks Completed" in line:
+                high_priority_tasks_completed += int((line.lstrip("High Priority Tasks Completed: ")).rstrip(" \n"))
+            if "Medium Priority Tasks Completed" in line:
+                medium_priority_tasks_completed += int((line.lstrip("Medium Priority Tasks Completed: ")).rstrip(" \n"))
+            if "Low Priority Tasks Completed" in line:
+                low_priority_tasks_completed += int((line.lstrip("Low Priority Tasks Completed: ")).rstrip(" \n"))
+            if "Tasks Completed" in line and "High" not in line and "Medium" not in line and "Low" not in line:
+                tasks_completed += int((line.lstrip("Tasks Completed: ")).rstrip(" \n"))
+            if "Rewards Claimed" in line:
+                rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
+            #as last_accessed is a datetime object the below converts the extracted string to a datetime object and saves it the last_accessed variable
+            if "Last Accessed" in line:
+                date_str = ((line.lstrip("Last Accessed: ")).rstrip(" \n"))
+                date_format = '%Y-%m-%d %H:%M:%S.%f'
+                last_accessed = datetime.datetime.strptime(date_str, date_format)
+            if "Streak" in line:
+                streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
 tasklist = load_list(tasklist_file_path)
-task_id += getmax_task_id()
+task_id += getmax_id("task")
 rewardlist = load_list(rewardlist_file_path)
-reward_id += getmax_reward_id()
+reward_id += getmax_id("reward")
 achievementlist = load_list(achievementlist_file_path)
 
 #packages the simple variables into a list ready for saving
