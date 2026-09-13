@@ -398,6 +398,7 @@ def display_rewards():
     if rewardlist == []:
         print("No rewards to display. please add some rewards.")
     else:
+        display_credits()
         print(display_banner("Rewards"))
         sorted_rewardlist = sorted(rewardlist, key=attrgetter('cost'))
         for reward in sorted_rewardlist:
