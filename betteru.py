@@ -428,9 +428,9 @@ def display_padding(description: str, id_padding:str="")->str:
     padding = ""
     padding_size = 50 - len(description)
     if id_padding == "task":
-        padding_size = padding_size - len(str(task_id))
+        padding_size = padding_size + len(str(task_id))
     if id_padding == "reward":
-        padding_size = padding_size - len(str(reward_id))
+        padding_size = padding_size + len(str(reward_id))
     while padding_size > 0:
         padding = padding + " "
         padding_size -= 1
