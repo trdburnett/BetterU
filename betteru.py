@@ -2,7 +2,7 @@ import datetime, argparse, os
 from operator import attrgetter
 from save import save_list, save
 from load import load_list
-from variables import tasklist, rewardlist, achievementlist, credits, task_id, reward_id, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, last_accessed, streak, save_file_path, load_variables
+from variables import tasklist, rewardlist, achievementlist, credits, task_id, reward_id, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, last_accessed, streak, save_file_path
 
 time = datetime.datetime
 tasklist_file_path = 'data/tasklist.dat'
