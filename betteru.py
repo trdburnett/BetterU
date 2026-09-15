@@ -4,7 +4,7 @@ from save import save_list, save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
 from tasks import Task, add_task, remove_task
-from achievements import Achievement, populate_achievement_list
+from achievements import Achievement, check_achievements
 
 time = datetime.datetime
 tasklist = []
@@ -176,53 +176,6 @@ def daily_reward(access_time: datetime):
         print(f"Well that is naughty, how has modifiying the last accessed time to the future helped you get things done?")
         return
 
-
-
-#helper method for check_achievements
-#takes a required statistic to check and the required value
-#returns true if the requirements have been met, false otherwise
-def check_achievement(required_stat: str, required_value: int):
-    global tasks_completed
-    global high_priority_tasks_completed
-    global medium_priority_tasks_completed
-    global low_priority_tasks_completed
-    global rewards_claimed
-    if required_stat == "tasks_completed":
-        if tasks_completed >= required_value:
-            return True
-    if required_stat == "high_priority_tasks_completed":
-        if high_priority_tasks_completed >= required_value:
-            return True
-    if required_stat == "medium_priority_tasks_completed":
-        if medium_priority_tasks_completed >= required_value:
-            return True
-    if required_stat == "low_priority_tasks_completed":
-        if low_priority_tasks_completed >= required_value:
-            return True
-    if required_stat == "rewards_claimed":
-        if rewards_claimed >= required_value:
-            return True
-    return False
-
-#called by complete task
-#performs a check for the achievement list if it is empty it calls the populate and save achievement functions respectively
-#otherwise applies credits and alerts user if an achievement has been completed
-def check_achievements():
-    global credits
-    if achievementlist == []:
-        populate_achievement_list(achievementlist)
-        save_list(achievementlist_file_path, achievementlist)
-    else:
-        for achievement in achievementlist:
-            if not achievement.completed:
-                completed = check_achievement(achievement.required_stat,achievement.required_value)
-                if completed:
-                    achievement.completed = True
-                    credits += achievement.reward
-                    save(save_file_path, variables_as_list())
-                    print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
-                    save_list(achievementlist_file_path, achievementlist)
-
 #returns either the time remaining to complete a task or expired string
 #helper for display_tasks and complete_tasks                    
 def time_remaining(task_priority: int, task_time: datetime):
@@ -259,9 +212,9 @@ def complete_task(task_id: int, repeat=False):
         else:
             credits += dprt[2]
             print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
-        save(save_file_path, variables_as_list())
         daily_reward(time.now())
-        check_achievements()
+        credits += check_achievements(achievementlist,variables_as_list(),tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+        save(save_file_path, variables_as_list())
         if repeat:
             add_task(dprt[0],dprt[1],dprt[2],task_id,tasklist)
 
@@ -312,7 +265,7 @@ def claim_reward(reward_id: int, repeat=False):
         rewards_claimed += 1
         save(save_file_path, variables_as_list())
         print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
-        check_achievements()
+        check_achievements(achievementlist,variables_as_list(),tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
         if repeat:
             add_reward(dc[0],dc[1])
 
@@ -353,7 +306,7 @@ def display_stats():
 
 #displays the achievement list
 def display_achievements():
-    check_achievements()
+    check_achievements(achievementlist,variables_as_list(),tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
     if achievementlist == []:
         print("Oh Dear, sorry the achievements have failed to load. Please try again.")
     else:

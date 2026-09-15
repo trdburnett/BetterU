@@ -1,3 +1,6 @@
+from save import save, save_list
+from file_paths import achievementlist_file_path, save_file_path
+
 class Achievement:
     def __init__(self,description: str, completed: bool, reward: int, required_stat: str, required_value: int):
         self.description = description
@@ -32,3 +35,44 @@ def populate_achievement_list(achievementlist: list)->list:
     achievementlist.append(Achievement("Claimed 50 Rewards",False,20,"rewards_claimed",50))
     achievementlist.append(Achievement("Claimed 250 Rewards",False,100,"rewards_claimed",250))
     return achievementlist
+
+#helper method for check_achievements
+#takes a required statistic to check and the required value
+#returns true if the requirements have been met, false otherwise
+def check_achievement(required_stat: str, required_value: int, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int)->bool:
+    if required_stat == "tasks_completed":
+        if tasks_completed >= required_value:
+            return True
+    if required_stat == "high_priority_tasks_completed":
+        if high_priority_tasks_completed >= required_value:
+            return True
+    if required_stat == "medium_priority_tasks_completed":
+        if medium_priority_tasks_completed >= required_value:
+            return True
+    if required_stat == "low_priority_tasks_completed":
+        if low_priority_tasks_completed >= required_value:
+            return True
+    if required_stat == "rewards_claimed":
+        if rewards_claimed >= required_value:
+            return True
+    return False
+
+#called by complete task
+#performs a check for the achievement list if it is empty it calls the populate and save achievement functions respectively
+#otherwise applies credits and alerts user if an achievement has been completed
+def check_achievements(achievementlist: list, variableslist: list, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int)->int:
+    credits_to_add = 0
+    if achievementlist == []:
+        populate_achievement_list(achievementlist)
+        save_list(achievementlist_file_path, achievementlist)
+    else:
+        for achievement in achievementlist:
+            if not achievement.completed:
+                completed = check_achievement(achievement.required_stat,achievement.required_value,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+                if completed:
+                    achievement.completed = True
+                    credits_to_add += achievement.reward
+                    save(save_file_path, variableslist)
+                    print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
+                    save_list(achievementlist_file_path, achievementlist)
+    return credits_to_add
