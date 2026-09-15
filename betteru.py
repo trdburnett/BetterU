@@ -3,7 +3,7 @@ from operator import attrgetter
 from save import save_list, save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
-from tasks import Task, add_task
+from tasks import Task, add_task, remove_task
 
 time = datetime.datetime
 tasklist = []
@@ -266,33 +266,6 @@ def time_remaining(task_priority: int, task_time: datetime):
     else:
         return task_deadline - time.now()
 
-#removes a task object from the task list only
-def remove_task(task_id: int, remove=True):
-    found = False
-    description = None
-    priority = None
-    reward = None
-    task_time = None
-    for i in range(len(tasklist)):
-        if tasklist[i].id == task_id:
-            index_to_remove = i
-            found = True
-            description = tasklist[i].description
-            priority = tasklist[i].priority
-            reward = tasklist[i].reward
-            task_time = tasklist[i].time
-    if found:
-        del tasklist[index_to_remove]
-        save_list(tasklist_file_path, tasklist)
-        if remove:
-            print("Task Removed.")
-        else:
-            return (description,priority,reward,task_time)
-    else:
-        print("Task not found, check task ID.")
-        if not remove:
-            return (description,priority,reward,task_time)
-
 #removes a task object from the task list and awards credits
 def complete_task(task_id: int, repeat=False):
     global credits
@@ -300,7 +273,7 @@ def complete_task(task_id: int, repeat=False):
     global high_priority_tasks_completed
     global medium_priority_tasks_completed
     global low_priority_tasks_completed
-    dprt = remove_task(task_id, remove=False)
+    dprt = remove_task(task_id, tasklist, remove=False)
     if not dprt[0] == None and not dprt[1] == None and not dprt[2] == None and not dprt[3] == None:
         if dprt[1] == 1:
             high_priority_tasks_completed += 1
@@ -493,7 +466,7 @@ if 'task_description' in args and 'task_priority' in args and 'task_reward' in a
 
 #branch for calling remove_task
 if 'remove_task_id' in args:
-    remove_task(args.remove_task_id)
+    remove_task(args.remove_task_id, tasklist)
 
 #branch for calling complete_task
 if 'complete_task_id' in args:
