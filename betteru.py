@@ -2,6 +2,7 @@ import datetime, argparse, os
 from operator import attrgetter
 from save import save_list, save
 from load import load_list
+from variables import credits
 
 time = datetime.datetime
 tasklist = []
@@ -9,7 +10,6 @@ rewardlist = []
 achievementlist = []
 task_id = 1
 reward_id = 1
-credits = 0
 tasks_completed = 0
 high_priority_tasks_completed = 0
 medium_priority_tasks_completed = 0
