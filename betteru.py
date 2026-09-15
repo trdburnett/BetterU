@@ -3,6 +3,7 @@ from operator import attrgetter
 from save import save_list, save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
+from tasks import add_task
 
 time = datetime.datetime
 tasklist = []
@@ -18,14 +19,6 @@ low_priority_tasks_completed = 0
 rewards_claimed = 0
 last_accessed = None
 streak = 0
-
-class Task:
-    def __init__(self,description: str, priority: int, reward: int, time: datetime, id: int):
-        self.description = description
-        self.priority = priority
-        self.reward = reward
-        self.time = time
-        self.id = id
 
 class Reward:
     def __init__(self,description: str, cost: int, id: int):
@@ -273,13 +266,6 @@ def time_remaining(task_priority: int, task_time: datetime):
     else:
         return task_deadline - time.now()
 
-#adds a task object to the task list
-def add_task(description: str, priority: int, reward: int):
-    task = Task(description,priority,reward,time.now(),task_id)
-    tasklist.append(task)
-    save_list(tasklist_file_path, tasklist)
-    print("Task Added.")
-
 #removes a task object from the task list only
 def remove_task(task_id: int, remove=True):
     found = False
@@ -333,7 +319,7 @@ def complete_task(task_id: int, repeat=False):
         daily_reward(time.now())
         check_achievements()
         if repeat:
-            add_task(dprt[0],dprt[1],dprt[2])
+            add_task(dprt[0],dprt[1],dprt[2],task_id,tasklist)
 
 #add a reward object to the reward list
 def add_reward(description: str, cost: int):
@@ -503,7 +489,7 @@ if args.achievements:
 
 #branch for calling add_task
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
-    add_task(args.task_description,args.task_priority,args.task_reward)
+    add_task(args.task_description,args.task_priority,args.task_reward,task_id,tasklist)
 
 #branch for calling remove_task
 if 'remove_task_id' in args:
