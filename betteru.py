@@ -3,7 +3,7 @@ from operator import attrgetter
 from save import save_list, save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
-from tasks import add_task
+from tasks import Task, add_task
 
 time = datetime.datetime
 tasklist = []
