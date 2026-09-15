@@ -2,21 +2,9 @@ import datetime, argparse, os
 from operator import attrgetter
 from save import save_list, save
 from load import load_list
-from variables import credits
+from variables import tasklist, rewardlist, achievementlist, credits, task_id, reward_id, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, last_accessed, streak
 
 time = datetime.datetime
-tasklist = []
-rewardlist = []
-achievementlist = []
-task_id = 1
-reward_id = 1
-tasks_completed = 0
-high_priority_tasks_completed = 0
-medium_priority_tasks_completed = 0
-low_priority_tasks_completed = 0
-rewards_claimed = 0
-last_accessed = None
-streak = 0
 tasklist_file_path = 'data/tasklist.dat'
 rewardlist_file_path = 'data/rewardlist.dat'
 achievementlist_file_path = 'data/achievementlist.dat'
