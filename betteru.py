@@ -2,12 +2,22 @@ import datetime, argparse, os
 from operator import attrgetter
 from save import save_list, save
 from load import load_list
-from variables import tasklist, rewardlist, achievementlist, credits, task_id, reward_id, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, last_accessed, streak, save_file_path
+from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
 
 time = datetime.datetime
-tasklist_file_path = 'data/tasklist.dat'
-rewardlist_file_path = 'data/rewardlist.dat'
-achievementlist_file_path = 'data/achievementlist.dat'
+tasklist = []
+rewardlist = []
+achievementlist = []
+credits = 0
+task_id = 1
+reward_id = 1
+tasks_completed = 0
+high_priority_tasks_completed = 0
+medium_priority_tasks_completed = 0
+low_priority_tasks_completed = 0
+rewards_claimed = 0
+last_accessed = None
+streak = 0
 
 class Task:
     def __init__(self,description: str, priority: int, reward: int, time: datetime, id: int):
