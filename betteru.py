@@ -97,7 +97,7 @@ def variables_as_list():
 def claim_reward(reward_id: int, repeat=False):
     global credits
     global rewards_claimed
-    dc = remove_reward(reward_id, rewardlist, False)
+    dc = remove_reward(reward_id, rewardlist, credits, False)
     if not dc[0] == None and not dc[1] == None:
         credits -= dc[1]
         rewards_claimed += 1
@@ -225,7 +225,7 @@ if args.achievements:
 
 #branch for calling add_task
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
-    add_task(args.task_description,args.task_priority,args.task_reward,task_id,tasklist)
+    add_task(args.task_description, args.task_priority, args.task_reward, task_id, tasklist)
 
 #branch for calling remove_task
 if 'remove_task_id' in args:
@@ -248,11 +248,11 @@ if 'complete_task_id' in args:
 
 #branch for calling add_reward
 if 'reward_description' in args and 'reward_cost' in args:
-    add_reward(args.reward_description,args.reward_cost,reward_id,rewardlist)
+    add_reward(args.reward_description, args.reward_cost, reward_id, rewardlist)
 
 #branch for calling remove reward
 if 'remove_reward_id' in args:
-    remove_reward(args.remove_reward_id,rewardlist)
+    remove_reward(args.remove_reward_id, rewardlist, credits)
 
 #branch for calling claim_reward
 if 'claim_reward_id' in args:

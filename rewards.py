@@ -15,7 +15,7 @@ def add_reward(description: str, cost: int, reward_id: int, rewardlist: list):
     print("Reward Added.")
 
 #removes a reward object from the reward list only
-def remove_reward(reward_id: int, rewardlist: list, remove=True):
+def remove_reward(reward_id: int, rewardlist: list, credits:int, remove=True):
     found = False
     description = None
     cost = None
