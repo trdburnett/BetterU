@@ -1,5 +1,6 @@
 from save import save_list
 from file_paths import achievementlist_file_path
+from display import display_banner, display_padding
 
 class Achievement:
     def __init__(self,description: str, completed: bool, reward: int, required_stat: str, required_value: int):
@@ -75,3 +76,12 @@ def check_achievements(achievementlist: list, tasks_completed: int, high_priorit
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
                     save_list(achievementlist_file_path, achievementlist)
     return credits_to_add
+
+#displays the achievement list
+def display_achievements(achievementlist: list):
+    if achievementlist == []:
+        populate_achievement_list(achievementlist)
+        save_list(achievementlist_file_path, achievementlist)
+    print(display_banner("Achievements"))
+    for achievement in achievementlist:
+        print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")

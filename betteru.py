@@ -1,11 +1,11 @@
 import datetime, argparse, os
 from operator import attrgetter
-from save import save, save_list
+from save import save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
 from tasks import Task, add_task, remove_task, complete_task, display_tasks
 from rewards import Reward, add_reward, remove_reward, claim_reward
-from achievements import Achievement, populate_achievement_list
+from achievements import Achievement, display_achievements
 from display import display_banner, display_padding, display_stats, display_credits
 
 time = datetime.datetime
@@ -103,15 +103,6 @@ def display_rewards():
         for reward in sorted_rewardlist:
             print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
 
-#displays the achievement list
-def display_achievements():
-    if achievementlist == []:
-        populate_achievement_list(achievementlist)
-        save_list(achievementlist_file_path, achievementlist)
-    print(display_banner("Achievements"))
-    for achievement in achievementlist:
-        print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
-
 #parsing command line arguments for different functions see help descriptions
 parser = argparse.ArgumentParser()
 parser.add_argument('--tasks', action='store_true', help='displays the task list')
@@ -157,7 +148,7 @@ if args.stats:
 
 #branch for calling display_achievements()
 if args.achievements:
-    display_achievements()
+    display_achievements(achievementlist)
 
 #branch for calling add_task
 if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
