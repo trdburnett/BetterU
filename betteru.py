@@ -1,11 +1,11 @@
 import datetime, argparse, os
 from operator import attrgetter
-from save import save_list, save
+from save import save, save_list
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
 from tasks import Task, add_task, remove_task, time_remaining, complete_task
 from rewards import Reward, add_reward, remove_reward, claim_reward
-from achievements import Achievement, check_achievements
+from achievements import Achievement, populate_achievement_list
 
 time = datetime.datetime
 tasklist = []
@@ -129,13 +129,12 @@ def display_stats():
 
 #displays the achievement list
 def display_achievements():
-    check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
     if achievementlist == []:
-        print("Oh Dear, sorry the achievements have failed to load. Please try again.")
-    else:
-        print(display_banner("Achievements"))
-        for achievement in achievementlist:
-            print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
+        populate_achievement_list(achievementlist)
+        save_list(achievementlist_file_path, achievementlist)
+    print(display_banner("Achievements"))
+    for achievement in achievementlist:
+        print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
 
 #returns a string of spaces based on the length of the description it is given
 #helper method for display functions
