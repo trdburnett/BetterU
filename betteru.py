@@ -6,7 +6,7 @@ from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path
 from tasks import Task, add_task, remove_task, time_remaining, complete_task
 from rewards import Reward, add_reward, remove_reward, claim_reward
 from achievements import Achievement, populate_achievement_list
-from display import display_banner, display_padding
+from display import display_banner, display_padding, display_stats, display_credits
 
 time = datetime.datetime
 tasklist = []
@@ -92,10 +92,6 @@ def variables_as_list():
     variablelist.append(f"Streak: {streak} \n")
     return variablelist
 
-#shows available credits
-def display_credits():
-    print(f"Available Credits: {credits}")
-
 #sorts the tasklist by priority and then time
 #the oldest tasks with the highest priority will display at the top
 def display_tasks():
@@ -112,21 +108,11 @@ def display_rewards():
     if rewardlist == []:
         print("No rewards to display. please add some rewards.")
     else:
-        display_credits()
+        display_credits(credits)
         print(display_banner("Rewards"))
         sorted_rewardlist = sorted(rewardlist, key=attrgetter('cost'))
         for reward in sorted_rewardlist:
             print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
-
-#displays statistics
-def display_stats():
-    print(display_banner("Statistics"))
-    print(f"Tasks Completed: {tasks_completed}")
-    print(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
-    print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
-    print(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
-    print(f"Rewards Claimed: {rewards_claimed}")
-    print(f"Current Streak: {streak} day(s)")
 
 #displays the achievement list
 def display_achievements():
@@ -174,11 +160,11 @@ if args.rewards:
 
 #branch for calling display_credits()
 if args.credits:
-    display_credits()
+    display_credits(credits)
 
 #branch for calling display_stats()
 if args.stats:
-    display_stats()
+    display_stats(tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak)
 
 #branch for calling display_achievements()
 if args.achievements:
