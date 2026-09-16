@@ -4,7 +4,7 @@ from save import save_list, save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
 from tasks import Task, add_task, remove_task, time_remaining, complete_task
-from rewards import Reward, add_reward
+from rewards import Reward, add_reward, remove_reward
 from achievements import Achievement, check_achievements
 
 time = datetime.datetime
@@ -91,41 +91,13 @@ def variables_as_list():
     variablelist.append(f"Streak: {streak} \n")
     return variablelist
 
-#removes a reward object from the reward list only
-def remove_reward(reward_id: int, remove=True):
-    found = False
-    description = None
-    cost = None
-    for i in range(len(rewardlist)):
-        if rewardlist[i].id == reward_id:
-            index_to_remove = i
-            found = True
-            description = rewardlist[i].description
-            cost = rewardlist[i].cost
-    if found:
-        if remove:
-            del rewardlist[index_to_remove]
-            save_list(rewardlist_file_path, rewardlist)
-            print("Reward Removed.")
-        else:
-            if cost <= credits:
-                del rewardlist[index_to_remove]
-                save_list(rewardlist_file_path, rewardlist)
-                return (description,cost)
-            else:
-                print("You don't have enough credits for that reward yet.")
-                description = None
-                cost = None
-                return (description,cost)
-    else:
-        print("Reward not found, check reward ID.")
-        return (description,cost)
+
 
 #removes a reward object from the reward list and removes the cost from available credits
 def claim_reward(reward_id: int, repeat=False):
     global credits
     global rewards_claimed
-    dc = remove_reward(reward_id, False)
+    dc = remove_reward(reward_id, rewardlist, False)
     if not dc[0] == None and not dc[1] == None:
         credits -= dc[1]
         rewards_claimed += 1
@@ -280,7 +252,7 @@ if 'reward_description' in args and 'reward_cost' in args:
 
 #branch for calling remove reward
 if 'remove_reward_id' in args:
-    remove_reward(args.remove_reward_id)
+    remove_reward(args.remove_reward_id,rewardlist)
 
 #branch for calling claim_reward
 if 'claim_reward_id' in args:
