@@ -4,7 +4,7 @@ from save import save_list, save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
 from tasks import Task, add_task, remove_task, time_remaining, complete_task
-from rewards import Reward, add_reward, remove_reward
+from rewards import Reward, add_reward, remove_reward, claim_reward
 from achievements import Achievement, check_achievements
 
 time = datetime.datetime
@@ -90,22 +90,6 @@ def variables_as_list():
     variablelist.append(f"Last Accessed: {last_accessed} \n")
     variablelist.append(f"Streak: {streak} \n")
     return variablelist
-
-
-
-#removes a reward object from the reward list and removes the cost from available credits
-def claim_reward(reward_id: int, repeat=False):
-    global credits
-    global rewards_claimed
-    dc = remove_reward(reward_id, rewardlist, credits, False)
-    if not dc[0] == None and not dc[1] == None:
-        credits -= dc[1]
-        rewards_claimed += 1
-        print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
-        credits += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
-        save(save_file_path, variables_as_list())
-        if repeat:
-            add_reward(dc[0],dc[1])
 
 #shows available credits
 def display_credits():
@@ -260,6 +244,6 @@ if 'remove_reward_id' in args:
 #branch for calling claim_reward
 if 'claim_reward_id' in args:
     if args.repeat:
-        claim_reward(args.claim_reward_id, args.repeat)
+        claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, args.repeat)
     else:
-        claim_reward(args.claim_reward_id)
+        claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed)

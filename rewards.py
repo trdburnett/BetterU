@@ -1,5 +1,6 @@
 from save import save_list
 from file_paths import rewardlist_file_path
+from achievements import check_achievements
 
 class Reward:
     def __init__(self,description: str, cost: int, id: int):
@@ -43,3 +44,17 @@ def remove_reward(reward_id: int, rewardlist: list, credits:int, remove=True):
     else:
         print("Reward not found, check reward ID.")
         return (description,cost)
+
+#removes a reward object from the reward list and removes the cost from available credits
+def claim_reward(reward_id: int, rewardlist: int, credits: int, achievementlist: list, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, repeat=False):
+    credits_to_add = 0
+    rewards_claimed_to_add = 0
+    dc = remove_reward(reward_id, rewardlist, credits, False)
+    if not dc[0] == None and not dc[1] == None:
+        credits_to_add -= dc[1]
+        rewards_claimed_to_add += 1
+        print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
+        credits_to_add += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+        if repeat:
+            add_reward(dc[0],dc[1])
+    return (credits_to_add,rewards_claimed_to_add)
