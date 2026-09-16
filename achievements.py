@@ -1,5 +1,5 @@
-from save import save, save_list
-from file_paths import achievementlist_file_path, save_file_path
+from save import save_list
+from file_paths import achievementlist_file_path
 
 class Achievement:
     def __init__(self,description: str, completed: bool, reward: int, required_stat: str, required_value: int):
@@ -72,7 +72,6 @@ def check_achievements(achievementlist: list, variableslist: list, tasks_complet
                 if completed:
                     achievement.completed = True
                     credits_to_add += achievement.reward
-                    save(save_file_path, variableslist)
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
                     save_list(achievementlist_file_path, achievementlist)
     return credits_to_add

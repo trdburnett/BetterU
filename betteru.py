@@ -128,7 +128,7 @@ def complete_task(task_id: int, repeat=False):
         last_accessed = lacs[0]
         credits += lacs[1]
         streak += lacs[2]
-        credits += check_achievements(achievementlist,variables_as_list(),tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+        credits += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
         save(save_file_path, variables_as_list())
         if repeat:
             add_task(dprt[0],dprt[1],dprt[2],task_id,tasklist)
@@ -179,7 +179,7 @@ def claim_reward(reward_id: int, repeat=False):
         credits -= dc[1]
         rewards_claimed += 1
         print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
-        credits += check_achievements(achievementlist,variables_as_list(),tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+        credits += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
         save(save_file_path, variables_as_list())
         if repeat:
             add_reward(dc[0],dc[1])
