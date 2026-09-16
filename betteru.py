@@ -1,5 +1,4 @@
 import datetime, argparse, os
-from operator import attrgetter
 from save import save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
@@ -40,57 +39,34 @@ def getmax_id(mode:str)->int:
 
 #checks to see if data/save.txt exisits
 #if it does it loads the values and sets variables used in the program
-def load_variables():
-    global credits
-    global high_priority_tasks_completed
-    global medium_priority_tasks_completed
-    global low_priority_tasks_completed
-    global tasks_completed
-    global rewards_claimed
-    global last_accessed
-    global streak
-    if os.path.exists(save_file_path):
-        with open(save_file_path, 'r') as f:
-            for line in f:
-                if "Credits" in line:
-                    credits += int((line.lstrip("Credits: ")).rstrip(" \n"))
-                if "High Priority Tasks Completed" in line:
-                    high_priority_tasks_completed += int((line.lstrip("High Priority Tasks Completed: ")).rstrip(" \n"))
-                if "Medium Priority Tasks Completed" in line:
-                    medium_priority_tasks_completed += int((line.lstrip("Medium Priority Tasks Completed: ")).rstrip(" \n"))
-                if "Low Priority Tasks Completed" in line:
-                    low_priority_tasks_completed += int((line.lstrip("Low Priority Tasks Completed: ")).rstrip(" \n"))
-                if "Tasks Completed" in line and "High" not in line and "Medium" not in line and "Low" not in line:
-                    tasks_completed += int((line.lstrip("Tasks Completed: ")).rstrip(" \n"))
-                if "Rewards Claimed" in line:
-                    rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
-                #as last_accessed is a datetime object the below converts the extracted string to a datetime object and saves it the last_accessed variable
-                if "Last Accessed" in line:
-                    date_str = ((line.lstrip("Last Accessed: ")).rstrip(" \n"))
-                    date_format = '%Y-%m-%d %H:%M:%S.%f'
-                    last_accessed = datetime.datetime.strptime(date_str, date_format)
-                if "Streak" in line:
-                    streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
-
-load_variables()
+if os.path.exists(save_file_path):
+    with open(save_file_path, 'r') as f:
+        for line in f:
+            if "Credits" in line:
+                credits += int((line.lstrip("Credits: ")).rstrip(" \n"))
+            if "High Priority Tasks Completed" in line:
+                high_priority_tasks_completed += int((line.lstrip("High Priority Tasks Completed: ")).rstrip(" \n"))
+            if "Medium Priority Tasks Completed" in line:
+                medium_priority_tasks_completed += int((line.lstrip("Medium Priority Tasks Completed: ")).rstrip(" \n"))
+            if "Low Priority Tasks Completed" in line:
+                low_priority_tasks_completed += int((line.lstrip("Low Priority Tasks Completed: ")).rstrip(" \n"))
+            if "Tasks Completed" in line and "High" not in line and "Medium" not in line and "Low" not in line:
+                tasks_completed += int((line.lstrip("Tasks Completed: ")).rstrip(" \n"))
+            if "Rewards Claimed" in line:
+                rewards_claimed += int((line.lstrip("Rewards Claimed: ")).rstrip(" \n"))
+            #as last_accessed is a datetime object the below converts the extracted string to a datetime object and saves it the last_accessed variable
+            if "Last Accessed" in line:
+                date_str = ((line.lstrip("Last Accessed: ")).rstrip(" \n"))
+                date_format = '%Y-%m-%d %H:%M:%S.%f'
+                last_accessed = datetime.datetime.strptime(date_str, date_format)
+            if "Streak" in line:
+                streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
+#loads lists and sets id tracking
 tasklist = load_list(tasklist_file_path)
 task_id += getmax_id("task")
 rewardlist = load_list(rewardlist_file_path)
 reward_id += getmax_id("reward")
 achievementlist = load_list(achievementlist_file_path)
-
-#packages the simple variables into a list ready for saving
-def variables_as_list():
-    variablelist = []
-    variablelist.append(f"Credits: {credits} \n")
-    variablelist.append(f"High Priority Tasks Completed: {high_priority_tasks_completed} \n")
-    variablelist.append(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed} \n")
-    variablelist.append(f"Low Priority Tasks Completed: {low_priority_tasks_completed} \n")
-    variablelist.append(f"Tasks Completed: {tasks_completed} \n")
-    variablelist.append(f"Rewards Claimed: {rewards_claimed} \n")
-    variablelist.append(f"Last Accessed: {last_accessed} \n")
-    variablelist.append(f"Streak: {streak} \n")
-    return variablelist
 
 #parsing command line arguments for different functions see help descriptions
 parser = argparse.ArgumentParser()
@@ -160,7 +136,7 @@ if 'complete_task_id' in args:
     low_priority_tasks_completed += cthmlsla[4]
     streak += cthmlsla[5]
     last_accessed = cthmlsla[6]
-    save(save_file_path, variables_as_list())
+    save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak)
 
 #branch for calling add_reward
 if 'reward_description' in args and 'reward_cost' in args:
@@ -181,4 +157,4 @@ if 'claim_reward_id' in args:
         cr = claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed)
     credits += cr[0]
     rewards_claimed += cr[1]
-    save(save_file_path, variables_as_list())
+    save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak)
