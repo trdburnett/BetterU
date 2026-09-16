@@ -60,7 +60,7 @@ def check_achievement(required_stat: str, required_value: int, tasks_completed: 
 #called by complete task
 #performs a check for the achievement list if it is empty it calls the populate and save achievement functions respectively
 #otherwise applies credits and alerts user if an achievement has been completed
-def check_achievements(achievementlist: list, variableslist: list, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int)->int:
+def check_achievements(achievementlist: list, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int)->int:
     credits_to_add = 0
     if achievementlist == []:
         populate_achievement_list(achievementlist)
