@@ -248,7 +248,10 @@ if 'complete_task_id' in args:
 
 #branch for calling add_reward
 if 'reward_description' in args and 'reward_cost' in args:
-    add_reward(args.reward_description, args.reward_cost, reward_id, rewardlist)
+    if args.reward_cost <= 0:
+        print("Who are you trying to cheat here? No negative or zero cost rewards are allowed!")
+    else:
+        add_reward(args.reward_description, args.reward_cost, reward_id, rewardlist)
 
 #branch for calling remove reward
 if 'remove_reward_id' in args:
