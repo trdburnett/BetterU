@@ -1,6 +1,8 @@
 import datetime
 from save import save_list
 from file_paths import tasklist_file_path
+from achievements import check_achievements
+from streak import daily_reward
 time = datetime.datetime
 
 class Task:
@@ -59,4 +61,35 @@ def time_remaining(task_priority: int, task_time: datetime):
     else:
         return task_deadline - time.now()
 
+#removes a task object from the task list and awards credits
+def complete_task(task_id: int, tasklist: list, achievementlist: list, last_accessed: datetime, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, streak: int, repeat=False)->set:
+    credits_to_add = 0
+    tasks_completed_to_add = 0
+    high_priority_tasks_completed_to_add = 0
+    medium_priority_tasks_completed_to_add = 0
+    low_priority_tasks_completed_to_add = 0
+    streak_to_add = 0
+    dprt = remove_task(task_id, tasklist, remove=False)
+    if not dprt[0] == None and not dprt[1] == None and not dprt[2] == None and not dprt[3] == None:
+        if dprt[1] == 1:
+            high_priority_tasks_completed_to_add += 1
+        if dprt[1] == 2:
+            medium_priority_tasks_completed_to_add += 1
+        if dprt[1] == 3:
+            low_priority_tasks_completed_to_add += 1
+        tasks_completed_to_add += 1
+        t = time_remaining(dprt[1],dprt[3])
+        if t == "Expired!":
+            print(f"Task Completed, however no credits have been awarded due to the task not being completed in time.")
+        else:
+            credits_to_add += dprt[2]
+            print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
+        lacs = daily_reward(time.now(), last_accessed, streak)
+        last_accessed = lacs[0]
+        credits_to_add += lacs[1]
+        streak_to_add += lacs[2]
+        credits_to_add += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+        if repeat:
+            add_task(dprt[0],dprt[1],dprt[2],task_id,tasklist)
+    return (credits_to_add, tasks_completed_to_add, high_priority_tasks_completed_to_add, medium_priority_tasks_completed_to_add, low_priority_tasks_completed_to_add, streak_to_add, last_accessed)
 

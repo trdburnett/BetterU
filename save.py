@@ -12,6 +12,7 @@ def save_list(file_path: str, savelist: list):
             pickle.dump(item, outp)
 
 #saves all simple variables used by the program
+#saves given list as plain text at given file path
 def save(save_file_path, variable_list):
     if not os.path.exists(save_file_path):
         os.makedirs('data', exist_ok=True)

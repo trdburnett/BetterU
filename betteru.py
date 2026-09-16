@@ -3,9 +3,8 @@ from operator import attrgetter
 from save import save_list, save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
-from tasks import Task, add_task, remove_task, time_remaining
+from tasks import Task, add_task, remove_task, time_remaining, complete_task
 from achievements import Achievement, check_achievements
-from streak import daily_reward
 
 time = datetime.datetime
 tasklist = []
@@ -27,8 +26,6 @@ class Reward:
         self.description = description
         self.cost = cost
         self.id = id
-
-
 
 #cycles through the tasks/rewards list based on mode and returns highest found ID
 #used to add to task_id/reward_id which is initialised at 1
@@ -98,40 +95,6 @@ def variables_as_list():
     variablelist.append(f"Last Accessed: {last_accessed} \n")
     variablelist.append(f"Streak: {streak} \n")
     return variablelist
-
-
-#removes a task object from the task list and awards credits
-def complete_task(task_id: int, repeat=False):
-    global credits
-    global tasks_completed
-    global high_priority_tasks_completed
-    global medium_priority_tasks_completed
-    global low_priority_tasks_completed
-    global last_accessed
-    global streak
-    dprt = remove_task(task_id, tasklist, remove=False)
-    if not dprt[0] == None and not dprt[1] == None and not dprt[2] == None and not dprt[3] == None:
-        if dprt[1] == 1:
-            high_priority_tasks_completed += 1
-        if dprt[1] == 2:
-            medium_priority_tasks_completed += 1
-        if dprt[1] == 3:
-            low_priority_tasks_completed += 1
-        tasks_completed += 1
-        t = time_remaining(dprt[1],dprt[3])
-        if t == "Expired!":
-            print(f"Task Completed, however no credits have been awarded due to the task not being completed in time.")
-        else:
-            credits += dprt[2]
-            print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
-        lacs = daily_reward(time.now(), last_accessed, streak)
-        last_accessed = lacs[0]
-        credits += lacs[1]
-        streak += lacs[2]
-        credits += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
-        save(save_file_path, variables_as_list())
-        if repeat:
-            add_task(dprt[0],dprt[1],dprt[2],task_id,tasklist)
 
 #add a reward object to the reward list
 def add_reward(description: str, cost: int):
@@ -222,7 +185,7 @@ def display_stats():
 
 #displays the achievement list
 def display_achievements():
-    check_achievements(achievementlist,variables_as_list(),tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+    check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
     if achievementlist == []:
         print("Oh Dear, sorry the achievements have failed to load. Please try again.")
     else:
@@ -311,9 +274,17 @@ if 'remove_task_id' in args:
 #branch for calling complete_task
 if 'complete_task_id' in args:
     if args.repeat:
-        complete_task(args.complete_task_id, args.repeat)
+        cthmlsla = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak, args.repeat)
     else:
-        complete_task(args.complete_task_id)
+        cthmlsla = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak)
+    credits += cthmlsla[0]
+    tasks_completed += cthmlsla[1]
+    high_priority_tasks_completed += cthmlsla[2]
+    medium_priority_tasks_completed += cthmlsla[3]
+    low_priority_tasks_completed += cthmlsla[4]
+    streak += cthmlsla[5]
+    last_accessed = cthmlsla[6]
+    save(save_file_path, variables_as_list())
 
 #branch for calling add_reward
 if 'reward_description' in args and 'reward_cost' in args:
