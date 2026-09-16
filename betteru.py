@@ -274,9 +274,9 @@ if 'remove_task_id' in args:
 #branch for calling complete_task
 if 'complete_task_id' in args:
     if args.repeat:
-        cthmlsla = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak, args.repeat)
+        cthmlsla = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak, args.repeat)
     else:
-        cthmlsla = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak)
+        cthmlsla = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak)
     credits += cthmlsla[0]
     tasks_completed += cthmlsla[1]
     high_priority_tasks_completed += cthmlsla[2]
