@@ -56,5 +56,5 @@ def claim_reward(reward_id: int, rewardlist: int, credits: int, achievementlist:
         print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
         credits_to_add += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
         if repeat:
-            add_reward(dc[0],dc[1])
+            add_reward(dc[0],dc[1],reward_id,rewardlist)
     return (credits_to_add,rewards_claimed_to_add)
