@@ -38,12 +38,15 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->s
     credits_to_add = 0
     streak_to_add = 0
     access_day = access_time.strftime("%A")
+    print(access_day)
+    print(last_accessed.strftime("%A"))
+    print(yesterday_check(last_accessed.strftime("%A"),access_day))
     if last_accessed == None:
         last_accessed = access_time
         credits_to_add += 1
         print("Looks like this your first time. You have been awarded a credit to help motivate you on your task completion journey!")
     elif last_accessed <= access_time - datetime.timedelta(days=1):
-        credits += 1
+        credits_to_add += 1
         streak_to_add = streak_reset(streak)
         last_accessed = access_time
         print("Looks like its been more than a day. You have been awarded a credit to get you motivated!")
