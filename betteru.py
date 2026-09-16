@@ -231,6 +231,7 @@ def display_stats():
     print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
     print(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
     print(f"Rewards Claimed: {rewards_claimed}")
+    print(f"Current Streak: {streak} day(s)")
 
 #displays the achievement list
 def display_achievements():
