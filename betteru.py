@@ -4,9 +4,9 @@ from save import save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
 from tasks import Task, add_task, remove_task, complete_task, display_tasks
-from rewards import Reward, add_reward, remove_reward, claim_reward
+from rewards import Reward, add_reward, remove_reward, claim_reward, display_rewards
 from achievements import Achievement, display_achievements
-from display import display_banner, display_padding, display_stats, display_credits
+from display import display_stats, display_credits
 
 time = datetime.datetime
 tasklist = []
@@ -92,17 +92,6 @@ def variables_as_list():
     variablelist.append(f"Streak: {streak} \n")
     return variablelist
 
-#displays the rewards list in cost order
-def display_rewards():
-    if rewardlist == []:
-        print("No rewards to display. please add some rewards.")
-    else:
-        display_credits(credits)
-        print(display_banner("Rewards"))
-        sorted_rewardlist = sorted(rewardlist, key=attrgetter('cost'))
-        for reward in sorted_rewardlist:
-            print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
-
 #parsing command line arguments for different functions see help descriptions
 parser = argparse.ArgumentParser()
 parser.add_argument('--tasks', action='store_true', help='displays the task list')
@@ -136,7 +125,7 @@ if args.tasks:
 
 #branch for calling display_rewards()
 if args.rewards:
-    display_rewards()
+    display_rewards(rewardlist, credits)
 
 #branch for calling display_credits()
 if args.credits:

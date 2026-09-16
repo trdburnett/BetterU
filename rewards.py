@@ -1,6 +1,8 @@
+from operator import attrgetter
 from save import save_list
 from file_paths import rewardlist_file_path
 from achievements import check_achievements
+from display import display_banner, display_padding, display_credits
 
 class Reward:
     def __init__(self,description: str, cost: int, id: int):
@@ -58,3 +60,14 @@ def claim_reward(reward_id: int, rewardlist: int, credits: int, achievementlist:
         if repeat:
             add_reward(dc[0],dc[1],reward_id,rewardlist)
     return (credits_to_add,rewards_claimed_to_add)
+
+#displays the rewards list in cost order
+def display_rewards(rewardlist: list, credits: int):
+    if rewardlist == []:
+        print("No rewards to display. please add some rewards.")
+    else:
+        display_credits(credits)
+        print(display_banner("Rewards"))
+        sorted_rewardlist = sorted(rewardlist, key=attrgetter('cost'))
+        for reward in sorted_rewardlist:
+            print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
