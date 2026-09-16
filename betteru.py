@@ -137,7 +137,7 @@ def complete_task(task_id: int, repeat=False):
         else:
             credits += dprt[2]
             print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
-        lacs = daily_reward(time.now())
+        lacs = daily_reward(time.now(), last_accessed, streak)
         last_accessed = lacs[0]
         credits += lacs[1]
         streak += lacs[2]
