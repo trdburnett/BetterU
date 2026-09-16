@@ -45,3 +45,18 @@ def remove_task(task_id: int, tasklist: list, remove=True):
         if not remove:
             return (description,priority,reward,task_time)
 
+#returns either the time remaining to complete a task or expired string
+#helper for display_tasks and complete_tasks                    
+def time_remaining(task_priority: int, task_time: datetime):
+    if task_priority == 1:
+        task_deadline = task_time + datetime.timedelta(days=2)
+    if task_priority == 2:
+        task_deadline = task_time + datetime.timedelta(days=7)
+    if task_priority == 3:
+        task_deadline = task_time + datetime.timedelta(days=28)
+    if task_deadline - time.now() < datetime.timedelta(seconds=0):
+        return "Expired!"
+    else:
+        return task_deadline - time.now()
+
+

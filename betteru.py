@@ -3,7 +3,7 @@ from operator import attrgetter
 from save import save_list, save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
-from tasks import Task, add_task, remove_task
+from tasks import Task, add_task, remove_task, time_remaining
 from achievements import Achievement, check_achievements
 from streak import daily_reward
 
@@ -99,19 +99,6 @@ def variables_as_list():
     variablelist.append(f"Streak: {streak} \n")
     return variablelist
 
-#returns either the time remaining to complete a task or expired string
-#helper for display_tasks and complete_tasks                    
-def time_remaining(task_priority: int, task_time: datetime):
-    if task_priority == 1:
-        task_deadline = task_time + datetime.timedelta(days=2)
-    if task_priority == 2:
-        task_deadline = task_time + datetime.timedelta(days=7)
-    if task_priority == 3:
-        task_deadline = task_time + datetime.timedelta(days=28)
-    if task_deadline - time.now() < datetime.timedelta(seconds=0):
-        return "Expired!"
-    else:
-        return task_deadline - time.now()
 
 #removes a task object from the task list and awards credits
 def complete_task(task_id: int, repeat=False):
