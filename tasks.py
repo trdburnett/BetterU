@@ -1,8 +1,10 @@
 import datetime
+from operator import attrgetter
 from save import save_list
 from file_paths import tasklist_file_path
 from achievements import check_achievements
 from streak import daily_reward
+from display import display_banner, display_padding
 time = datetime.datetime
 
 class Task:
@@ -92,4 +94,15 @@ def complete_task(task_id: int, tasklist: list, achievementlist: list, last_acce
         if repeat:
             add_task(dprt[0],dprt[1],dprt[2],task_id,tasklist)
     return (credits_to_add, tasks_completed_to_add, high_priority_tasks_completed_to_add, medium_priority_tasks_completed_to_add, low_priority_tasks_completed_to_add, streak_to_add, last_accessed)
+
+#sorts the tasklist by priority and then time
+#the oldest tasks with the highest priority will display at the top
+def display_tasks(tasklist: list):
+    if tasklist == []:
+        print("No tasks to display, please add some tasks.")
+    else:
+        print(display_banner("Tasks"))
+        sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
+        for task in sorted_tasklist:
+            print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits | Time Remaining: {time_remaining(task.priority,task.time)}")
 

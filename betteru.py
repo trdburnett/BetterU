@@ -3,7 +3,7 @@ from operator import attrgetter
 from save import save, save_list
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
-from tasks import Task, add_task, remove_task, time_remaining, complete_task
+from tasks import Task, add_task, remove_task, complete_task, display_tasks
 from rewards import Reward, add_reward, remove_reward, claim_reward
 from achievements import Achievement, populate_achievement_list
 from display import display_banner, display_padding, display_stats, display_credits
@@ -92,17 +92,6 @@ def variables_as_list():
     variablelist.append(f"Streak: {streak} \n")
     return variablelist
 
-#sorts the tasklist by priority and then time
-#the oldest tasks with the highest priority will display at the top
-def display_tasks():
-    if tasklist == []:
-        print("No tasks to display, please add some tasks.")
-    else:
-        print(display_banner("Tasks"))
-        sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
-        for task in sorted_tasklist:
-            print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits | Time Remaining: {time_remaining(task.priority,task.time)}")
-
 #displays the rewards list in cost order
 def display_rewards():
     if rewardlist == []:
@@ -152,7 +141,7 @@ args = parser.parse_args()
 
 #branch for calling display_tasks()
 if args.tasks:
-    display_tasks()
+    display_tasks(tasklist)
 
 #branch for calling display_rewards()
 if args.rewards:
