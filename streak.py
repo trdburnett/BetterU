@@ -5,25 +5,25 @@ import datetime
 def yesterday_check(last_accessed_day: str, access_day: str) -> bool:
     yesterday = False
     if last_accessed_day == "Monday":
-        if access_day == "Sunday":
-            yesterday = True
-    if last_accessed_day == "Tuesday":
-        if access_day == "Monday":
-            yesterday = True
-    if last_accessed_day == "Wednesday":
         if access_day == "Tuesday":
             yesterday = True
-    if last_accessed_day == "Thursday":
+    if last_accessed_day == "Tuesday":
         if access_day == "Wednesday":
             yesterday = True
-    if last_accessed_day == "Friday":
+    if last_accessed_day == "Wednesday":
         if access_day == "Thursday":
             yesterday = True
-    if last_accessed_day == "Saturday":
+    if last_accessed_day == "Thursday":
         if access_day == "Friday":
             yesterday = True
-    if last_accessed_day == "Sunday":
+    if last_accessed_day == "Friday":
         if access_day == "Saturday":
+            yesterday = True
+    if last_accessed_day == "Saturday":
+        if access_day == "Sunday":
+            yesterday = True
+    if last_accessed_day == "Sunday":
+        if access_day == "Monday":
             yesterday = True
     return yesterday
 
@@ -38,9 +38,6 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->s
     credits_to_add = 0
     streak_to_add = 0
     access_day = access_time.strftime("%A")
-    print(access_day)
-    print(last_accessed.strftime("%A"))
-    print(yesterday_check(last_accessed.strftime("%A"),access_day))
     if last_accessed == None:
         last_accessed = access_time
         credits_to_add += 1
