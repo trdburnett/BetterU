@@ -244,6 +244,9 @@ if 'remove_reward_id' in args:
 #branch for calling claim_reward
 if 'claim_reward_id' in args:
     if args.repeat:
-        claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, args.repeat)
+        cr = claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, args.repeat)
     else:
-        claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed)
+        cr = claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed)
+    credits += cr[0]
+    rewards_claimed += cr[1]
+    save(save_file_path, variables_as_list())
