@@ -4,6 +4,7 @@ from save import save_list, save
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
 from tasks import Task, add_task, remove_task, time_remaining, complete_task
+from rewards import Reward, add_reward
 from achievements import Achievement, check_achievements
 
 time = datetime.datetime
@@ -20,12 +21,6 @@ low_priority_tasks_completed = 0
 rewards_claimed = 0
 last_accessed = None
 streak = 0
-
-class Reward:
-    def __init__(self,description: str, cost: int, id: int):
-        self.description = description
-        self.cost = cost
-        self.id = id
 
 #cycles through the tasks/rewards list based on mode and returns highest found ID
 #used to add to task_id/reward_id which is initialised at 1
@@ -95,13 +90,6 @@ def variables_as_list():
     variablelist.append(f"Last Accessed: {last_accessed} \n")
     variablelist.append(f"Streak: {streak} \n")
     return variablelist
-
-#add a reward object to the reward list
-def add_reward(description: str, cost: int):
-    reward = Reward(description,cost,reward_id)
-    rewardlist.append(reward)
-    save_list(rewardlist_file_path, rewardlist)
-    print("Reward Added.")
 
 #removes a reward object from the reward list only
 def remove_reward(reward_id: int, remove=True):
@@ -288,7 +276,7 @@ if 'complete_task_id' in args:
 
 #branch for calling add_reward
 if 'reward_description' in args and 'reward_cost' in args:
-    add_reward(args.reward_description,args.reward_cost)
+    add_reward(args.reward_description,args.reward_cost,reward_id,rewardlist)
 
 #branch for calling remove reward
 if 'remove_reward_id' in args:
