@@ -40,6 +40,10 @@ class TestTasks(unittest.TestCase):
                              "tasklist": testtasklist}
             self.assertEqual(remove_task(1,testtasklist,True), expected_dict)
 
+    def test_remove_task_unsuccessful_removal_called_by_complete_task(self):
+                testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+                self.assertEqual(remove_task(2,testtasklist), None)
+
 
 if __name__ == "__main__":
     unittest.main()
