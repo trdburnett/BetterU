@@ -16,11 +16,12 @@ class TestTasks(unittest.TestCase):
     @freeze_time("2000-01-01")
     def test_add_task(self):
         testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
-        self.assertEqual(add_task("Test Task",1,1,1,[])[0].description, testtasklist[0].description)
-        self.assertEqual(add_task("Test Task",1,1,1,[])[0].priority, testtasklist[0].priority)
-        self.assertEqual(add_task("Test Task",1,1,1,[])[0].reward, testtasklist[0].reward)
-        self.assertEqual(add_task("Test Task",1,1,1,[])[0].time, testtasklist[0].time)
-        self.assertEqual(add_task("Test Task",1,1,1,[])[0].id, testtasklist[0].id)
+        tasklist = add_task("Test Task",1,1,1,[])
+        self.assertEqual(tasklist[0].description, testtasklist[0].description)
+        self.assertEqual(tasklist[0].priority, testtasklist[0].priority)
+        self.assertEqual(tasklist[0].reward, testtasklist[0].reward)
+        self.assertEqual(tasklist[0].time, testtasklist[0].time)
+        self.assertEqual(tasklist[0].id, testtasklist[0].id)
 
 if __name__ == "__main__":
     unittest.main()
