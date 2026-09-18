@@ -1,7 +1,5 @@
 import datetime
 from operator import attrgetter
-from save import save_list
-from file_paths import tasklist_file_path
 from achievements import check_achievements
 from streak import daily_reward
 from display import display_banner, display_padding
