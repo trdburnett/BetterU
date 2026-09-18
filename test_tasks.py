@@ -42,7 +42,7 @@ class TestTasks(unittest.TestCase):
 
     def test_remove_task_unsuccessful_removal_called_by_complete_task(self):
                 testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
-                self.assertEqual(remove_task(2,testtasklist), None)
+                self.assertEqual(remove_task(2,testtasklist,True), None)
 
 
 if __name__ == "__main__":
