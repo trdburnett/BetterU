@@ -3,7 +3,7 @@ import datetime
 from tasks import Task, add_task, remove_task
 from freezegun import freeze_time
 
-@freeze_time("2000-01-01")
+@freeze_time("2000-01-31")
 class TestTasks(unittest.TestCase):
 
     def test_task_class(self):
