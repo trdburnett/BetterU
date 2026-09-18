@@ -123,7 +123,8 @@ if __name__ == "__main__":
 
 #branch for calling remove_task
     if 'remove_task_id' in args:
-        remove_task(args.remove_task_id, tasklist)
+        tasklist = remove_task(args.remove_task_id, tasklist)
+        save_list(tasklist_file_path, tasklist)
 
 #branch for calling complete_task
     if 'complete_task_id' in args:
@@ -138,7 +139,9 @@ if __name__ == "__main__":
         low_priority_tasks_completed += cthmlsla[4]
         streak += cthmlsla[5]
         last_accessed = cthmlsla[6]
+        tasklist = cthmlsla[7]
         save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak)
+        save_list(tasklist_file_path, tasklist)
 
 #branch for calling add_reward
     if 'reward_description' in args and 'reward_cost' in args:

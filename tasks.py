@@ -23,7 +23,7 @@ def add_task(description: str, priority: int, reward: int, task_id: int, tasklis
     return tasklist
 
 #removes a task object from the task list only
-def remove_task(task_id: int, tasklist: list, remove=True):
+def remove_task(task_id: int, tasklist: list, called_from_complete_task=False):
     found = False
     description = None
     priority = None
@@ -39,15 +39,22 @@ def remove_task(task_id: int, tasklist: list, remove=True):
             task_time = tasklist[i].time
     if found:
         del tasklist[index_to_remove]
-        save_list(tasklist_file_path, tasklist)
-        if remove:
+        #save_list(tasklist_file_path, tasklist)
+        if not called_from_complete_task:
             print("Task Removed.")
+            return tasklist
         else:
-            return (description,priority,reward,task_time)
+            return {"description": description,
+                          "priority": priority,
+                          "reward": reward,
+                          "task_time": task_time,
+                          "tasklist": tasklist}
     else:
         print("Task not found, check task ID.")
-        if not remove:
-            return (description,priority,reward,task_time)
+        if called_from_complete_task:
+            return None
+        else:
+            return tasklist
 
 #returns either the time remaining to complete a task or expired string
 #helper for display_tasks and complete_tasks                    
@@ -71,29 +78,31 @@ def complete_task(task_id: int, tasklist: list, achievementlist: list, last_acce
     medium_priority_tasks_completed_to_add = 0
     low_priority_tasks_completed_to_add = 0
     streak_to_add = 0
-    dprt = remove_task(task_id, tasklist, remove=False)
-    if not dprt[0] == None and not dprt[1] == None and not dprt[2] == None and not dprt[3] == None:
-        if dprt[1] == 1:
+    retdict = remove_task(task_id, tasklist, called_from_complete_task=True)
+    if not retdict == None:
+        if retdict["priority"] == 1:
             high_priority_tasks_completed_to_add += 1
-        if dprt[1] == 2:
+        if retdict["priority"] == 2:
             medium_priority_tasks_completed_to_add += 1
-        if dprt[1] == 3:
+        if retdict["priority"] == 3:
             low_priority_tasks_completed_to_add += 1
         tasks_completed_to_add += 1
-        t = time_remaining(dprt[1],dprt[3])
+        t = time_remaining(retdict["priority"],retdict["task_time"])
         if t == "Expired!":
             print(f"Task Completed, however no credits have been awarded due to the task not being completed in time.")
         else:
-            credits_to_add += dprt[2]
-            print(f"Task Completed, you have been awarded {dprt[2]} credit(s)")
+            credits_to_add += retdict["reward"]
+            print(f"Task Completed, you have been awarded {retdict["reward"]} credit(s)")
         lacs = daily_reward(time.now(), last_accessed, streak)
         last_accessed = lacs[0]
         credits_to_add += lacs[1]
         streak_to_add += lacs[2]
         credits_to_add += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
         if repeat:
-            add_task(dprt[0],dprt[1],dprt[2],task_id,tasklist)
-    return (credits_to_add, tasks_completed_to_add, high_priority_tasks_completed_to_add, medium_priority_tasks_completed_to_add, low_priority_tasks_completed_to_add, streak_to_add, last_accessed)
+            tasklist = add_task(retdict["description"],retdict["priority"],retdict["reward"],task_id,retdict["tasklist"])
+        else:
+            tasklist = retdict["tasklist"]
+    return (credits_to_add, tasks_completed_to_add, high_priority_tasks_completed_to_add, medium_priority_tasks_completed_to_add, low_priority_tasks_completed_to_add, streak_to_add, last_accessed, tasklist)
 
 #sorts the tasklist by priority and then time
 #the oldest tasks with the highest priority will display at the top
