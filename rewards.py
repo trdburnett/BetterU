@@ -1,6 +1,4 @@
 from operator import attrgetter
-from save import save_list
-from file_paths import rewardlist_file_path
 from achievements import check_achievements
 from display import display_banner, display_padding, display_credits
 
@@ -14,11 +12,11 @@ class Reward:
 def add_reward(description: str, cost: int, reward_id: int, rewardlist: list):
     reward = Reward(description,cost,reward_id)
     rewardlist.append(reward)
-    save_list(rewardlist_file_path, rewardlist)
     print("Reward Added.")
+    return rewardlist
 
 #removes a reward object from the reward list only
-def remove_reward(reward_id: int, rewardlist: list, credits:int, remove=True):
+def remove_reward(reward_id: int, rewardlist: list, credits:int, called_from_claim_reward=False):
     found = False
     description = None
     cost = None
@@ -29,37 +27,46 @@ def remove_reward(reward_id: int, rewardlist: list, credits:int, remove=True):
             description = rewardlist[i].description
             cost = rewardlist[i].cost
     if found:
-        if remove:
+        if not called_from_claim_reward:
             del rewardlist[index_to_remove]
-            save_list(rewardlist_file_path, rewardlist)
             print("Reward Removed.")
+            return rewardlist
         else:
             if cost <= credits:
                 del rewardlist[index_to_remove]
-                save_list(rewardlist_file_path, rewardlist)
-                return (description,cost)
+                return {"description": description,
+                        "cost": cost,
+                        "rewardlist": rewardlist}
             else:
                 print("You don't have enough credits for that reward yet.")
-                description = None
-                cost = None
-                return (description,cost)
+                return None
     else:
         print("Reward not found, check reward ID.")
-        return (description,cost)
+        if called_from_claim_reward:
+            return None
+        else:
+            return rewardlist
 
 #removes a reward object from the reward list and removes the cost from available credits
-def claim_reward(reward_id: int, rewardlist: int, credits: int, achievementlist: list, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, repeat=False):
+def claim_reward(reward_id: int, rewardlist: int, credits: int, achievementlist: list, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, repeat=False)->dict:
     credits_to_add = 0
     rewards_claimed_to_add = 0
-    dc = remove_reward(reward_id, rewardlist, credits, False)
-    if not dc[0] == None and not dc[1] == None:
-        credits_to_add -= dc[1]
+    retdict_rr = remove_reward(reward_id, rewardlist, credits, called_from_claim_reward=True)
+    if not retdict_rr == None:
+        credits_to_add -= retdict_rr["cost"]
         rewards_claimed_to_add += 1
-        print(f"Reward Claimed, {dc[1]} credit(s) have been deducted.")
-        credits_to_add += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+        print(f"Reward Claimed, {retdict_rr["cost"]} credit(s) have been deducted.")
+        retdict_ca = check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+        credits_to_add += retdict_ca["credits_to_add"]
+        achievementlist = retdict_ca["achievementlist"]
         if repeat:
-            add_reward(dc[0],dc[1],reward_id,rewardlist)
-    return (credits_to_add,rewards_claimed_to_add)
+            rewardlist = add_reward(retdict_rr["description"],retdict_rr["cost"],reward_id,retdict_rr["rewardlist"])
+        else:
+            rewardlist = retdict_rr["rewardlist"]
+    return {"credits_to_add": credits_to_add,
+            "rewards_claimed_to_add": rewards_claimed_to_add,
+            "rewardlist": rewardlist,
+            "achievementlist": achievementlist}
 
 #displays the rewards list in cost order
 def display_rewards(rewardlist: list, credits: int):

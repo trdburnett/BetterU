@@ -1,5 +1,3 @@
-from save import save_list
-from file_paths import achievementlist_file_path
 from display import display_banner, display_padding
 
 class Achievement:
@@ -61,11 +59,10 @@ def check_achievement(required_stat: str, required_value: int, tasks_completed: 
 #called by complete task
 #performs a check for the achievement list if it is empty it calls the populate and save achievement functions respectively
 #otherwise applies credits and alerts user if an achievement has been completed
-def check_achievements(achievementlist: list, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int)->int:
+def check_achievements(achievementlist: list, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int)->dict:
     credits_to_add = 0
     if achievementlist == []:
-        populate_achievement_list(achievementlist)
-        save_list(achievementlist_file_path, achievementlist)
+        achievementlist = populate_achievement_list(achievementlist)
     else:
         for achievement in achievementlist:
             if not achievement.completed:
@@ -74,14 +71,14 @@ def check_achievements(achievementlist: list, tasks_completed: int, high_priorit
                     achievement.completed = True
                     credits_to_add += achievement.reward
                     print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
-                    save_list(achievementlist_file_path, achievementlist)
-    return credits_to_add
+    return {"credits_to_add": credits_to_add,
+            "achievementlist": achievementlist}
 
 #displays the achievement list
-def display_achievements(achievementlist: list):
+def display_achievements(achievementlist: list)->list:
     if achievementlist == []:
-        populate_achievement_list(achievementlist)
-        save_list(achievementlist_file_path, achievementlist)
+        achievementlist = populate_achievement_list(achievementlist)
     print(display_banner("Achievements"))
     for achievement in achievementlist:
         print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
+    return achievementlist

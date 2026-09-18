@@ -114,7 +114,8 @@ if __name__ == "__main__":
 
 #branch for calling display_achievements()
     if args.achievements:
-        display_achievements(achievementlist)
+        achievementlist = display_achievements(achievementlist)
+        save_list(achievementlist_file_path, achievementlist)
 
 #branch for calling add_task
     if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
@@ -129,37 +130,45 @@ if __name__ == "__main__":
 #branch for calling complete_task
     if 'complete_task_id' in args:
         if args.repeat:
-            cthmlsla = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak, args.repeat)
+            retdict_ct = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak, args.repeat)
         else:
-            cthmlsla = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak)
-        credits += cthmlsla[0]
-        tasks_completed += cthmlsla[1]
-        high_priority_tasks_completed += cthmlsla[2]
-        medium_priority_tasks_completed += cthmlsla[3]
-        low_priority_tasks_completed += cthmlsla[4]
-        streak += cthmlsla[5]
-        last_accessed = cthmlsla[6]
-        tasklist = cthmlsla[7]
+            retdict_ct = complete_task(args.complete_task_id, tasklist, achievementlist, last_accessed, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak)
+        credits += retdict_ct["credits_to_add"]
+        tasks_completed += retdict_ct["tasks_completed_to_add"]
+        high_priority_tasks_completed += retdict_ct["high_priority_tasks_completed_to_add"]
+        medium_priority_tasks_completed += retdict_ct["medium_priority_tasks_completed_to_add"]
+        low_priority_tasks_completed += retdict_ct["low_priority_tasks_completed_to_add"]
+        streak += retdict_ct["streak_to_add"]
+        last_accessed = retdict_ct["last_accessed"]
+        tasklist = retdict_ct["tasklist"]
+        achievementlist = retdict_ct["achievementlist"]
         save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak)
         save_list(tasklist_file_path, tasklist)
+        save_list(achievementlist_file_path, achievementlist)
 
 #branch for calling add_reward
     if 'reward_description' in args and 'reward_cost' in args:
         if args.reward_cost <= 0:
             print("Who are you trying to cheat here? No negative or zero cost rewards are allowed!")
         else:
-            add_reward(args.reward_description, args.reward_cost, reward_id, rewardlist)
+            rewardlist = add_reward(args.reward_description, args.reward_cost, reward_id, rewardlist)
+            save_list(rewardlist_file_path, rewardlist)
 
 #branch for calling remove reward
     if 'remove_reward_id' in args:
-        remove_reward(args.remove_reward_id, rewardlist, credits)
+        rewardlist = remove_reward(args.remove_reward_id, rewardlist, credits)
+        save_list(rewardlist_file_path, rewardlist)
 
 #branch for calling claim_reward
     if 'claim_reward_id' in args:
         if args.repeat:
-            cr = claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, args.repeat)
+            retdict_cr = claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, args.repeat)
         else:
-            cr = claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed)
-        credits += cr[0]
-        rewards_claimed += cr[1]
+            retdict_cr = claim_reward(args.claim_reward_id, rewardlist, credits, achievementlist, tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed)
+        credits += retdict_cr["credits_to_add"]
+        rewards_claimed += retdict_cr["rewards_claimed_to_add"]
+        rewardlist = retdict_cr["rewardlist"]
+        achievementlist = retdict_cr["achievementlist"]
         save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak)
+        save_list(rewardlist_file_path, rewardlist)
+        save_list(achievementlist_file_path, achievementlist)

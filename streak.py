@@ -34,7 +34,7 @@ def streak_reset(streak: int)->int:
 
 #called by complete task
 #checks the last time a task was completed and if it is a new day displays a welcome message and applies a credit
-def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->set:
+def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->dict:
     credits_to_add = 0
     streak_to_add = 0
     access_day = access_time.strftime("%A")
@@ -68,4 +68,6 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->s
                 print(f"Congratulations on reaching a streak of {streak_weeks} week(s)! You have been awarded 7 credits")
     elif last_accessed > access_time:
         print(f"Well that is naughty, how has modifiying the last accessed time to the future helped you get things done?")
-    return (last_accessed,credits_to_add,streak_to_add)
+    return {"last_accessed": last_accessed,
+            "credits_to_add": credits_to_add,
+            "streak_to_add": streak_to_add}

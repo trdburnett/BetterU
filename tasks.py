@@ -69,38 +69,48 @@ def time_remaining(task_priority: int, task_time: datetime):
         return task_deadline - time.now()
 
 #removes a task object from the task list and awards credits
-def complete_task(task_id: int, tasklist: list, achievementlist: list, last_accessed: datetime, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, streak: int, repeat=False)->set:
+def complete_task(task_id: int, tasklist: list, achievementlist: list, last_accessed: datetime, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, streak: int, repeat=False)->dict:
     credits_to_add = 0
     tasks_completed_to_add = 0
     high_priority_tasks_completed_to_add = 0
     medium_priority_tasks_completed_to_add = 0
     low_priority_tasks_completed_to_add = 0
     streak_to_add = 0
-    retdict = remove_task(task_id, tasklist, called_from_complete_task=True)
-    if not retdict == None:
-        if retdict["priority"] == 1:
+    retdict_rt = remove_task(task_id, tasklist, called_from_complete_task=True)
+    if not retdict_rt == None:
+        if retdict_rt["priority"] == 1:
             high_priority_tasks_completed_to_add += 1
-        if retdict["priority"] == 2:
+        if retdict_rt["priority"] == 2:
             medium_priority_tasks_completed_to_add += 1
-        if retdict["priority"] == 3:
+        if retdict_rt["priority"] == 3:
             low_priority_tasks_completed_to_add += 1
         tasks_completed_to_add += 1
-        t = time_remaining(retdict["priority"],retdict["task_time"])
+        t = time_remaining(retdict_rt["priority"],retdict_rt["task_time"])
         if t == "Expired!":
             print(f"Task Completed, however no credits have been awarded due to the task not being completed in time.")
         else:
-            credits_to_add += retdict["reward"]
-            print(f"Task Completed, you have been awarded {retdict["reward"]} credit(s)")
-        lacs = daily_reward(time.now(), last_accessed, streak)
-        last_accessed = lacs[0]
-        credits_to_add += lacs[1]
-        streak_to_add += lacs[2]
-        credits_to_add += check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+            credits_to_add += retdict_rt["reward"]
+            print(f"Task Completed, you have been awarded {retdict_rt["reward"]} credit(s)")
+        retdict_dr = daily_reward(time.now(), last_accessed, streak)
+        last_accessed = retdict_dr["last_accessed"]
+        credits_to_add += retdict_dr["credits_to_add"]
+        streak_to_add += retdict_dr["streak_to_add"]
+        retdict_ca = check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+        credits_to_add += retdict_ca["credits_to_add"]
+        achievementlist = retdict_ca["achievementlist"]
         if repeat:
-            tasklist = add_task(retdict["description"],retdict["priority"],retdict["reward"],task_id,retdict["tasklist"])
+            tasklist = add_task(retdict_rt["description"],retdict_rt["priority"],retdict_rt["reward"],task_id,retdict_rt["tasklist"])
         else:
-            tasklist = retdict["tasklist"]
-    return (credits_to_add, tasks_completed_to_add, high_priority_tasks_completed_to_add, medium_priority_tasks_completed_to_add, low_priority_tasks_completed_to_add, streak_to_add, last_accessed, tasklist)
+            tasklist = retdict_rt["tasklist"]
+    return {"credits_to_add": credits_to_add,
+            "tasks_completed_to_add": tasks_completed_to_add,
+            "high_priority_tasks_completed_to_add": high_priority_tasks_completed_to_add,
+            "medium_priority_tasks_completed_to_add": medium_priority_tasks_completed_to_add,
+            "low_priority_tasks_completed_to_add": low_priority_tasks_completed_to_add,
+            "streak_to_add": streak_to_add,
+            "last_accessed": last_accessed,
+            "tasklist": tasklist,
+            "achievementlist": achievementlist}
 
 #sorts the tasklist by priority and then time
 #the oldest tasks with the highest priority will display at the top
