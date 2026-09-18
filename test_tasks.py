@@ -1,6 +1,7 @@
 import unittest
 import datetime
 from tasks import Task, add_task
+from freezegun import freeze_time
 
 class TestTasks(unittest.TestCase):
 
@@ -12,6 +13,7 @@ class TestTasks(unittest.TestCase):
         self.assertEqual(task.time, datetime.datetime(2000,1,1,8,30))
         self.assertEqual(task.id, 1)
 
+    @freeze_time("2000-01-01")
     def test_add_task(self):
         testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
         self.assertEqual(add_task("Test Task",1,1,1,[]), testtasklist)
