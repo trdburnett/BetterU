@@ -19,8 +19,8 @@ class Task:
 def add_task(description: str, priority: int, reward: int, task_id: int, tasklist: list):
     task = Task(description,priority,reward,time.now(),task_id)
     tasklist.append(task)
-    save_list(tasklist_file_path, tasklist)
     print("Task Added.")
+    return tasklist
 
 #removes a task object from the task list only
 def remove_task(task_id: int, tasklist: list, remove=True):

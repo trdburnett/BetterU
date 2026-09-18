@@ -1,5 +1,5 @@
 import datetime, argparse, os
-from save import save
+from save import save, save_list
 from load import load_list
 from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path, achievementlist_file_path
 from tasks import Task, add_task, remove_task, complete_task, display_tasks
@@ -118,7 +118,8 @@ if __name__ == "__main__":
 
 #branch for calling add_task
     if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
-        add_task(args.task_description, args.task_priority, args.task_reward, task_id, tasklist)
+        tasklist = add_task(args.task_description, args.task_priority, args.task_reward, task_id, tasklist)
+        save_list(tasklist_file_path, tasklist)
 
 #branch for calling remove_task
     if 'remove_task_id' in args:
