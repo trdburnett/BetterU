@@ -1,6 +1,6 @@
 import unittest
 import datetime
-from tasks import Task, add_task
+from tasks import Task, add_task, remove_task
 from freezegun import freeze_time
 
 class TestTasks(unittest.TestCase):
@@ -22,6 +22,11 @@ class TestTasks(unittest.TestCase):
         self.assertEqual(tasklist[0].reward, testtasklist[0].reward)
         self.assertEqual(tasklist[0].time, testtasklist[0].time)
         self.assertEqual(tasklist[0].id, testtasklist[0].id)
+
+    def test_remove_task_successful_removal(self):
+        testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+        self.assertEqual(remove_task(1,testtasklist), [])
+
 
 if __name__ == "__main__":
     unittest.main()
