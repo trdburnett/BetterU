@@ -3,6 +3,7 @@ import datetime
 from tasks import Task, add_task, remove_task
 from freezegun import freeze_time
 
+@freeze_time("2000-01-01")
 class TestTasks(unittest.TestCase):
 
     def test_task_class(self):
@@ -13,7 +14,6 @@ class TestTasks(unittest.TestCase):
         self.assertEqual(task.time, datetime.datetime(2000,1,1,8,30))
         self.assertEqual(task.id, 1)
 
-    @freeze_time("2000-01-01")
     def test_add_task(self):
         testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
         tasklist = add_task("Test Task",1,1,1,[])
@@ -30,6 +30,15 @@ class TestTasks(unittest.TestCase):
     def test_remove_task_unsuccessful_removal(self):
             testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
             self.assertEqual(remove_task(2,testtasklist), testtasklist)
+        
+    def test_remove_task_successful_removal_called_by_complete_task(self):
+            testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+            expected_dict = {"description": "Test Task",
+                             "priority": 1,
+                             "reward": 1,
+                             "task_time": datetime.datetime.now(),
+                             "tasklist": testtasklist}
+            self.assertEqual(remove_task(1,testtasklist,True), expected_dict)
 
 
 if __name__ == "__main__":
