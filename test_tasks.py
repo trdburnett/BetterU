@@ -1,9 +1,9 @@
 import unittest
 import datetime
-from tasks import Task, add_task, remove_task
+from tasks import Task, add_task, remove_task, time_remaining
 from freezegun import freeze_time
 
-@freeze_time("2000-01-31")
+@freeze_time("2000-01-01 08:30:00")
 class TestTasks(unittest.TestCase):
 
     def test_task_class(self):
@@ -28,21 +28,29 @@ class TestTasks(unittest.TestCase):
         self.assertEqual(remove_task(1,testtasklist), [])
 
     def test_remove_task_unsuccessful_removal(self):
-            testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
-            self.assertEqual(remove_task(2,testtasklist), testtasklist)
+        testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+        self.assertEqual(remove_task(2,testtasklist), testtasklist)
         
     def test_remove_task_successful_removal_called_by_complete_task(self):
-            testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
-            expected_dict = {"description": "Test Task",
-                             "priority": 1,
-                             "reward": 1,
-                             "task_time": datetime.datetime.now(),
-                             "tasklist": testtasklist}
-            self.assertEqual(remove_task(1,testtasklist,True), expected_dict)
+        testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+        expected_dict = {"description": "Test Task",
+                         "priority": 1,
+                         "reward": 1,
+                         "task_time": datetime.datetime.now(),
+                         "tasklist": testtasklist}
+        self.assertEqual(remove_task(1,testtasklist,True), expected_dict)
 
     def test_remove_task_unsuccessful_removal_called_by_complete_task(self):
-                testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
-                self.assertEqual(remove_task(2,testtasklist,True), None)
+        testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+        self.assertEqual(remove_task(2,testtasklist,True), None)
+
+    def test_time_remaining_priority_1_in_range(self):
+        expected_result = datetime.timedelta(days=2)
+        self.assertEqual(time_remaining(1, datetime.datetime.now), expected_result)
+
+    def test_time_remaining_priority_1_in_range(self):
+        expected_result = "Expired!"
+        self.assertEqual(time_remaining(1, datetime.datetime(1999,12,31,8,15)), expected_result)
 
 
 if __name__ == "__main__":
