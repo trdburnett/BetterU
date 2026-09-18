@@ -1,6 +1,6 @@
 import unittest
 import datetime
-from tasks import Task
+from tasks import Task, add_task
 
 class TestTasks(unittest.TestCase):
 
@@ -11,6 +11,10 @@ class TestTasks(unittest.TestCase):
         self.assertEqual(task.reward, 1)
         self.assertEqual(task.time, datetime.datetime(2000,1,1,8,30))
         self.assertEqual(task.id, 1)
+
+    def test_add_task(self):
+        testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+        self.assertAlmostEqual(add_task("Test Task",1,1,1,[]), testtasklist)
 
 if __name__ == "__main__":
     unittest.main()
