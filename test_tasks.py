@@ -50,7 +50,7 @@ class TestTasks(unittest.TestCase):
 
     def test_time_remaining_priority_1_in_range(self):
         expected_result = "Expired!"
-        self.assertEqual(time_remaining(1, datetime.datetime(1999,12,31,8,15)), expected_result)
+        self.assertEqual(time_remaining(1, datetime.datetime(1999,12,31,8,31)), expected_result)
 
 
 if __name__ == "__main__":
