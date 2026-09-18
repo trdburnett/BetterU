@@ -14,7 +14,7 @@ class TestTasks(unittest.TestCase):
 
     def test_add_task(self):
         testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
-        self.assertAlmostEqual(add_task("Test Task",1,1,1,[]), testtasklist)
+        self.assertEqual(add_task("Test Task",1,1,1,[]), testtasklist)
 
 if __name__ == "__main__":
     unittest.main()
