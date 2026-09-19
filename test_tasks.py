@@ -1,7 +1,7 @@
 import unittest
 import datetime
 from tasks import Task, add_task, remove_task, time_remaining, complete_task
-from achievement import populate_achievement_list
+from achievements import populate_achievement_list
 from freezegun import freeze_time
 
 @freeze_time("2000-01-01 08:30:00")
