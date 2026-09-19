@@ -1,6 +1,7 @@
 import unittest
 import datetime
-from tasks import Task, add_task, remove_task, time_remaining
+from tasks import Task, add_task, remove_task, time_remaining, complete_task
+from achievement import populate_achievement_list
 from freezegun import freeze_time
 
 @freeze_time("2000-01-01 08:30:00")
@@ -67,6 +68,28 @@ class TestTasks(unittest.TestCase):
     def test_time_remaining_priority_3_not_in_range(self):
         expected_result = "Expired!"
         self.assertEqual(time_remaining(3, datetime.datetime(1999,12,3,8,30)), expected_result)
+
+    def test_complete_task_success_priority_1_task_in_range_no_achievement_triggered_no_streak_triggered_no_repeat(self):
+        testtask_id = 1
+        testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+        testachievementlist = populate_achievement_list([])
+        testlast_accessed = datetime.datetime.now() - datetime.timedelta(hours=1)
+        testtasks_completed = 0
+        testhigh_priority_tasks_completed = 0
+        testmedium_priority_tasks_completed = 0
+        testlow_priority_tasks_completed = 0
+        testrewards_claimed = 0
+        teststreak = 0
+        expected_result = {"credits_to_add": 1,
+                           "tasks_completed_to_add": 1,
+                           "high_priority_tasks_completed_to_add": 1,
+                           "medium_priority_tasks_completed_to_add": 0,
+                           "low_priority_tasks_completed_to_add": 0,
+                           "streak_to_add": 0,
+                           "last_accessed": testlast_accessed,
+                           "tasklist": [],
+                           "achievementlist": testachievementlist}
+        self.assertEqual(complete_task(testtask_id,testtasklist,testachievementlist,testlast_accessed,testtasks_completed,testhigh_priority_tasks_completed,testmedium_priority_tasks_completed,testlow_priority_tasks_completed,testrewards_claimed,teststreak), expected_result)
 
 if __name__ == "__main__":
     unittest.main()
