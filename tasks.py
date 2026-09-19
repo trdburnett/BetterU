@@ -63,7 +63,7 @@ def time_remaining(task_priority: int, task_time: datetime):
         task_deadline = task_time + datetime.timedelta(days=7)
     if task_priority == 3:
         task_deadline = task_time + datetime.timedelta(days=28)
-    if task_deadline - time.now() <= datetime.timedelta(seconds=0):
+    if task_deadline - time.now() < datetime.timedelta(seconds=0):
         return "Expired!"
     else:
         return task_deadline - time.now()
