@@ -46,7 +46,7 @@ class TestTasks(unittest.TestCase):
 
     def test_time_remaining_priority_1_in_range(self):
         expected_result = datetime.timedelta(days=2)
-        self.assertEqual(time_remaining(1, datetime.datetime.now), expected_result)
+        self.assertEqual(time_remaining(1, datetime.datetime.now()), expected_result)
 
     def test_time_remaining_priority_1_not_in_range(self):
         expected_result = "Expired!"
@@ -54,7 +54,7 @@ class TestTasks(unittest.TestCase):
 
     def test_time_remaining_priority_2_in_range(self):
         expected_result = datetime.timedelta(days=7)
-        self.assertEqual(time_remaining(2, datetime.datetime.now), expected_result)
+        self.assertEqual(time_remaining(2, datetime.datetime.now()), expected_result)
 
     def test_time_remaining_priority_2_not_in_range(self):
         expected_result = "Expired!"
@@ -62,7 +62,7 @@ class TestTasks(unittest.TestCase):
 
     def test_time_remaining_priority_3_in_range(self):
         expected_result = datetime.timedelta(days=28)
-        self.assertEqual(time_remaining(3, datetime.datetime.now), expected_result)
+        self.assertEqual(time_remaining(3, datetime.datetime.now()), expected_result)
 
     def test_time_remaining_priority_3_not_in_range(self):
         expected_result = "Expired!"
