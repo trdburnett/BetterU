@@ -1,5 +1,4 @@
 from operator import attrgetter
-from achievements import check_achievements
 from display import display_banner, display_padding, display_credits
 
 class Reward:
@@ -48,7 +47,7 @@ def remove_reward(reward_id: int, rewardlist: list, credits:int, called_from_cla
             return rewardlist
 
 #removes a reward object from the reward list and removes the cost from available credits
-def claim_reward(reward_id: int, rewardlist: int, credits: int, achievementlist: list, tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, repeat=False)->dict:
+def claim_reward(reward_id: int, rewardlist: int, credits: int, repeat=False)->dict:
     credits_to_add = 0
     rewards_claimed_to_add = 0
     retdict_rr = remove_reward(reward_id, rewardlist, credits, called_from_claim_reward=True)
@@ -56,17 +55,13 @@ def claim_reward(reward_id: int, rewardlist: int, credits: int, achievementlist:
         credits_to_add -= retdict_rr["cost"]
         rewards_claimed_to_add += 1
         print(f"Reward Claimed, {retdict_rr["cost"]} credit(s) have been deducted.")
-        retdict_ca = check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
-        credits_to_add += retdict_ca["credits_to_add"]
-        achievementlist = retdict_ca["achievementlist"]
         if repeat:
             rewardlist = add_reward(retdict_rr["description"],retdict_rr["cost"],reward_id,retdict_rr["rewardlist"])
         else:
             rewardlist = retdict_rr["rewardlist"]
     return {"credits_to_add": credits_to_add,
             "rewards_claimed_to_add": rewards_claimed_to_add,
-            "rewardlist": rewardlist,
-            "achievementlist": achievementlist}
+            "rewardlist": rewardlist}
 
 #displays the rewards list in cost order
 def display_rewards(rewardlist: list, credits: int):
