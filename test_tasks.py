@@ -68,7 +68,7 @@ class TestTasks(unittest.TestCase):
         expected_result = "Expired!"
         self.assertEqual(time_remaining(3, datetime.datetime(1999,12,3,8,30)), expected_result)
 
-    def test_complete_task_success_priority_1_task_in_range_no_achievement_triggered_no_streak_triggered_no_repeat(self):
+    def test_complete_task_success_priority_1_valid_task_in_range_no_repeat(self):
         testtask_id = 1
         testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
         expected_result = {"credits_to_add": 1,
@@ -79,7 +79,7 @@ class TestTasks(unittest.TestCase):
                            "tasklist": []}
         self.assertEqual(complete_task(testtask_id,testtasklist), expected_result)
 
-    def test_complete_task_success_priority_2_task_in_range_no_achievement_triggered_no_streak_triggered_no_repeat(self):
+    def test_complete_task_success_priority_2_valid_task_in_range_no_repeat(self):
         testtask_id = 1
         testtasklist = [Task("Test Task",2,1,datetime.datetime.now(),1)]
         expected_result = {"credits_to_add": 1,
@@ -90,7 +90,7 @@ class TestTasks(unittest.TestCase):
                            "tasklist": []}
         self.assertEqual(complete_task(testtask_id,testtasklist), expected_result)
 
-    def test_complete_task_success_priority_3_task_in_range_no_achievement_triggered_no_streak_triggered_no_repeat(self):
+    def test_complete_task_success_priority_3_valid_task_in_range_no_repeat(self):
         testtask_id = 1
         testtasklist = [Task("Test Task",3,1,datetime.datetime.now(),1)]
         expected_result = {"credits_to_add": 1,
@@ -99,7 +99,73 @@ class TestTasks(unittest.TestCase):
                            "medium_priority_tasks_completed_to_add": 0,
                            "low_priority_tasks_completed_to_add": 1,
                            "tasklist": []}
-        self.assertEqual(complete_task(testtask_id,testtasklist), expected_result)   
+        self.assertEqual(complete_task(testtask_id,testtasklist), expected_result)
+
+    def test_complete_task_invalid_task_no_repeat(self):
+        testtask_id = 2
+        testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+        expected_result = {"credits_to_add": 0,
+                           "tasks_completed_to_add": 0,
+                           "high_priority_tasks_completed_to_add": 0,
+                           "medium_priority_tasks_completed_to_add": 0,
+                           "low_priority_tasks_completed_to_add": 0,
+                           "tasklist": testtasklist}
+        self.assertEqual(complete_task(testtask_id,testtasklist), expected_result)
+
+    def test_complete_task_invalid_task_repeat(self):
+        testtask_id = 2
+        testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+        expected_result = {"credits_to_add": 0,
+                            "tasks_completed_to_add": 0,
+                           "high_priority_tasks_completed_to_add": 0,
+                           "medium_priority_tasks_completed_to_add": 0,
+                           "low_priority_tasks_completed_to_add": 0,
+                           "tasklist": testtasklist}
+        self.assertEqual(complete_task(testtask_id,testtasklist,True), expected_result)
+
+    def test_complete_task_success_priority_1_valid_task_out_of_range_no_repeat(self):
+        testtask_id = 1
+        testtasklist = [Task("Test Task",1,1,datetime.datetime(1999,12,30,8,30),1)]
+        expected_result = {"credits_to_add": 0,
+                           "tasks_completed_to_add": 1,
+                           "high_priority_tasks_completed_to_add": 1,
+                           "medium_priority_tasks_completed_to_add": 0,
+                           "low_priority_tasks_completed_to_add": 0,
+                           "tasklist": []}
+        self.assertEqual(complete_task(testtask_id,testtasklist), expected_result)
+    
+    def test_complete_task_success_priority_2_valid_task_out_of_range_no_repeat(self):
+        testtask_id = 1
+        testtasklist = [Task("Test Task",2,1,datetime.datetime(1999,12,25,8,30),1)]
+        expected_result = {"credits_to_add": 0,
+                           "tasks_completed_to_add": 1,
+                           "high_priority_tasks_completed_to_add": 0,
+                           "medium_priority_tasks_completed_to_add": 1,
+                           "low_priority_tasks_completed_to_add": 0,
+                           "tasklist": []}
+        self.assertEqual(complete_task(testtask_id,testtasklist), expected_result)
+    
+    def test_complete_task_success_priority_3_valid_task_out_of_range_no_repeat(self):
+        testtask_id = 1
+        testtasklist = [Task("Test Task",3,1,datetime.datetime(1999,12,3,8,30),1)]
+        expected_result = {"credits_to_add": 0,
+                           "tasks_completed_to_add": 1,
+                           "high_priority_tasks_completed_to_add": 0,
+                           "medium_priority_tasks_completed_to_add": 0,
+                           "low_priority_tasks_completed_to_add": 1,
+                           "tasklist": []}
+        self.assertEqual(complete_task(testtask_id,testtasklist), expected_result)
+
+    def test_complete_task_success_priority_1_valid_task_in_range_repeat(self):
+        testtask_id = 1
+        testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
+        expected_result = {"credits_to_add": 1,
+                           "tasks_completed_to_add": 1,
+                           "high_priority_tasks_completed_to_add": 1,
+                           "medium_priority_tasks_completed_to_add": 0,
+                           "low_priority_tasks_completed_to_add": 0,
+                           "tasklist": testtasklist}
+        self.assertEqual(complete_task(testtask_id,testtasklist,True), expected_result)   
 
 if __name__ == "__main__":
     unittest.main()
