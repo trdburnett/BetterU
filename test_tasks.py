@@ -23,6 +23,16 @@ class TestTasks(unittest.TestCase):
         self.assertEqual(tasklist[0].time, testtasklist[0].time)
         self.assertEqual(tasklist[0].id, testtasklist[0].id)
 
+    def test_add_task_reward_zero(self):
+        testtasklist = []
+        tasklist = add_task("Test Task",1,0,1,[])
+        self.assertEqual(tasklist, testtasklist)
+
+    def test_add_task_reward_above_5(self):
+            testtasklist = []
+            tasklist = add_task("Test Task",1,6,1,[])
+            self.assertEqual(tasklist, testtasklist)
+
     def test_remove_task_successful_removal(self):
         testtasklist = [Task("Test Task",1,1,datetime.datetime.now(),1)]
         self.assertEqual(remove_task(1,testtasklist), [])
