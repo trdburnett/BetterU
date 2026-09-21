@@ -15,12 +15,11 @@ class Task:
 def add_task(description: str, priority: int, reward: int, task_id: int, tasklist: list):
     if reward <= 0 or reward > 5:
         print("The reward for a task must be between 1 and 5 credits.")
-        return tasklist
     else:
         task = Task(description,priority,reward,time.now(),task_id)
         tasklist.append(task)
         print("Task Added.")
-        return tasklist
+    return tasklist
 
 #removes a task object from the task list only
 def remove_task(task_id: int, tasklist: list, called_from_complete_task=False):

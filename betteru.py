@@ -153,11 +153,8 @@ if __name__ == "__main__":
 
 #branch for calling add_reward
     if 'reward_description' in args and 'reward_cost' in args:
-        if args.reward_cost <= 0:
-            print("Who are you trying to cheat here? No negative or zero cost rewards are allowed!")
-        else:
-            rewardlist = add_reward(args.reward_description, args.reward_cost, reward_id, rewardlist)
-            save_list(rewardlist_file_path, rewardlist)
+        rewardlist = add_reward(args.reward_description, args.reward_cost, reward_id, rewardlist)
+        save_list(rewardlist_file_path, rewardlist)
 
 #branch for calling remove reward
     if 'remove_reward_id' in args:

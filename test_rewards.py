@@ -16,6 +16,11 @@ class TestRewards(unittest.TestCase):
         self.assertEqual(rewardlist[0].cost, testrewardlist[0].cost)
         self.assertEqual(rewardlist[0].id, testrewardlist[0].id)
 
+    def test_add_reward_free_reward(self):
+        testrewardlist = []
+        rewardlist = add_reward("Test Reward",0,1,[])
+        self.assertEqual(rewardlist, testrewardlist)
+
     def test_remove_reward_valid_not_called_by_claim_reward(self):
         testreward_id = 1
         testrewardlist = [Reward("Test Reward",1,1)]

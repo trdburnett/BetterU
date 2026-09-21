@@ -9,9 +9,12 @@ class Reward:
 
 #add a reward object to the reward list
 def add_reward(description: str, cost: int, reward_id: int, rewardlist: list):
-    reward = Reward(description,cost,reward_id)
-    rewardlist.append(reward)
-    print("Reward Added.")
+    if cost <= 0:
+        print("No free or negative cost rewards allowed!")
+    else:
+        reward = Reward(description,cost,reward_id)
+        rewardlist.append(reward)
+        print("Reward Added.")
     return rewardlist
 
 #removes a reward object from the reward list only
