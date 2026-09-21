@@ -13,10 +13,14 @@ class Task:
 
 #adds a task object to the task list
 def add_task(description: str, priority: int, reward: int, task_id: int, tasklist: list):
-    task = Task(description,priority,reward,time.now(),task_id)
-    tasklist.append(task)
-    print("Task Added.")
-    return tasklist
+    if reward <= 0 or reward > 5:
+        print("The reward for a task must be between 1 and 5 credits.")
+        return tasklist
+    else:
+        task = Task(description,priority,reward,time.now(),task_id)
+        tasklist.append(task)
+        print("Task Added.")
+        return tasklist
 
 #removes a task object from the task list only
 def remove_task(task_id: int, tasklist: list, called_from_complete_task=False):
@@ -35,7 +39,6 @@ def remove_task(task_id: int, tasklist: list, called_from_complete_task=False):
             task_time = tasklist[i].time
     if found:
         del tasklist[index_to_remove]
-        #save_list(tasklist_file_path, tasklist)
         if not called_from_complete_task:
             print("Task Removed.")
             return tasklist
