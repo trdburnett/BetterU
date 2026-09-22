@@ -219,39 +219,39 @@ class TestAchievements(unittest.TestCase):
                            "achievementlist": testresultachievementlist}
         self.assertEqual(check_achievements(testachievementlist,testtasks_completed,testhigh_priority_tasks_completed,testmedium_priority_tasks_completed,testlow_priority_tasks_completed,testrewards_claimed), expected_result)
 
-        def test_check_achievements_1_task_completed_empty_list(self):
-                testachievementlist = []
-                testtasks_completed = 1
-                testhigh_priority_tasks_completed = 1
-                testmedium_priority_tasks_completed = 0
-                testlow_priority_tasks_completed = 0
-                testrewards_claimed = 0
-                testresultachievementlist = [Achievement("Completed 10 Tasks",False,2,"tasks_completed",10),
-                                             Achievement("Completed 50 Tasks",False,10,"tasks_completed",50),
-                                             Achievement("Completed 100 Tasks",False,20,"tasks_completed",100),
-                                             Achievement("Completed 500 Tasks",False,100,"tasks_completed",500),
-                                             Achievement("Completed 1000 Tasks",False,200,"tasks_completed",1000),
-                                             Achievement("Completed 5000 Tasks",False,1000,"tasks_completed",5000),
-                                             Achievement("Completed 10000 Tasks",False,2000,"tasks_completed",10000),
-                                             Achievement("Completed 20 High Priority Tasks",False,2,"high_priority_tasks_completed",20),
-                                             Achievement("Completed 100 High Priority Tasks",False,10,"high_priority_tasks_completed",100),
-                                             Achievement("Completed 200 High Priority Tasks",False,20,"high_priority_tasks_completed",200),
-                                             Achievement("Completed 1000 High Priority Tasks",False,100,"high_priority_tasks_completed",1000),
-                                             Achievement("Completed 40 Medium Priority Tasks",False,2,"medium_priority_tasks_completed",40),
-                                             Achievement("Completed 200 Medium Priority Tasks",False,10,"medium_priority_tasks_completed",200),
-                                             Achievement("Completed 400 Medium Priority Tasks",False,20,"medium_priority_tasks_completed",400),
-                                             Achievement("Completed 2000 Medium Priority Tasks",False,100,"medium_priority_tasks_completed",2000),
-                                             Achievement("Completed 80 Low Priority Tasks",False,2,"low_priority_tasks_completed",80),
-                                             Achievement("Completed 400 Low Priority Tasks",False,10,"low_priority_tasks_completed",400),
-                                             Achievement("Completed 800 Low Priority Tasks",False,20,"low_priority_tasks_completed",800),
-                                             Achievement("Completed 4000 Low Priority Tasks",False,100,"low_priority_tasks_completed",4000),
-                                             Achievement("Claimed 5 Rewards",False,2,"rewards_claimed",5),
-                                             Achievement("Claimed 25 Rewards",False,10,"rewards_claimed",25),
-                                             Achievement("Claimed 50 Rewards",False,20,"rewards_claimed",50),
-                                             Achievement("Claimed 250 Rewards",False,100,"rewards_claimed",250)]
-                expected_result = {"credits_to_add": 0,
-                                   "achievementlist": testresultachievementlist}
-                self.assertEqual(check_achievements(testachievementlist,testtasks_completed,testhigh_priority_tasks_completed,testmedium_priority_tasks_completed,testlow_priority_tasks_completed,testrewards_claimed), expected_result)
+    def test_check_achievements_1_task_completed_empty_list(self):
+        testachievementlist = []
+        testtasks_completed = 1
+        testhigh_priority_tasks_completed = 1
+        testmedium_priority_tasks_completed = 0
+        testlow_priority_tasks_completed = 0
+        testrewards_claimed = 0
+        testresultachievementlist = [Achievement("Completed 10 Tasks",False,2,"tasks_completed",10),
+                                     Achievement("Completed 50 Tasks",False,10,"tasks_completed",50),
+                                     Achievement("Completed 100 Tasks",False,20,"tasks_completed",100),
+                                     Achievement("Completed 500 Tasks",False,100,"tasks_completed",500),
+                                     Achievement("Completed 1000 Tasks",False,200,"tasks_completed",1000),
+                                     Achievement("Completed 5000 Tasks",False,1000,"tasks_completed",5000),
+                                     Achievement("Completed 10000 Tasks",False,2000,"tasks_completed",10000),
+                                     Achievement("Completed 20 High Priority Tasks",False,2,"high_priority_tasks_completed",20),
+                                     Achievement("Completed 100 High Priority Tasks",False,10,"high_priority_tasks_completed",100),
+                                     Achievement("Completed 200 High Priority Tasks",False,20,"high_priority_tasks_completed",200),
+                                     Achievement("Completed 1000 High Priority Tasks",False,100,"high_priority_tasks_completed",1000),
+                                     Achievement("Completed 40 Medium Priority Tasks",False,2,"medium_priority_tasks_completed",40),
+                                     Achievement("Completed 200 Medium Priority Tasks",False,10,"medium_priority_tasks_completed",200),
+                                     Achievement("Completed 400 Medium Priority Tasks",False,20,"medium_priority_tasks_completed",400),
+                                     Achievement("Completed 2000 Medium Priority Tasks",False,100,"medium_priority_tasks_completed",2000),
+                                     Achievement("Completed 80 Low Priority Tasks",False,2,"low_priority_tasks_completed",80),
+                                     Achievement("Completed 400 Low Priority Tasks",False,10,"low_priority_tasks_completed",400),
+                                     Achievement("Completed 800 Low Priority Tasks",False,20,"low_priority_tasks_completed",800),
+                                     Achievement("Completed 4000 Low Priority Tasks",False,100,"low_priority_tasks_completed",4000),
+                                     Achievement("Claimed 5 Rewards",False,2,"rewards_claimed",5),
+                                     Achievement("Claimed 25 Rewards",False,10,"rewards_claimed",25),
+                                     Achievement("Claimed 50 Rewards",False,20,"rewards_claimed",50),
+                                     Achievement("Claimed 250 Rewards",False,100,"rewards_claimed",250)]
+        expected_result = {"credits_to_add": 0,
+                           "achievementlist": testresultachievementlist}
+        self.assertEqual(check_achievements(testachievementlist,testtasks_completed,testhigh_priority_tasks_completed,testmedium_priority_tasks_completed,testlow_priority_tasks_completed,testrewards_claimed), expected_result)
 
 if __name__ == "__main__":
     unittest.main()
