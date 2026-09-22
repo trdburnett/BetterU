@@ -8,6 +8,11 @@ class Achievement:
         self.required_stat = required_stat
         self.required_value = required_value
 
+    def __eq__(self,other):
+        if not isinstance(other, Achievement):
+            return NotImplemented
+        return self.description == other.description and self.completed == other.completed and self.reward == other.reward and self.required_stat == other.required_stat and self.required_value == other.required_value
+
 #populates the achievement_list
 def populate_achievement_list(achievementlist: list)->list:
     achievementlist.append(Achievement("Completed 10 Tasks",False,2,"tasks_completed",10))
