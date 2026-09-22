@@ -27,7 +27,7 @@ class TestAchievements(unittest.TestCase):
                                Achievement("Claimed 25 Rewards",False,10,"rewards_claimed",25),
                                Achievement("Claimed 50 Rewards",False,20,"rewards_claimed",50),
                                Achievement("Claimed 250 Rewards",False,100,"rewards_claimed",250)]
-        self.assertEqual(populate_achievement_list([]), testachievementlist)
+        self.assertAlmostEqual(populate_achievement_list([]), testachievementlist)
 
     def test_check_achievement_tasks_completed_met(self):
         testrequired_stat = "tasks_completed"
