@@ -11,6 +11,11 @@ class Task:
         self.time = time
         self.id = id
 
+    def __eq__(self,other):
+        if not isinstance(other, Task):
+            return NotImplemented
+        return self.description == other.description and self.priority == other.priority and self.reward == other.reward and self.time == other.time and self.id == other.id
+
 #adds a task object to the task list
 def add_task(description: str, priority: int, reward: int, task_id: int, tasklist: list):
     if reward <= 0 or reward > 5:

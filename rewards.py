@@ -7,6 +7,11 @@ class Reward:
         self.cost = cost
         self.id = id
 
+    def __eq__(self,other):
+        if not isinstance(other, Reward):
+            return NotImplemented
+        return self.description == other.description and self.cost == other.cost and self.id == other.id
+
 #add a reward object to the reward list
 def add_reward(description: str, cost: int, reward_id: int, rewardlist: list):
     if cost <= 0:
