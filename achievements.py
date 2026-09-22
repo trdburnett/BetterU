@@ -63,14 +63,13 @@ def check_achievements(achievementlist: list, tasks_completed: int, high_priorit
     credits_to_add = 0
     if achievementlist == []:
         achievementlist = populate_achievement_list(achievementlist)
-    else:
-        for achievement in achievementlist:
-            if not achievement.completed:
-                completed = check_achievement(achievement.required_stat,achievement.required_value,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
-                if completed:
-                    achievement.completed = True
-                    credits_to_add += achievement.reward
-                    print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
+    for achievement in achievementlist:
+        if not achievement.completed:
+            completed = check_achievement(achievement.required_stat,achievement.required_value,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
+            if completed:
+                achievement.completed = True
+                credits_to_add += achievement.reward
+                print(f"Achievement completed: {achievement.description} | You have been rewarded {achievement.reward} credits!")
     return {"credits_to_add": credits_to_add,
             "achievementlist": achievementlist}
 
