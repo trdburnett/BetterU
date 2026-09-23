@@ -59,10 +59,10 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->d
                     print(f"Amazing you have been getting tasks done for whole year! Your streak has now been reset and you have been awarded another 99 credits")
                 else:
                     credits_to_add += 27
-                    print(f"Congratulations on reaching a streak of {streak_months} month(s)! You have awarded another 27 credits")
+                    print(f"Congratulations on reaching a streak of {int(streak_months)} month(s)! You have awarded another 27 credits")
             else:    
                 credits_to_add += 6
-                print(f"Congratulations on reaching a streak of {streak_weeks} week(s)! You have been awarded another 6 credits")
+                print(f"Congratulations on reaching a streak of {int(streak_weeks)} week(s)! You have been awarded another 6 credits")
     elif last_accessed > access_time:
         print(f"Well that is naughty, how has modifiying the last accessed time to the future helped you get things done?")
     last_accessed = access_time
