@@ -39,18 +39,15 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->d
     streak_to_add = 0
     access_day = access_time.strftime("%A")
     if last_accessed == None:
-        last_accessed = access_time
         credits_to_add += 1
         print("Looks like this your first time. You have been awarded a credit to help motivate you on your task completion journey!")
     elif last_accessed <= access_time - datetime.timedelta(days=1) and not yesterday_check(last_accessed.strftime("%A"),access_day):
         credits_to_add += 1
         streak_to_add = streak_reset(streak)
-        last_accessed = access_time
         print("Looks like its been more than a day. You have been awarded a credit to get you motivated!")
     elif yesterday_check(last_accessed.strftime("%A"),access_day):
         credits_to_add += 1
         streak_to_add += 1
-        last_accessed = access_time
         print(f"You are getting things done! Have a productive {access_day}. You have increased your streak to {streak+streak_to_add} day(s) and been awarded your daily credit!")
         if (streak+streak_to_add) % 7 == 0:
             streak_weeks = streak / 7
@@ -68,6 +65,7 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->d
                 print(f"Congratulations on reaching a streak of {streak_weeks} week(s)! You have been awarded another 6 credits")
     elif last_accessed > access_time:
         print(f"Well that is naughty, how has modifiying the last accessed time to the future helped you get things done?")
+    last_accessed = access_time
     return {"last_accessed": last_accessed,
             "credits_to_add": credits_to_add,
             "streak_to_add": streak_to_add}
