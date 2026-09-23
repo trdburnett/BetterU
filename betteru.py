@@ -23,6 +23,7 @@ if __name__ == "__main__":
     rewards_claimed = 0
     last_accessed = None
     streak = 0
+    freeze = 0
 
 #cycles through the tasks/rewards list based on mode and returns highest found ID
 #used to add to task_id/reward_id which is initialised at 1
@@ -63,6 +64,8 @@ if __name__ == "__main__":
                     last_accessed = datetime.datetime.strptime(date_str, date_format)
                 if "Streak" in line:
                     streak += int((line.lstrip("Streak: ")).rstrip(" \n"))
+                if "Freeze" in line:
+                    freeze += int((line.lstrip("Freeze: ")).rstrip(" \n"))
 #loads lists and sets id tracking
     tasklist = load_list(tasklist_file_path)
     task_id += getmax_id("task")
@@ -147,7 +150,7 @@ if __name__ == "__main__":
         retdict_ca = check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
         credits += retdict_ca["credits_to_add"]
         achievementlist = retdict_ca["achievementlist"]
-        save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak)
+        save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak, freeze)
         save_list(tasklist_file_path, tasklist)
         save_list(achievementlist_file_path, achievementlist)
 
@@ -173,6 +176,6 @@ if __name__ == "__main__":
         retdict_ca = check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
         credits += retdict_ca["credits_to_add"]
         achievementlist = retdict_ca["achievementlist"]
-        save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak)
+        save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak, freeze)
         save_list(rewardlist_file_path, rewardlist)
         save_list(achievementlist_file_path, achievementlist)

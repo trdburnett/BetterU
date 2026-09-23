@@ -13,7 +13,7 @@ def save_list(file_path: str, savelist: list):
 
 #helper for save function
 #packages the simple variables into a list ready for saving
-def variables_as_list(credits: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, tasks_completed: int, rewards_claimed: int, last_accessed: datetime, streak: int):
+def variables_as_list(credits: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, tasks_completed: int, rewards_claimed: int, last_accessed: datetime, streak: int, freeze: int):
     variablelist = []
     variablelist.append(f"Credits: {credits} \n")
     variablelist.append(f"High Priority Tasks Completed: {high_priority_tasks_completed} \n")
@@ -23,12 +23,13 @@ def variables_as_list(credits: int, high_priority_tasks_completed: int, medium_p
     variablelist.append(f"Rewards Claimed: {rewards_claimed} \n")
     variablelist.append(f"Last Accessed: {last_accessed} \n")
     variablelist.append(f"Streak: {streak} \n")
+    variablelist.append(f"Freeze: {freeze} \n")
     return variablelist
 
 #saves all simple variables used by the program
 #saves given list as plain text at given file path
-def save(save_file_path: str, credits: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, tasks_completed: int, rewards_claimed: int, last_accessed: datetime, streak: int):
-    variablelist = variables_as_list(credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak)
+def save(save_file_path: str, credits: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, tasks_completed: int, rewards_claimed: int, last_accessed: datetime, streak: int, freeze: int):
+    variablelist = variables_as_list(credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak, freeze)
     if not os.path.exists(save_file_path):
         os.makedirs('data', exist_ok=True)
         f = open(save_file_path, 'x')
