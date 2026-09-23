@@ -50,7 +50,7 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->d
         streak_to_add += 1
         print(f"You are getting things done! Have a productive {access_day}. You have increased your streak to {streak+streak_to_add} day(s) and been awarded your daily credit!")
         if (streak+streak_to_add) % 7 == 0:
-            streak_weeks = streak / 7
+            streak_weeks = (streak+streak_to_add) / 7
             if streak_weeks % 4 == 0:
                 streak_months = streak_weeks / 4
                 if streak_months % 13 == 0:
