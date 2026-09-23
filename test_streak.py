@@ -42,7 +42,7 @@ class TestStreak(unittest.TestCase):
 
     def test_yesterday_check_friday_true(self):
             testaccess_day = "Friday"
-            testlast_access_day = "Saturday"
+            testlast_access_day = "Thursday"
             expected_result = True
             self.assertEqual(yesterday_check(testlast_access_day,testaccess_day), expected_result)
 
