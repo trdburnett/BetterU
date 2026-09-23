@@ -42,7 +42,7 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->d
         last_accessed = access_time
         credits_to_add += 1
         print("Looks like this your first time. You have been awarded a credit to help motivate you on your task completion journey!")
-    elif last_accessed <= access_time - datetime.timedelta(days=1):
+    elif last_accessed <= access_time - datetime.timedelta(days=1) and not yesterday_check(last_accessed.strftime("%A"),access_day):
         credits_to_add += 1
         streak_to_add = streak_reset(streak)
         last_accessed = access_time
@@ -52,20 +52,20 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int)->d
         streak_to_add += 1
         last_accessed = access_time
         print(f"You are getting things done! Have a productive {access_day}. You have increased your streak to {streak+streak_to_add} day(s) and been awarded your daily credit!")
-        if streak % 7 == 0 and streak != 0:
+        if (streak+streak_to_add) % 7 == 0:
             streak_weeks = streak / 7
             if streak_weeks % 4 == 0:
                 streak_months = streak_weeks / 4
                 if streak_months % 13 == 0:
-                    credits_to_add += 100
+                    credits_to_add += 99
                     streak_to_add = streak_reset(streak)
-                    print(f"Amazing you have been getting tasks done for whole year! Your streak has now been reset and you have been awarded 100 credits")
+                    print(f"Amazing you have been getting tasks done for whole year! Your streak has now been reset and you have been awarded another 99 credits")
                 else:
-                    credits_to_add += 28
-                    print(f"Congratulations on reaching a streak of {streak_months} month(s)! You have awarded 28 credits")
+                    credits_to_add += 27
+                    print(f"Congratulations on reaching a streak of {streak_months} month(s)! You have awarded another 27 credits")
             else:    
-                credits_to_add += 7
-                print(f"Congratulations on reaching a streak of {streak_weeks} week(s)! You have been awarded 7 credits")
+                credits_to_add += 6
+                print(f"Congratulations on reaching a streak of {streak_weeks} week(s)! You have been awarded another 6 credits")
     elif last_accessed > access_time:
         print(f"Well that is naughty, how has modifiying the last accessed time to the future helped you get things done?")
     return {"last_accessed": last_accessed,
