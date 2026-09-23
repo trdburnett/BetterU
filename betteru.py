@@ -143,10 +143,11 @@ if __name__ == "__main__":
         medium_priority_tasks_completed += retdict_ct["medium_priority_tasks_completed_to_add"]
         low_priority_tasks_completed += retdict_ct["low_priority_tasks_completed_to_add"]
         tasklist = retdict_ct["tasklist"]
-        retdict_dr = daily_reward(time.now(), last_accessed, streak)
+        retdict_dr = daily_reward(time.now(), last_accessed, streak, freeze)
         last_accessed = retdict_dr["last_accessed"]
         credits += retdict_dr["credits_to_add"]
         streak += retdict_dr["streak_to_add"]
+        freeze += retdict_dr["freeze_to_add"]
         retdict_ca = check_achievements(achievementlist,tasks_completed,high_priority_tasks_completed,medium_priority_tasks_completed,low_priority_tasks_completed,rewards_claimed)
         credits += retdict_ca["credits_to_add"]
         achievementlist = retdict_ca["achievementlist"]
