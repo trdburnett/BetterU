@@ -74,7 +74,7 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int, fr
                 streak_months = streak_weeks / 4
                 if streak_months % 13 == 0:
                     credits_to_add += 99
-                    retdict_sr = streak_reset(streak, freeze, 0, True)
+                    retdict_sr = streak_reset((streak+streak_to_add), freeze, 0, True)
                     streak_to_add += retdict_sr["streak_to_add"]
                     print(f"Amazing you have been getting tasks done for whole year! Your streak has now been reset and you have been awarded another 99 credits")
                 else:
