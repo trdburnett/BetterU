@@ -220,3 +220,25 @@ class TestStreak(unittest.TestCase):
                                       "streak_to_add": -363,
                                       "freeze_to_add": 0}
                    self.assertEqual(daily_reward(testaccess_day,testlast_access_day,teststreak,testfreeze), expected_result)
+
+    def test_daily_reward_last_accessed_not_yesterday_more_than_24_hours_not_enough_freezes(self):
+                       testaccess_day = datetime.datetime.now()
+                       testlast_access_day = datetime.datetime(1999,12,28,22,30)
+                       teststreak = 5
+                       testfreeze = 2
+                       expected_result = {"last_accessed": datetime.datetime(2000,1,1,8,30),
+                                          "credits_to_add": 1,
+                                          "streak_to_add": -5,
+                                          "freeze_to_add": -2}
+                       self.assertEqual(daily_reward(testaccess_day,testlast_access_day,teststreak,testfreeze), expected_result)
+
+    def test_daily_reward_last_accessed_not_yesterday_more_than_24_hours_streak_saved(self):
+                       testaccess_day = datetime.datetime.now()
+                       testlast_access_day = datetime.datetime(1999,12,28,22,30)
+                       teststreak = 5
+                       testfreeze = 3
+                       expected_result = {"last_accessed": datetime.datetime(2000,1,1,8,30),
+                                          "credits_to_add": 1,
+                                          "streak_to_add": 0,
+                                          "freeze_to_add": -3}
+                       self.assertEqual(daily_reward(testaccess_day,testlast_access_day,teststreak,testfreeze), expected_result)
