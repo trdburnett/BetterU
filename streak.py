@@ -58,7 +58,7 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int, fr
         print("Looks like this your first time. You have been awarded a credit to help motivate you on your task completion journey!")
     elif last_accessed <= access_time - datetime.timedelta(days=1) and not yesterday_check(last_accessed.strftime("%A"),access_day):
         credits_to_add += 1
-        access_delta = last_accessed - access_time
+        access_delta = access_time - last_accessed
         freezes_required = access_delta.days
         retdict_sr = streak_reset(streak, freeze, freezes_required)
         streak_to_add += retdict_sr["streak_to_add"]
