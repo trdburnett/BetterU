@@ -38,7 +38,7 @@ def streak_reset(streak: int, freeze: int, freezes_required: int, year_reset=Fal
         return {"streak_to_add": streak * -1,
                 "freeze_to_add": 0}
     elif freeze >= freezes_required:
-        print(f"Your streak has been saved, but it cost you {freezes_required} freeze(s)")
+        print(f"Your streak has been saved, but it cost you {freezes_required} streak freeze(s)")
         return {"streak_to_add": 0,
                 "freeze_to_add": freezes_required * -1}
     else:
