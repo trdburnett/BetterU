@@ -108,11 +108,11 @@ def complete_task(task_id: int, tasklist: list, repeat=False)->dict:
 
 #sorts the tasklist by priority and then time
 #the oldest tasks with the highest priority will display at the top
-def display_tasks(tasklist: list):
+def display_tasks(tasklist: list, terminal_size: set):
     if tasklist == []:
         print("No tasks to display, please add some tasks.")
     else:
-        print(display_banner("Tasks"))
+        print(display_banner("Tasks",terminal_size))
         sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
         for task in sorted_tasklist:
             print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits | Time Remaining: {time_remaining(task.priority,task.time)}")
