@@ -24,6 +24,7 @@ if __name__ == "__main__":
     last_accessed = None
     streak = 0
     freeze = 0
+    terminal_size = os.get_terminal_size()
 
 #cycles through the tasks/rewards list based on mode and returns highest found ID
 #used to add to task_id/reward_id which is initialised at 1
@@ -104,6 +105,7 @@ if __name__ == "__main__":
 #branch for calling display_tasks()
     if args.tasks:
         display_tasks(tasklist)
+        print(terminal_size)
 
 #branch for calling display_rewards()
     if args.rewards:
