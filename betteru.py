@@ -75,12 +75,12 @@ if __name__ == "__main__":
 
 #parsing command line arguments for different functions see help descriptions
     parser = argparse.ArgumentParser()
-    parser.add_argument('--tasks', action='store_true', help='displays the task list')
-    parser.add_argument('--rewards', action='store_true', help='displays the reward list')
-    parser.add_argument('--credits', action='store_true', help='displays available credits')
-    parser.add_argument('--stats', action='store_true', help='displays statistics such as tasks completed and rewards claimed')
-    parser.add_argument('--achievements', action='store_true', help='displays achievements')
-    parser.add_argument('--streak_freeze', action='store_true', help='adds a streak freeze at the cost of 30 credits')
+    parser.add_argument('-t','--tasks', action='store_true', help='displays the task list')
+    parser.add_argument('-r','--rewards', action='store_true', help='displays the reward list')
+    parser.add_argument('-c','--credits', action='store_true', help='displays available credits')
+    parser.add_argument('-s','--stats', action='store_true', help='displays statistics such as tasks completed and rewards claimed')
+    parser.add_argument('-a','--achievements', action='store_true', help='displays achievements')
+    parser.add_argument('-f','--streak_freeze', action='store_true', help='adds a streak freeze at the cost of 30 credits')
     subparsers = parser.add_subparsers()
     parser_add_task = subparsers.add_parser('add_task', help='add a task to the task list')
     parser_add_task.add_argument('task_description', type=str, help='Description of task')
