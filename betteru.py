@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
 #branch for calling display_rewards()
     if args.rewards:
-        display_rewards(rewardlist, credits)
+        display_rewards(rewardlist, credits, terminal_size)
 
 #branch for calling display_credits()
     if args.credits:
@@ -116,11 +116,11 @@ if __name__ == "__main__":
 
 #branch for calling display_stats()
     if args.stats:
-        display_stats(tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak, freeze)
+        display_stats(tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak, freeze, terminal_size)
 
 #branch for calling display_achievements()
     if args.achievements:
-        achievementlist = display_achievements(achievementlist)
+        achievementlist = display_achievements(achievementlist, terminal_size)
         save_list(achievementlist_file_path, achievementlist)
 
 #branch for calling add_streak_freeze()

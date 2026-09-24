@@ -79,10 +79,10 @@ def check_achievements(achievementlist: list, tasks_completed: int, high_priorit
             "achievementlist": achievementlist}
 
 #displays the achievement list
-def display_achievements(achievementlist: list)->list:
+def display_achievements(achievementlist: list, terminal_size: set)->list:
     if achievementlist == []:
         achievementlist = populate_achievement_list(achievementlist)
-    print(display_banner("Achievements"))
+    print(display_banner("Achievements",terminal_size))
     for achievement in achievementlist:
         print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
     return achievementlist

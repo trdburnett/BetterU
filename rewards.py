@@ -72,12 +72,12 @@ def claim_reward(reward_id: int, rewardlist: int, credits: int, repeat=False)->d
             "rewardlist": rewardlist}
 
 #displays the rewards list in cost order
-def display_rewards(rewardlist: list, credits: int):
+def display_rewards(rewardlist: list, credits: int, terminal_size: set):
     if rewardlist == []:
         print("No rewards to display. please add some rewards.")
     else:
         display_credits(credits)
-        print(display_banner("Rewards"))
+        print(display_banner("Rewards",terminal_size))
         sorted_rewardlist = sorted(rewardlist, key=attrgetter('cost'))
         for reward in sorted_rewardlist:
             print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
