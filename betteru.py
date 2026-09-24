@@ -127,6 +127,7 @@ if __name__ == "__main__":
         retdir_sf = add_streak_freeze(credits)
         credits += retdir_sf["credits_to_add"]
         freeze += retdir_sf["freeze_to_add"]
+        save(save_file_path, credits, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, tasks_completed, rewards_claimed, last_accessed, streak, freeze)
 
 #branch for calling add_task
     if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:
