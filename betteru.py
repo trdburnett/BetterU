@@ -5,7 +5,7 @@ from file_paths import  save_file_path, tasklist_file_path, rewardlist_file_path
 from tasks import Task, add_task, remove_task, complete_task, display_tasks
 from rewards import Reward, add_reward, remove_reward, claim_reward, display_rewards
 from achievements import Achievement, display_achievements, check_achievements
-from streak import daily_reward
+from streak import daily_reward, add_streak_freeze
 from display import display_stats, display_credits
 
 if __name__ == "__main__":
@@ -80,6 +80,7 @@ if __name__ == "__main__":
     parser.add_argument('--credits', action='store_true', help='displays available credits')
     parser.add_argument('--stats', action='store_true', help='displays statistics such as tasks completed and rewards claimed')
     parser.add_argument('--achievements', action='store_true', help='displays achievements')
+    parser.add_argument('--streak_freeze', action='store_true', help='adds a streak freeze at the cost of 30 credits')
     subparsers = parser.add_subparsers()
     parser_add_task = subparsers.add_parser('add_task', help='add a task to the task list')
     parser_add_task.add_argument('task_description', type=str, help='Description of task')
@@ -114,12 +115,18 @@ if __name__ == "__main__":
 
 #branch for calling display_stats()
     if args.stats:
-        display_stats(tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak)
+        display_stats(tasks_completed, high_priority_tasks_completed, medium_priority_tasks_completed, low_priority_tasks_completed, rewards_claimed, streak, freeze)
 
 #branch for calling display_achievements()
     if args.achievements:
         achievementlist = display_achievements(achievementlist)
         save_list(achievementlist_file_path, achievementlist)
+
+#branch for calling add_streak_freeze()
+    if args.streak_freeze:
+        retdir_sf = add_streak_freeze(credits)
+        credits += retdir_sf["credits_to_add"]
+        freeze += retdir_sf["freeze_to_add"]
 
 #branch for calling add_task
     if 'task_description' in args and 'task_priority' in args and 'task_reward' in args:

@@ -90,3 +90,16 @@ def daily_reward(access_time: datetime, last_accessed: datetime, streak: int, fr
             "credits_to_add": credits_to_add,
             "streak_to_add": streak_to_add,
             "freeze_to_add": freeze_to_add}
+
+def add_streak_freeze(credits: int)->int:
+    credits_to_add = 0
+    freeze_to_add = 0
+    if credits >= 30:
+        credits_to_add -= 30
+        freeze_to_add += 1
+        print("Streak freeze added, 30 credits have been deducted.")
+    else:
+        print("You need 30 credits to buy a streak freeze, you don't have enough.")
+    return {"credits_to_add": credits_to_add,
+            "freeze_to_add": freeze_to_add}
+    

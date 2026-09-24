@@ -26,7 +26,7 @@ def display_credits(credits: int):
     print(f"Available Credits: {credits}")
 
 #displays statistics
-def display_stats(tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, streak: int):
+def display_stats(tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, streak: int, freeze: int):
     print(display_banner("Statistics"))
     print(f"Tasks Completed: {tasks_completed}")
     print(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
@@ -34,3 +34,4 @@ def display_stats(tasks_completed: int, high_priority_tasks_completed: int, medi
     print(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
     print(f"Rewards Claimed: {rewards_claimed}")
     print(f"Current Streak: {streak} day(s)")
+    print(f"Current Streak Freezes: {freeze} ")
