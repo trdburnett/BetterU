@@ -254,3 +254,6 @@ class TestStreak(unittest.TestCase):
         expected_result = {"credits_to_add": 0,
                            "freeze_to_add": 0}
         self.assertEqual(add_streak_freeze(testcredits), expected_result)
+
+if __name__ == "__main__":
+    unittest.main()
