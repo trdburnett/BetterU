@@ -106,6 +106,8 @@ if __name__ == "__main__":
     if args.tasks:
         display_tasks(tasklist)
         print(terminal_size)
+        print(terminal_size[0])
+        print(terminal_size[1])
 
 #branch for calling display_rewards()
     if args.rewards:
