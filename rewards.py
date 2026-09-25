@@ -1,5 +1,5 @@
 from operator import attrgetter
-from display import display_banner, display_padding, display_credits, description_padding, display_box_top, display_box_bottom
+from display import display_banner, display_credits, description_padding, display_box_top, display_box_bottom
 
 class Reward:
     def __init__(self,description: str, cost: int, id: int):
@@ -76,11 +76,10 @@ def display_rewards(rewardlist: list, credits: int, terminal_size: set):
     if rewardlist == []:
         print("No rewards to display. please add some rewards.")
     else:
-        display_credits(credits)
+        display_credits(credits,terminal_size)
         print(display_banner("Rewards",terminal_size))
         sorted_rewardlist = sorted(rewardlist, key=attrgetter('cost'))
         for reward in sorted_rewardlist:
-            #print(f"Reward[{reward.id}]: {reward.description}{display_padding(reward.description)}| Cost: {reward.cost} Credits")
             reward_box = ""
             reward_box = display_box_top(reward.id,"Reward",terminal_size) + "\n"
             reward_box = reward_box + description_padding(reward.description,terminal_size) + "\n"

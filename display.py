@@ -1,13 +1,3 @@
-#returns a string of spaces based on the length of the description it is given
-#helper method for display functions
-def display_padding(description: str)->str:
-    padding = ""
-    padding_size = 50 - len(description)
-    while padding_size > 0:
-        padding = padding + " "
-        padding_size -= 1
-    return padding
-
 #returns a string to be used as a banner at the top of displays
 #helper method for display functions
 def display_banner(string_to_banner: str, terminal_size: set)->str:
@@ -29,6 +19,8 @@ def display_banner(string_to_banner: str, terminal_size: set)->str:
     banner = left_banner_padding + decorated_string + right_banner_padding
     return banner
 
+#returns a box top string for displaying tasks and rewards
+#helper method for task and reward displays
 def display_box_top(id: int, caller: str, terminal_size: set)->str:
     columns = terminal_size[0]
     decorated_string = f"[{caller} ID: {id}]"
@@ -48,6 +40,8 @@ def display_box_top(id: int, caller: str, terminal_size: set)->str:
     box_top = left_box_padding + decorated_string + right_box_padding
     return box_top
 
+#returns a string centering the given description string with option to handle struckthrough strings
+#helper method for display functions
 def description_padding(description: str, terminal_size: set, struckthrough=False)->str:
     columns = terminal_size[0]
     truncated_description = ""
@@ -78,6 +72,8 @@ def description_padding(description: str, terminal_size: set, struckthrough=Fals
         result_string = result_string + truncated_padding + truncated_description + truncated_padding
     return result_string
 
+#returns a string to center reward and time remaining over one line
+#helper method for display tasks
 def reward_and_time_remaining_padding(reward: str, time_remaining: str, terminal_size: set)->str:
     result_string = ""
     columns = terminal_size[0]
@@ -115,6 +111,8 @@ def reward_and_time_remaining_padding(reward: str, time_remaining: str, terminal
     result_string = result_string + left_space_padding_reward + reward + right_space_padding_reward + left_space_padding_time_remaining + time_remaining + right_space_padding_time_remaining
     return result_string
 
+#returns a box bottom string
+#helper method for display tasks
 def display_box_bottom(terminal_size: set)->str:
     box_bottom = ""
     padding_size = terminal_size[0]
@@ -123,6 +121,8 @@ def display_box_bottom(terminal_size: set)->str:
         padding_size -= 1
     return box_bottom
 
+#returns a string of the given text struckthrough
+#helper method for display achievements 
 def string_strikethrough(string_to_strikethorugh: str)->str:
     result = ""
     for character in string_to_strikethorugh:
@@ -130,8 +130,8 @@ def string_strikethrough(string_to_strikethorugh: str)->str:
     return result
 
 #shows available credits
-def display_credits(credits: int):
-    print(f"Available Credits: {credits}")
+def display_credits(credits: int, terminal_size: set):
+    print(description_padding(f"Available Credits: {credits}",terminal_size))
 
 #displays statistics
 def display_stats(tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, streak: int, freeze: int, terminal_size: set):

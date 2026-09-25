@@ -112,7 +112,7 @@ if __name__ == "__main__":
 
 #branch for calling display_credits()
     if args.credits:
-        display_credits(credits)
+        display_credits(credits, terminal_size)
 
 #branch for calling display_stats()
     if args.stats:
