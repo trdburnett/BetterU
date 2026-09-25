@@ -48,7 +48,7 @@ def display_box_top(id: int, caller: str, terminal_size: set)->str:
     box_top = left_box_padding + decorated_string + right_box_padding
     return box_top
 
-def description_padding(description: str, terminal_size: set)->str:
+def description_padding(description: str, terminal_size: set, struckthrough=False)->str:
     columns = terminal_size[0]
     truncated_description = ""
     truncated_padding = "|"
@@ -56,7 +56,10 @@ def description_padding(description: str, terminal_size: set)->str:
     if len(description) > (columns - 2):
         truncated_description = truncated_description + description[0:(columns - 5)] + "..."
     if truncated_description == "":
-        space_to_pad = columns - len(description) - 2
+        if struckthrough:
+            space_to_pad = columns - (len(description)//2) - 2
+        else:
+            space_to_pad = columns - len(description) - 2
         left_side_padding = space_to_pad // 2
         right_side_padding = left_side_padding
         if space_to_pad % 2 != 0:

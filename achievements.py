@@ -88,8 +88,8 @@ def display_achievements(achievementlist: list, terminal_size: set)->list:
         description_to_print = ""
         if achievement.completed:
             description_to_print = description_to_print + string_strikethrough(achievement.description)
+            print(description_padding(description_to_print,terminal_size,True))
         else:
             description_to_print = description_to_print + achievement.description
-        print(description_padding(description_to_print,terminal_size))
-        print(len(description_to_print))
+            print(description_padding(description_to_print,terminal_size))
     return achievementlist
