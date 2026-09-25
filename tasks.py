@@ -71,7 +71,7 @@ def time_remaining(task_priority: int, task_time: datetime):
     if task_deadline - time.now() <= datetime.timedelta(seconds=0):
         return "Expired!"
     else:
-        return task_deadline - time.now()
+        return str(task_deadline - time.now()).split(".")[0]
 
 #removes a task object from the task list and awards credits
 def complete_task(task_id: int, tasklist: list, repeat=False)->dict:
