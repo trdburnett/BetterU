@@ -91,4 +91,5 @@ def display_achievements(achievementlist: list, terminal_size: set)->list:
         else:
             description_to_print = description_to_print + achievement.description
         print(description_padding(description_to_print,terminal_size))
+        print(len(description_to_print))
     return achievementlist
