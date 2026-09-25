@@ -121,3 +121,4 @@ def display_tasks(tasklist: list, terminal_size: set):
             taskbox = taskbox + description_padding(task.description,terminal_size) + "\n"
             taskbox = taskbox + reward_and_time_remaining_padding(f"Reward: {task.reward} Credits",f"Time Remaining: {time_remaining(task.priority,task.time)}", terminal_size) + "\n"
             taskbox = taskbox + display_box_bottom(terminal_size) + "\n"
+            print(taskbox)
