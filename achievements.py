@@ -1,4 +1,4 @@
-from display import display_banner, display_padding
+from display import display_banner, display_padding, string_strikethrough, description_padding
 
 class Achievement:
     def __init__(self,description: str, completed: bool, reward: int, required_stat: str, required_value: int):
@@ -84,5 +84,11 @@ def display_achievements(achievementlist: list, terminal_size: set)->list:
         achievementlist = populate_achievement_list(achievementlist)
     print(display_banner("Achievements",terminal_size))
     for achievement in achievementlist:
-        print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
+        #print(f"{achievement.description}{display_padding(achievement.description)}| Completed: {achievement.completed}")
+        description_to_print = ""
+        if achievement.completed:
+            description_to_print = description_to_print + string_strikethrough(achievement.description)
+        else:
+            description_to_print = description_to_print + achievement.description
+        print(description_padding(description_to_print,terminal_size))
     return achievementlist

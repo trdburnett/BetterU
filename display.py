@@ -120,6 +120,12 @@ def display_box_bottom(terminal_size: set)->str:
         padding_size -= 1
     return box_bottom
 
+def string_strikethrough(string_to_strikethorugh: str)->str:
+    result = ""
+    for character in string_to_strikethorugh:
+        result = result + character + '\u0336'
+    return result
+
 #shows available credits
 def display_credits(credits: int):
     print(f"Available Credits: {credits}")
