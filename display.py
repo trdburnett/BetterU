@@ -54,7 +54,7 @@ def description_padding(description: str, terminal_size: set)->str:
     truncated_padding = "|"
     result_string = ""
     if len(description) > (columns - 2):
-        truncated_description = truncated_description + description[0:(columns - 6)] + "..."
+        truncated_description = truncated_description + description[0:(columns - 5)] + "..."
     if truncated_description == "":
         space_to_pad = columns - len(description) - 2
         left_side_padding = space_to_pad // 2
