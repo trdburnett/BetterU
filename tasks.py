@@ -1,6 +1,6 @@
 import datetime
 from operator import attrgetter
-from display import display_banner, display_padding
+from display import display_banner, display_padding, display_box_top, description_padding, reward_and_time_remaining_padding, display_box_bottom
 time = datetime.datetime
 
 class Task:
@@ -115,5 +115,9 @@ def display_tasks(tasklist: list, terminal_size: set):
         print(display_banner("Tasks",terminal_size))
         sorted_tasklist = sorted(tasklist, key=attrgetter('priority','time'))
         for task in sorted_tasklist:
-            print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits | Time Remaining: {time_remaining(task.priority,task.time)}")
-
+            #print(f"Task[{task.id}]: {task.description}{display_padding(task.description)}| Reward: {task.reward} Credits | Time Remaining: {time_remaining(task.priority,task.time)}")
+            taskbox = ""
+            taskbox = taskbox + display_box_top(task.id,"Task",terminal_size) + "\n"
+            taskbox = taskbox + description_padding(task.description,terminal_size) + "\n"
+            taskbox = taskbox + reward_and_time_remaining_padding(f"Reward: {task.reward} Credits",f"Time Remaining: {time_remaining(task.priority,task.time)}", terminal_size) + "\n"
+            taskbox = taskbox + display_box_bottom(terminal_size) + "\n"
