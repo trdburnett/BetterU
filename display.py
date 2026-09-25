@@ -136,10 +136,10 @@ def display_credits(credits: int):
 #displays statistics
 def display_stats(tasks_completed: int, high_priority_tasks_completed: int, medium_priority_tasks_completed: int, low_priority_tasks_completed: int, rewards_claimed: int, streak: int, freeze: int, terminal_size: set):
     print(display_banner("Statistics",terminal_size))
-    print(f"Tasks Completed: {tasks_completed}")
-    print(f"High Priority Tasks Completed: {high_priority_tasks_completed}")
-    print(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}")
-    print(f"Low Priority Tasks Completed: {low_priority_tasks_completed}")
-    print(f"Rewards Claimed: {rewards_claimed}")
-    print(f"Current Streak: {streak} day(s)")
-    print(f"Current Streak Freezes: {freeze} ")
+    print(description_padding(f"Tasks Completed: {tasks_completed}",terminal_size))
+    print(description_padding(f"High Priority Tasks Completed: {high_priority_tasks_completed}",terminal_size))
+    print(description_padding(f"Medium Priority Tasks Completed: {medium_priority_tasks_completed}",terminal_size))
+    print(description_padding(f"Low Priority Tasks Completed: {low_priority_tasks_completed}",terminal_size))
+    print(description_padding(f"Rewards Claimed: {rewards_claimed}",terminal_size))
+    print(description_padding(f"Current Streak: {streak} day(s)",terminal_size))
+    print(description_padding(f"Current Streak Freezes: {freeze}",terminal_size))
