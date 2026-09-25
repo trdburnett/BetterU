@@ -116,7 +116,7 @@ def display_box_bottom(terminal_size: set)->str:
     box_bottom = ""
     padding_size = terminal_size[0]
     while padding_size > 0:
-        box_bottom = box_bottom + u" \u305"
+        box_bottom = box_bottom + u' \u305'
         padding_size -= 1
     return box_bottom
 
