@@ -66,7 +66,7 @@ def description_padding(description: str, terminal_size: set)->str:
             left_space_padding = left_space_padding + " "
             left_side_padding -= 1
         right_space_padding = ""
-        while right_side_padding > 1:
+        while right_side_padding > 0:
             right_space_padding = right_space_padding + " "
             right_side_padding -= 1
         right_space_padding = right_space_padding + "|"
@@ -105,7 +105,7 @@ def reward_and_time_remaining_padding(reward: str, time_remaining: str, terminal
         left_space_padding_time_remaining = left_space_padding_time_remaining + " "
         left_side_padding_time_remaining -= 1
     right_space_padding_time_remaining = ""
-    while right_side_padding_time_remaining > 1:
+    while right_side_padding_time_remaining > 0:
         right_space_padding_time_remaining = right_space_padding_time_remaining + " "
         right_side_padding_time_remaining -= 1
     right_space_padding_time_remaining = right_space_padding_time_remaining + "|"
